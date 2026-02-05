@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Étude 002 — Spatialisation (Gauche – Droite)</title>
-  <link rel="stylesheet" href="../../style.css?v=1">
+  <link rel="stylesheet" href="../../style.css?v=2">
 </head>
 
 <body>
@@ -18,31 +18,28 @@
     </header>
 
     <h1 class="study-title">Étude 002 : Spatialisation (Gauche – Droite)</h1>
-
     <div class="cat">Étude laborieuse</div>
 
     <!-- Zone d’écoute -->
     <div class="audio-block">
-
       <p>Écoute — deux situations sonores</p>
 
-      <!-- Choix des parties -->
       <ul class="track-list" id="trackList">
-  <li>
-    <a href="#" data-src="../../audio/002-1.mp3" onclick="return selectTrack(this);">
-      Partie 1 — Déplacement gauche → droite (24 s)
-    </a>
-  </li>
-  <li>
-    <a href="#" data-src="../../audio/002-2.mp3" onclick="return selectTrack(this);">
-      Partie 2 — Focalisation spatiale (12 s)
-    </a>
-  </li>
-</ul>
+        <li>
+          <a href="#" data-src="../../audio/002-1.mp3"
+             onclick="return selectTrack(this);">
+            Partie 1 — Déplacement gauche → droite (24 s)
+          </a>
+        </li>
+        <li>
+          <a href="#" data-src="../../audio/002-2.mp3"
+             onclick="return selectTrack(this);">
+            Partie 2 — Focalisation spatiale (12 s)
+          </a>
+        </li>
+      </ul>
 
-      <!-- Player unique -->
-    <audio id="player" controls preload="metadata"></audio>
-
+      <audio id="player" controls preload="metadata"></audio>
     </div>
 
     <nav>
@@ -59,7 +56,8 @@ let gainNode;
 let sourceNode;
 
 const player = document.getElementById("player");
-let fadeDur = 0.5; // augmente si clic persiste (0.25 à 0.5)
+let pendingSrc = null;
+let fadeDur = 0.4; // augmenter à 0.5 si nécessaire
 
 function initAudio() {
   if (!audioCtx) {
@@ -82,25 +80,23 @@ function fadeTo(value, duration = fadeDur) {
 }
 
 function setActive(link) {
-  document.querySelectorAll("#trackList a").forEach(a => a.classList.remove("is-active"));
+  document.querySelectorAll("#trackList a")
+    .forEach(a => a.classList.remove("is-active"));
   link.classList.add("is-active");
 }
-
-let pendingSrc = null;
 
 function selectTrack(link) {
   initAudio();
   setActive(link);
-
   pendingSrc = link.getAttribute("data-src");
 
-  // 1) fade out
-  fadeTo(0, fadeDur);
+  // fade out avant coupure
+  fadeTo(0);
 
-  // 2) après fade, change source
-  const waitMs = Math.ceil(fadeDur * 1000) + 30;
+  const waitMs = Math.ceil(fadeDur * 1000) + 40;
   setTimeout(() => {
-    player.pause();      // ok car gain ≈ 0
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    player.pause();
     player.currentTime = 0;
     player.src = pendingSrc;
     player.load();
@@ -109,19 +105,22 @@ function selectTrack(link) {
   return false;
 }
 
-// 3) quand c’est prêt à jouer => play + fade in
+// autoplay sécurisé quand la piste est prête
 player.addEventListener("canplay", () => {
-  if (!audioCtx) return;
-  // si une source vient d'être sélectionnée, on joue
-  if (pendingSrc && player.src.includes(pendingSrc.split("/").pop())) {
-    player.play().then(() => {
-      fadeTo(1, 0.18); // fade-in plus court, sensation réactive
-      pendingSrc = null;
-    }).catch(() => {
-      // si un navigateur bloque, l'utilisateur devra appuyer play (rare sur desktop)
-    });
-  }
+  if (!audioCtx || !pendingSrc) return;
+
+  player.play().then(() => {
+    fadeTo(1, 0.18);
+    pendingSrc = null;
+  }).catch(() => {});
+});
+
+// si l'utilisateur appuie sur Play manuellement
+player.addEventListener("play", () => {
+  initAudio();
+  fadeTo(1, 0.12);
 });
 </script>
+
 </body>
 </html>
