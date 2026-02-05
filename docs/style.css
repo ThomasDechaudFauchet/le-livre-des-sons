@@ -1,1 +1,9 @@
 /* Base graphique – Le Livre des Sons */
+/* Fond sombre + texte de base */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #121212;   /* anthracite doux */
+  color: #e6e6e6;        /* gris clair lisible */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
