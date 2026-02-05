@@ -248,15 +248,8 @@ nav {
   margin-top: calc(var(--rhythm) * 4);
 }
 
-/* Fond image — page catalogue */
-.page-catalogue {
-  background: #121212;
-  position: relative;
-  z-index: 0;
-}
-
-/* Couche image (inversée et adoucie) */
-.page-catalogue::after {
+/* Fond image — page catalogue (solution robuste) */
+body.page-catalogue::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -265,17 +258,23 @@ nav {
   background-position: center;
   background-size: 60%;
   filter: invert(1) brightness(0.9);
-  opacity: 0.65;
-  z-index: -2;
+  opacity: 0.6;
   pointer-events: none;
+  z-index: 0;
 }
 
 /* Voile sombre pour la lisibilité */
-.page-catalogue::before {
+body.page-catalogue::after {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.75);
+  background: rgba(0,0,0,0.7);
   pointer-events: none;
-  z-index: -1;
+  z-index: 1;
+}
+
+/* Le contenu doit passer AU-DESSUS */
+body.page-catalogue .wrap {
+  position: relative;
+  z-index: 2;
 }
