@@ -155,3 +155,16 @@ nav a { margin-right: 0 !important; } /* annule les vieux styles */
   header { margin-bottom: 3.4rem; }
   nav { margin-top: 2.6rem; }
 }
+
+/* Liens – style éditorial sobre */
+a,
+a:visited {
+  color: #e6e6e6;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(230,230,230,0.25);
+}
+
+a:hover {
+  color: #ffffff;
+  border-bottom-color: rgba(255,255,255,0.8);
+}
