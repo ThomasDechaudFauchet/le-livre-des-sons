@@ -20,20 +20,17 @@
     <h1 class="study-title">Étude 002 : Spatialisation (Gauche – Droite)</h1>
     <div class="cat">Étude laborieuse</div>
 
-    <!-- Zone d’écoute -->
     <div class="audio-block">
       <p>Écoute — deux situations sonores</p>
 
       <ul class="track-list" id="trackList">
         <li>
-          <a href="#" data-src="../../audio/002-1.mp3"
-             onclick="return selectTrack(this);">
+          <a href="#" data-src="../../audio/002-1.mp3" onclick="return selectTrack(this);">
             Partie 1 — Déplacement gauche → droite (24 s)
           </a>
         </li>
         <li>
-          <a href="#" data-src="../../audio/002-2.mp3"
-             onclick="return selectTrack(this);">
+          <a href="#" data-src="../../audio/002-2.mp3" onclick="return selectTrack(this);">
             Partie 2 — Focalisation spatiale (12 s)
           </a>
         </li>
@@ -57,7 +54,10 @@ let sourceNode;
 
 const player = document.getElementById("player");
 let pendingSrc = null;
-let fadeDur = 0.4; // augmenter à 0.5 si nécessaire
+
+let fadeOutDur = 0.35; // 0.25 à 0.5
+let fadeInDur  = 0.12; // court et réactif
+let resumeDur  = 0.08; // anti-clic reprise en cours
 
 function initAudio() {
   if (!audioCtx) {
@@ -72,7 +72,7 @@ function initAudio() {
   if (audioCtx.state === "suspended") audioCtx.resume();
 }
 
-function fadeTo(value, duration = fadeDur) {
+function fadeTo(value, duration) {
   const now = audioCtx.currentTime;
   gainNode.gain.cancelScheduledValues(now);
   gainNode.gain.setValueAtTime(gainNode.gain.value, now);
@@ -80,8 +80,7 @@ function fadeTo(value, duration = fadeDur) {
 }
 
 function setActive(link) {
-  document.querySelectorAll("#trackList a")
-    .forEach(a => a.classList.remove("is-active"));
+  document.querySelectorAll("#trackList a").forEach(a => a.classList.remove("is-active"));
   link.classList.add("is-active");
 }
 
@@ -90,12 +89,14 @@ function selectTrack(link) {
   setActive(link);
   pendingSrc = link.getAttribute("data-src");
 
-  // fade out avant coupure
-  fadeTo(0);
+  // fade-out avant coupure
+  fadeTo(0, fadeOutDur);
 
-  const waitMs = Math.ceil(fadeDur * 1000) + 40;
+  const waitMs = Math.ceil(fadeOutDur * 1000) + 40;
   setTimeout(() => {
+    // verrouille à 0 avant de couper le MediaElement
     gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+
     player.pause();
     player.currentTime = 0;
     player.src = pendingSrc;
@@ -105,20 +106,28 @@ function selectTrack(link) {
   return false;
 }
 
-// autoplay sécurisé quand la piste est prête
+// Autoplay quand la piste est prête après sélection
 player.addEventListener("canplay", () => {
-  if (!audioCtx || !pendingSrc) return;
+  if (!pendingSrc) return;
 
   player.play().then(() => {
-    fadeTo(1, 0.18);
+    // fade-in après démarrage
+    fadeTo(1, fadeInDur);
     pendingSrc = null;
-  }).catch(() => {});
+  }).catch(() => {
+    // si un navigateur bloque, l'utilisateur devra appuyer sur Play
+  });
 });
 
-// si l'utilisateur appuie sur Play manuellement
+// Anti-clic à chaque (re)play, y compris reprise en cours
 player.addEventListener("play", () => {
   initAudio();
-  fadeTo(1, 0.12);
+  const now = audioCtx.currentTime;
+
+  // force silence immédiat puis remontée rapide
+  gainNode.gain.cancelScheduledValues(now);
+  gainNode.gain.setValueAtTime(0, now);
+  gainNode.gain.linearRampToValueAtTime(1, now + resumeDur);
 });
 </script>
 
