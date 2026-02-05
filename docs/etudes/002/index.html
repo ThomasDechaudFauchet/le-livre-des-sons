@@ -62,10 +62,9 @@
 let audioCtx;
 let gainNode;
 let sourceNode;
-const player = document.getElementById("player");
 
-const btnPlay = document.getElementById("btnPlay");
-const btnPause = document.getElementById("btnPause");
+const player = document.getElementById("player");
+let fadeDur = 0.35; // augmente si clic persiste (0.25 à 0.5)
 
 function initAudio() {
   if (!audioCtx) {
@@ -80,45 +79,53 @@ function initAudio() {
   if (audioCtx.state === "suspended") audioCtx.resume();
 }
 
-function fadeTo(value, duration = 0.3) {
+function fadeTo(value, duration = fadeDur) {
   const now = audioCtx.currentTime;
   gainNode.gain.cancelScheduledValues(now);
   gainNode.gain.setValueAtTime(gainNode.gain.value, now);
   gainNode.gain.linearRampToValueAtTime(value, now + duration);
 }
 
+function setActive(link) {
+  document.querySelectorAll("#trackList a").forEach(a => a.classList.remove("is-active"));
+  link.classList.add("is-active");
+}
+
+let pendingSrc = null;
+
 function selectTrack(link) {
   initAudio();
-  const src = link.getAttribute("data-src");
+  setActive(link);
 
-  document.querySelectorAll("#trackList a")
-    .forEach(a => a.classList.remove("is-active"));
-  link.classList.add("is-active");
+  pendingSrc = link.getAttribute("data-src");
 
-  // Fade-out puis arrêt propre
-  fadeTo(0, 0.25);
+  // 1) fade out
+  fadeTo(0, fadeDur);
 
+  // 2) après fade, change source
+  const waitMs = Math.ceil(fadeDur * 1000) + 30;
   setTimeout(() => {
-    player.pause();
-    player.src = src;
+    player.pause();      // ok car gain ≈ 0
+    player.currentTime = 0;
+    player.src = pendingSrc;
     player.load();
-  }, 260);
+  }, waitMs);
 
   return false;
 }
 
-// Bouton Lire : play + fade-in
-btnPlay.addEventListener("click", () => {
-  initAudio();
-  player.play();
-  fadeTo(1, 0.2);
-});
-
-// Bouton Pause : fade-out puis pause quand gain=0 (anti-clic)
-btnPause.addEventListener("click", () => {
-  initAudio();
-  fadeTo(0, 0.3);
-  setTimeout(() => player.pause(), 320);
+// 3) quand c’est prêt à jouer => play + fade in
+player.addEventListener("canplay", () => {
+  if (!audioCtx) return;
+  // si une source vient d'être sélectionnée, on joue
+  if (pendingSrc && player.src.includes(pendingSrc.split("/").pop())) {
+    player.play().then(() => {
+      fadeTo(1, 0.18); // fade-in plus court, sensation réactive
+      pendingSrc = null;
+    }).catch(() => {
+      // si un navigateur bloque, l'utilisateur devra appuyer play (rare sur desktop)
+    });
+  }
 });
 </script>
 </body>
