@@ -250,7 +250,7 @@ nav {
 
 /* Fond image — page catalogue uniquement */
 .page-catalogue {
-  background-image: url("./image/fond-sommaire.jpg");
+  background-image: url(".docs/image/fond-sommaire.jpg");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
