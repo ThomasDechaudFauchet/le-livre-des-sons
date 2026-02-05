@@ -168,3 +168,38 @@ a:hover {
   color: #ffffff;
   border-bottom-color: rgba(255,255,255,0.8);
 }
+
+/* Catalogue — hiérarchie chapitres / études */
+
+/* Titres de chapitres (Études laborieuses, etc.) */
+section h2 {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-top: 2.6rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Liens d’études (Étude 001, 002…) */
+section p {
+  margin: 0.2rem 0;
+}
+
+section p a {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #d6d6d6;
+  border-bottom: 1px solid rgba(214,214,214,0.25);
+}
+
+section p a:hover {
+  color: #ffffff;
+  border-bottom-color: rgba(255,255,255,0.8);
+}
+
+/* "À venir" discret */
+section p em {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #9a9a9a;
+}
