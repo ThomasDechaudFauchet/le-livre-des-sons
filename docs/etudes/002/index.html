@@ -106,17 +106,17 @@ function selectTrack(link) {
   return false;
 }
 
-// Autoplay quand la piste est prête après sélection
+/// Autoplay quand la piste est prête après sélection
 player.addEventListener("canplay", () => {
   if (!pendingSrc) return;
 
+  const expectedFile = pendingSrc.split("/").pop();
+  const currentFile = (player.currentSrc || "").split("/").pop();
+  if (expectedFile !== currentFile) return;
+
   player.play().then(() => {
-    // fade-in après démarrage
-    fadeTo(1, fadeInDur);
     pendingSrc = null;
-  }).catch(() => {
-    // si un navigateur bloque, l'utilisateur devra appuyer sur Play
-  });
+  }).catch(() => {});
 });
 
 // Anti-clic à chaque (re)play, y compris reprise en cours
@@ -124,11 +124,18 @@ player.addEventListener("play", () => {
   initAudio();
   const now = audioCtx.currentTime;
 
-  // force silence immédiat puis remontée rapide
   gainNode.gain.cancelScheduledValues(now);
   gainNode.gain.setValueAtTime(0, now);
   gainNode.gain.linearRampToValueAtTime(1, now + resumeDur);
 });
+
+player.addEventListener("pause", () => {
+  if (!audioCtx || !gainNode) return;
+  const now = audioCtx.currentTime;
+  gainNode.gain.cancelScheduledValues(now);
+  gainNode.gain.setValueAtTime(0, now);
+});
+  
 </script>
 
 </body>
