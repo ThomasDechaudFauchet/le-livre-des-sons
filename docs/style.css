@@ -257,6 +257,21 @@ nav {
   background-color: #121212;
 }
 
+/* Inversion + adoucissement de l’image */
+.page-catalogue::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: inherit;
+  background-repeat: inherit;
+  background-position: inherit;
+  background-size: inherit;
+  filter: invert(1) brightness(0.6);
+  opacity: 0.35;
+  z-index: -2;
+  pointer-events: none;
+}
+
 /* Voile sombre pour la lisibilité */
 .page-catalogue::before {
   content: "";
