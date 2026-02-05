@@ -41,12 +41,7 @@
 </ul>
 
       <!-- Player unique -->
-     <audio id="player" preload="metadata"></audio>
-
-<div class="controls">
-  <button class="ctrl" id="btnPlay" type="button">▶ Lire</button>
-  <button class="ctrl" id="btnPause" type="button">⏸ Pause</button>
-</div>
+    <audio id="player" controls preload="metadata"></audio>
 
     </div>
 
@@ -64,7 +59,7 @@ let gainNode;
 let sourceNode;
 
 const player = document.getElementById("player");
-let fadeDur = 0.35; // augmente si clic persiste (0.25 à 0.5)
+let fadeDur = 0.5; // augmente si clic persiste (0.25 à 0.5)
 
 function initAudio() {
   if (!audioCtx) {
