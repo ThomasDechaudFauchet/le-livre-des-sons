@@ -262,8 +262,8 @@ nav {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 60%;
-  filter: invert(1) brightness(0.6);
-  opacity: 0.75;
+  filter: invert(1) brightness(0.8);
+  opacity: 0.5;
   z-index: -2;
   pointer-events: none;
 }
