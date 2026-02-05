@@ -247,3 +247,21 @@ audio {
 nav {
   margin-top: calc(var(--rhythm) * 4);
 }
+
+/* Fond image — page catalogue uniquement */
+.page-catalogue {
+  background-image: url("./images/fond-sommaire.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* Voile sombre pour la lisibilité */
+.page-catalogue::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  pointer-events: none;
+  z-index: -1;
+}
