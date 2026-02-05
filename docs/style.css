@@ -203,3 +203,47 @@ section p em {
   font-style: italic;
   color: #9a9a9a;
 }
+
+/* Grille éditoriale — rythme vertical */
+
+:root {
+  --rhythm: 0.6rem;
+}
+
+/* Blocs principaux alignés sur la grille */
+header {
+  margin-bottom: calc(var(--rhythm) * 6);
+}
+
+.study-title {
+  margin-bottom: calc(var(--rhythm) * 2);
+}
+
+.cat {
+  margin-bottom: calc(var(--rhythm) * 4);
+}
+
+section {
+  margin-bottom: calc(var(--rhythm) * 5);
+}
+
+/* Chapitres */
+section h2 {
+  margin-top: calc(var(--rhythm) * 4);
+  margin-bottom: calc(var(--rhythm) * 2);
+}
+
+/* Entrées d’études (liens) */
+section p {
+  margin: calc(var(--rhythm) * 0.6) 0;
+}
+
+/* Navigation et audio (pour les pages d’étude) */
+audio {
+  margin-top: calc(var(--rhythm) * 3);
+  margin-bottom: calc(var(--rhythm) * 4);
+}
+
+nav {
+  margin-top: calc(var(--rhythm) * 4);
+}
