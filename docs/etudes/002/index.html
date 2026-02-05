@@ -4,53 +4,48 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Étude 002 — Spatialisation (Gauche – Droite)</title>
-  <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto; margin:16px; line-height:1.45;}
-    .id{font-weight:600;}
-    .cat{font-style:italic; color:#555; margin-bottom:1rem;}
-    .btn{display:inline-block; padding:.6rem 1rem; border:1px solid #000; margin:.35rem 0;}
-    nav{margin-top:1.2rem;}
-    nav a{margin-right:1rem; color:#000; text-decoration:none;}
-    nav a:hover{text-decoration:underline;}
-  </style>
+  <link rel="stylesheet" href="../../style.css?v=1">
 </head>
+
 <body>
-  <div class="id">Étude 002</div>
-  <h1>Spatialisation (Gauche – Droite)</h1>
-  <div class="cat">Étude Laborieuse</div>
+  <main class="wrap">
 
- <h2>Parties</h2>
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
 
-<div>
-  <button class="btn" type="button" onclick="loadTrack('https://www.lelivredessons.fr/audio/002-1.mp3', 'Partie 1 — Déplacement progressif gauche → droite (24 s)')">
-    ▶ Charger Partie 1
-  </button>
+    <div class="id">Étude 002</div>
 
-  <button class="btn" type="button" onclick="loadTrack('https://www.lelivredessons.fr/audio/002-2.mp3', 'Partie 2 — Variation de focalisation spatiale (12 s)')">
-    ▶ Charger Partie 2
-  </button>
-</div>
+    <h1 class="study-title">Étude 002 : Spatialisation (Gauche – Droite)</h1>
 
-<p id="trackLabel" style="margin:.8rem 0; color:#555;">Aucune piste chargée</p>
+    <div class="cat">Étude laborieuse</div>
 
-<audio id="player" controls preload="metadata" style="width:100%; max-width:520px;">
-  Ton navigateur ne supporte pas l’audio.
-</audio>
+    <!-- Player unique + chargement pistes -->
+    <p><strong>Partie 1 — Déplacement gauche → droite (24 s)</strong></p>
+    <button onclick="loadTrack('../../audio/002-1.mp3')">Charger</button>
 
-<script>
-  function loadTrack(url, label) {
-    const player = document.getElementById('player');
-    const trackLabel = document.getElementById('trackLabel');
-    trackLabel.textContent = label;
-    player.src = url;
-    player.load();
-    // On ne force pas play() (iOS peut bloquer). L’utilisateur appuie sur Play.
-  }
-</script>
-  <nav>
-    <a href="../001/">← Étude précédente</a>
-    <a href="../../">Sommaire</a>
-    <a href="#">Étude suivante →</a>
-  </nav>
+    <p><strong>Partie 2 — Focalisation spatiale (12 s)</strong></p>
+    <button onclick="loadTrack('../../audio/002-2.mp3')">Charger</button>
+
+    <audio id="player" controls preload="metadata"></audio>
+
+    <nav>
+      <a href="../001/">← Étude précédente</a>
+      <a href="../../">Sommaire</a>
+      <a href="#">Étude suivante →</a>
+    </nav>
+
+  </main>
+
+  <script>
+    function loadTrack(src){
+      const p = document.getElementById('player');
+      p.src = src;
+      p.load();
+    }
+  </script>
 </body>
 </html>
