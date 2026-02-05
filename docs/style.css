@@ -258,7 +258,7 @@ body.page-catalogue::before {
   background-position: center;
   background-size: 62%;
   filter: invert(1) brightness(1);
-  opacity: 2;
+  opacity: 1;
   pointer-events: none;
   z-index: 0;
 }
@@ -318,4 +318,19 @@ body.page-catalogue .wrap {
 .track-list a.is-active::before {
   content: "▶ ";
   letter-spacing: 0.02em;
+}
+
+/* Métadonnées du sommaire */
+.meta {
+  font-size: 0.8rem;
+  color: #9a9a9a;
+  margin-left: 0.4rem;
+  white-space: nowrap;
+}
+
+section p {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  flex-wrap: wrap;
 }
