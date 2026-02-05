@@ -235,7 +235,7 @@ section h2 {
 
 /* Entrées d’études (liens) */
 section p {
-  margin: calc(var(--rhythm) * 0.6) 0;
+  margin: calc(var(--rhythm) * 0.5) 0;
 }
 
 /* Navigation et audio (pour les pages d’étude) */
