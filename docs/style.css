@@ -334,3 +334,30 @@ section p {
   gap: 0.4rem;
   flex-wrap: wrap;
 }
+
+/* Contrôles audio custom */
+.controls {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: calc(var(--rhythm) * 2);
+  flex-wrap: wrap;
+}
+
+.ctrl {
+  background: transparent;
+  color: #e6e6e6;
+  border: 1px solid rgba(230,230,230,0.35);
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.ctrl:hover {
+  border-color: rgba(255,255,255,0.8);
+}
+
+.ctrl:active {
+  transform: translateY(1px);
+}
