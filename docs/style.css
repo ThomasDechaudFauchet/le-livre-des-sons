@@ -256,7 +256,7 @@ body.page-catalogue::before {
   background-image: url("./image/fond-sommaire.jpg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 60%;
+  background-size: 58%;
   filter: invert(1) brightness(0.5);
   opacity: 2;
   pointer-events: none;
