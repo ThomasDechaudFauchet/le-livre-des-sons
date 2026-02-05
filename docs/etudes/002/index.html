@@ -21,14 +21,29 @@
 
     <div class="cat">Étude laborieuse</div>
 
-    <!-- Player unique + chargement pistes -->
-    <p><strong>Partie 1 — Déplacement gauche → droite (24 s)</strong></p>
-    <button onclick="loadTrack('../../audio/002-1.mp3')">Charger</button>
+    <!-- Zone d’écoute -->
+    <div class="audio-block">
 
-    <p><strong>Partie 2 — Focalisation spatiale (12 s)</strong></p>
-    <button onclick="loadTrack('../../audio/002-2.mp3')">Charger</button>
+      <p>Écoute — deux situations sonores</p>
 
-    <audio id="player" controls preload="metadata"></audio>
+      <!-- Choix des parties -->
+      <ul class="track-list">
+        <li>
+          <a href="#" onclick="loadTrack('../../audio/002-1.mp3'); return false;">
+            Partie 1 — Déplacement gauche → droite (24 s)
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="loadTrack('../../audio/002-2.mp3'); return false;">
+            Partie 2 — Focalisation spatiale (12 s)
+          </a>
+        </li>
+      </ul>
+
+      <!-- Player unique -->
+      <audio id="player" controls preload="metadata"></audio>
+
+    </div>
 
     <nav>
       <a href="../001/">← Étude précédente</a>
@@ -39,11 +54,13 @@
   </main>
 
   <script>
-    function loadTrack(src){
-      const p = document.getElementById('player');
-      p.src = src;
-      p.load();
+    function loadTrack(src) {
+      const player = document.getElementById('player');
+      player.src = src;
+      player.load();
+      player.play();
     }
   </script>
+
 </body>
 </html>
