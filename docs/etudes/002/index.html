@@ -53,24 +53,67 @@
 
   </main>
 
-  <script>
-  function selectTrack(link) {
-    const src = link.getAttribute('data-src');
-    const player = document.getElementById('player');
+<script>
+let audioCtx;
+let gainNode;
+const player = document.getElementById('player');
 
-    // Retire l'état actif partout
-    document.querySelectorAll('#trackList a').forEach(a => a.classList.remove('is-active'));
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioCtx.createMediaElementSource(player);
+    gainNode = audioCtx.createGain();
+    gainNode.gain.value = 0;
 
-    // Active le lien cliqué
-    link.classList.add('is-active');
+    source.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+  }
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+}
 
-    // Charge + joue
+function fadeIn(duration = 0.2) {
+  gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+  gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+  gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + duration);
+}
+
+function fadeOut(duration = 0.15) {
+  gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+  gainNode.gain.setValueAtTime(gainNode.gain.value, audioCtx.currentTime);
+  gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration);
+}
+
+function selectTrack(link) {
+  initAudio();
+
+  const src = link.getAttribute('data-src');
+
+  document.querySelectorAll('#trackList a')
+    .forEach(a => a.classList.remove('is-active'));
+  link.classList.add('is-active');
+
+  fadeOut();
+
+  setTimeout(() => {
     player.src = src;
     player.load();
-    player.play();
+  }, 160);
 
-    return false; // empêche le saut de page
-  }
+  return false;
+}
+
+// Fade-in uniquement quand l'utilisateur appuie sur Play
+player.addEventListener("play", () => {
+  initAudio();
+  fadeIn();
+});
+
+// Fade-out au pause (optionnel)
+player.addEventListener("pause", () => {
+  if (gainNode && !player.ended) fadeOut(0.1);
+});
 </script>
 </body>
 </html>
