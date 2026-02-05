@@ -38,3 +38,74 @@ p {
   line-height: 1.6;
   margin: 0 0 1rem 0;
 }
+
+/* Layout global : centré */
+.wrap{
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 48px 20px 64px;
+}
+
+/* Typo de base : Arial partout */
+html, body{
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Titres “forts” : serif expressive (présente partout) */
+.site-title{
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin: 0 0 0.3rem 0;
+}
+
+.site-subtitle{
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #cfcfcf;
+  margin: 0 0 2rem 0;
+  max-width: 760px;
+}
+
+/* Bloc étude */
+.study-title{
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 0.4rem 0 0.6rem 0;
+}
+
+.id{
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+
+.cat{
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #bdbdbd;
+  margin-bottom: 1.5rem;
+}
+
+/* Nav : visible sur fond sombre */
+nav a{
+  color: #e6e6e6;
+  text-decoration: none;
+  margin-right: 1rem;
+  opacity: 0.85;
+}
+nav a:hover{
+  text-decoration: underline;
+  opacity: 1;
+}
+
+/* Audio : respirer */
+audio{
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  margin: 0.8rem 0 1.2rem 0;
+}
