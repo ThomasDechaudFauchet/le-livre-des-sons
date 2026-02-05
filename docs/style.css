@@ -249,7 +249,6 @@ nav {
 }
 
 /* Fond image — page catalogue uniquement */
-/* Fond image — page catalogue uniquement */
 .page-catalogue {
   background-image: url("./image/fond-sommaire.jpg");
   background-repeat: no-repeat;
@@ -261,4 +260,12 @@ nav {
   filter: invert(1) brightness(0.6);
 }
 
+.page-catalogue::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  pointer-events: none;
+  z-index: -1;
+}
 
