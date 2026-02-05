@@ -248,18 +248,27 @@ nav {
   margin-top: calc(var(--rhythm) * 4);
 }
 
-/* Fond image — page catalogue uniquement */
+/* Fond image — page catalogue */
 .page-catalogue {
+  background: #121212;
+}
+
+/* Couche image (inversée et adoucie) */
+.page-catalogue::after {
+  content: "";
+  position: fixed;
+  inset: 0;
   background-image: url("./image/fond-sommaire.jpg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 65%;
-  background-color: #121212;
-
-  /* Inversion + assombrissement simples et fiables */
+  background-size: 60%;
   filter: invert(1) brightness(0.6);
+  opacity: 0.35;
+  z-index: -2;
+  pointer-events: none;
 }
 
+/* Voile sombre pour la lisibilité */
 .page-catalogue::before {
   content: "";
   position: fixed;
@@ -267,5 +276,6 @@ nav {
   background: rgba(0,0,0,0.75);
   pointer-events: none;
   z-index: -1;
+}
 }
 
