@@ -56,35 +56,31 @@
 <script>
 let audioCtx;
 let gainNode;
+let sourceNode;
 const player = document.getElementById('player');
 
 function initAudio() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const source = audioCtx.createMediaElementSource(player);
+    sourceNode = audioCtx.createMediaElementSource(player);
     gainNode = audioCtx.createGain();
-    gainNode.gain.value = 0;
 
-    source.connect(gainNode);
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+
+    sourceNode.connect(gainNode);
     gainNode.connect(audioCtx.destination);
   }
-  if (audioCtx.state === "suspended") {
-    audioCtx.resume();
-  }
 }
 
-function fadeIn(duration = 0.2) {
-  gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
-  gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-  gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + duration);
+/* Fade utils */
+function fadeTo(value, duration = 0.3) {
+  const now = audioCtx.currentTime;
+  gainNode.gain.cancelScheduledValues(now);
+  gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+  gainNode.gain.linearRampToValueAtTime(value, now + duration);
 }
 
-function fadeOut(duration = 0.15) {
-  gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
-  gainNode.gain.setValueAtTime(gainNode.gain.value, audioCtx.currentTime);
-  gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration);
-}
-
+/* Sélection d’une piste (sans autoplay) */
 function selectTrack(link) {
   initAudio();
 
@@ -94,25 +90,29 @@ function selectTrack(link) {
     .forEach(a => a.classList.remove('is-active'));
   link.classList.add('is-active');
 
-  fadeOut();
+  // Fade-out AVANT changement
+  fadeTo(0, 0.25);
 
+  // Changement de source APRÈS fade-out
   setTimeout(() => {
+    player.pause();
     player.src = src;
     player.load();
-  }, 160);
+  }, 260);
 
   return false;
 }
 
-// Fade-in uniquement quand l'utilisateur appuie sur Play
+/* Fade-in UNIQUEMENT quand l’utilisateur lance la lecture */
 player.addEventListener("play", () => {
   initAudio();
-  fadeIn();
+  fadeTo(1, 0.3);
 });
 
-// Fade-out au pause (optionnel)
+/* Fade-out propre avant pause */
 player.addEventListener("pause", () => {
-  if (gainNode && !player.ended) fadeOut(0.1);
+  if (!gainNode || !audioCtx) return;
+  fadeTo(0, 0.25);
 });
 </script>
 </body>
