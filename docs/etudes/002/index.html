@@ -62,22 +62,24 @@
 let audioCtx;
 let gainNode;
 let sourceNode;
-const player = document.getElementById('player');
+const player = document.getElementById("player");
+
+const btnPlay = document.getElementById("btnPlay");
+const btnPause = document.getElementById("btnPause");
 
 function initAudio() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     sourceNode = audioCtx.createMediaElementSource(player);
     gainNode = audioCtx.createGain();
-
     gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
 
     sourceNode.connect(gainNode);
     gainNode.connect(audioCtx.destination);
   }
+  if (audioCtx.state === "suspended") audioCtx.resume();
 }
 
-/* Fade utils */
 function fadeTo(value, duration = 0.3) {
   const now = audioCtx.currentTime;
   gainNode.gain.cancelScheduledValues(now);
@@ -85,20 +87,17 @@ function fadeTo(value, duration = 0.3) {
   gainNode.gain.linearRampToValueAtTime(value, now + duration);
 }
 
-/* Sélection d’une piste (sans autoplay) */
 function selectTrack(link) {
   initAudio();
+  const src = link.getAttribute("data-src");
 
-  const src = link.getAttribute('data-src');
+  document.querySelectorAll("#trackList a")
+    .forEach(a => a.classList.remove("is-active"));
+  link.classList.add("is-active");
 
-  document.querySelectorAll('#trackList a')
-    .forEach(a => a.classList.remove('is-active'));
-  link.classList.add('is-active');
-
-  // Fade-out AVANT changement
+  // Fade-out puis arrêt propre
   fadeTo(0, 0.25);
 
-  // Changement de source APRÈS fade-out
   setTimeout(() => {
     player.pause();
     player.src = src;
@@ -108,16 +107,18 @@ function selectTrack(link) {
   return false;
 }
 
-/* Fade-in UNIQUEMENT quand l’utilisateur lance la lecture */
-player.addEventListener("play", () => {
+// Bouton Lire : play + fade-in
+btnPlay.addEventListener("click", () => {
   initAudio();
-  fadeTo(1, 0.3);
+  player.play();
+  fadeTo(1, 0.2);
 });
 
-/* Fade-out propre avant pause */
-player.addEventListener("pause", () => {
-  if (!gainNode || !audioCtx) return;
-  fadeTo(0, 0.25);
+// Bouton Pause : fade-out puis pause quand gain=0 (anti-clic)
+btnPause.addEventListener("click", () => {
+  initAudio();
+  fadeTo(0, 0.3);
+  setTimeout(() => player.pause(), 320);
 });
 </script>
 </body>
