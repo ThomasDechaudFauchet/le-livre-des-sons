@@ -291,3 +291,31 @@ body.page-catalogue .wrap {
   color: #cfcfcf;
   margin-bottom: 0.6rem;
 }
+
+/* Playlist — état actif */
+.track-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 calc(var(--rhythm) * 2) 0;
+}
+
+.track-list li {
+  margin: calc(var(--rhythm) * 0.7) 0;
+}
+
+.track-list a {
+  display: inline-block;
+  font-style: italic;
+  border-bottom: 1px solid rgba(214,214,214,0.25);
+  padding: 2px 0;
+}
+
+.track-list a.is-active {
+  color: #ffffff;
+  border-bottom-color: rgba(255,255,255,0.8);
+}
+
+.track-list a.is-active::before {
+  content: "▶ ";
+  letter-spacing: 0.02em;
+}
