@@ -27,18 +27,18 @@
       <p>Écoute — deux situations sonores</p>
 
       <!-- Choix des parties -->
-      <ul class="track-list">
-        <li>
-          <a href="#" onclick="loadTrack('../../audio/002-1.mp3'); return false;">
-            Partie 1 — Déplacement gauche → droite (24 s)
-          </a>
-        </li>
-        <li>
-          <a href="#" onclick="loadTrack('../../audio/002-2.mp3'); return false;">
-            Partie 2 — Focalisation spatiale (12 s)
-          </a>
-        </li>
-      </ul>
+      <ul class="track-list" id="trackList">
+  <li>
+    <a href="#" data-src="../../audio/002-1.mp3" onclick="return selectTrack(this);">
+      Partie 1 — Déplacement gauche → droite (24 s)
+    </a>
+  </li>
+  <li>
+    <a href="#" data-src="../../audio/002-2.mp3" onclick="return selectTrack(this);">
+      Partie 2 — Focalisation spatiale (12 s)
+    </a>
+  </li>
+</ul>
 
       <!-- Player unique -->
       <audio id="player" controls preload="metadata"></audio>
@@ -54,13 +54,23 @@
   </main>
 
   <script>
-    function loadTrack(src) {
-      const player = document.getElementById('player');
-      player.src = src;
-      player.load();
-      player.play();
-    }
-  </script>
+  function selectTrack(link) {
+    const src = link.getAttribute('data-src');
+    const player = document.getElementById('player');
 
+    // Retire l'état actif partout
+    document.querySelectorAll('#trackList a').forEach(a => a.classList.remove('is-active'));
+
+    // Active le lien cliqué
+    link.classList.add('is-active');
+
+    // Charge + joue
+    player.src = src;
+    player.load();
+    player.play();
+
+    return false; // empêche le saut de page
+  }
+</script>
 </body>
 </html>
