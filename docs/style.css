@@ -109,3 +109,15 @@ audio{
   max-width: 720px;
   margin: 0.8rem 0 1.2rem 0;
 }
+
+/* NAV : forcer la lisibilité même si un CSS local traîne */
+nav { margin-top: 1.6rem; }
+nav a, nav a:visited {
+  color: #e6e6e6 !important;
+  text-decoration: none;
+  opacity: 0.9;
+}
+nav a:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
