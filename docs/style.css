@@ -250,10 +250,11 @@ nav {
 
 /* Fond image — page catalogue uniquement */
 .page-catalogue {
-  background-image: url(".docs/image/fond-sommaire.jpg");
-  background-size: cover;
+  background-image: url("./image/fond-sommaire.jpg");
+  background-repeat: no-repeat;
   background-position: center;
-  background-attachment: fixed;
+  background-size: 70%;
+  background-color: #121212;
 }
 
 /* Voile sombre pour la lisibilité */
