@@ -258,7 +258,7 @@ body.page-catalogue::before {
   background-position: center;
   background-size: 60%;
   filter: invert(1) brightness(0.5);
-  opacity: 0.95;
+  opacity: 2;
   pointer-events: none;
   z-index: 0;
 }
