@@ -257,6 +257,16 @@ nav {
   background-color: #121212;
 }
 
+/* Voile sombre pour la lisibilité */
+.page-catalogue::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  pointer-events: none;
+  z-index: -1;
+}
+
 /* Inversion + adoucissement de l’image */
 .page-catalogue::after {
   content: "";
@@ -270,14 +280,4 @@ nav {
   opacity: 0.35;
   z-index: -2;
   pointer-events: none;
-}
-
-/* Voile sombre pour la lisibilité */
-.page-catalogue::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  pointer-events: none;
-  z-index: -1;
 }
