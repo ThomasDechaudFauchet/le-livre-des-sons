@@ -121,3 +121,20 @@ nav a:hover {
   text-decoration: underline;
   opacity: 1;
 }
+
+/* Respiration responsive : plus d'air sur grands écrans */
+@media (min-width: 900px) {
+  .wrap { padding-top: 72px; padding-bottom: 96px; }
+  header { margin-bottom: 3rem; }
+  .study-title { margin-top: 0.8rem; margin-bottom: 1rem; }
+  .cat { margin-bottom: 2rem; }
+  audio { margin-top: 1.2rem; margin-bottom: 1.8rem; }
+  nav { margin-top: 2.2rem; }
+}
+
+@media (min-width: 1200px) {
+  .wrap { max-width: 960px; }
+  .site-title { font-size: 2.5rem; }
+  .study-title { font-size: 2.1rem; }
+  body { font-size: 18px; }
+}
