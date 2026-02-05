@@ -251,6 +251,8 @@ nav {
 /* Fond image — page catalogue */
 .page-catalogue {
   background: #121212;
+  position: relative;
+  z-index: 0;
 }
 
 /* Couche image (inversée et adoucie) */
@@ -277,4 +279,3 @@ nav {
   pointer-events: none;
   z-index: -1;
 }
-
