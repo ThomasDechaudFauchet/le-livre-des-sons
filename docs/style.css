@@ -249,35 +249,16 @@ nav {
 }
 
 /* Fond image — page catalogue uniquement */
+/* Fond image — page catalogue uniquement */
 .page-catalogue {
   background-image: url("./image/fond-sommaire.jpg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 50%;
+  background-size: 65%;
   background-color: #121212;
-}
 
-/* Voile sombre pour la lisibilité */
-.page-catalogue::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* Inversion + adoucissement de l’image */
-.page-catalogue::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: inherit;
-  background-repeat: inherit;
-  background-position: inherit;
-  background-size: inherit;
+  /* Inversion + assombrissement simples et fiables */
   filter: invert(1) brightness(0.6);
-  opacity: 0.35;
-  z-index: -2;
-  pointer-events: none;
 }
+
+
