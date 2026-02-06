@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Étude 001 — Taille et Volume</title>
-  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../style.css?v=2">
 </head>
 
 <body>
@@ -18,23 +18,25 @@
     </header>
 
     <h1 class="study-title">Étude 001 : Taille et Volume</h1>
-
     <div class="cat">Étude laborieuse</div>
-    
-<div class="audio-block">
-      <p>Écoute — un fichier sonore</p>
 
+    <!-- Zone d’écoute -->
+    <div class="audio-block">
+      <p>Écoute — une situation sonore</p>
+
+      <!-- Playlist -->
       <ul class="track-list" id="trackList">
         <li>
-          <a href="#" data-src="../../audio/001.mp3" onclick="return selectTrack(this);">
-            Etude 001 : Taille et Volume
+          <a href="#" data-src="../../audio/001.mp3"
+             onclick="return selectTrack(this);">
+            Taille et Volume
           </a>
         </li>
-        <li>
-      </ul> 
-  
-  <audio id="player" controls preload="metadata"></audio>
-</div>
+      </ul>
+
+      <!-- Player -->
+      <audio id="player" controls preload="metadata"></audio>
+    </div>
 
     <nav>
       <a href="../../">Sommaire</a>
@@ -42,5 +44,29 @@
     </nav>
 
   </main>
+
+<script>
+const player = document.getElementById("player");
+
+function setActive(link) {
+  document.querySelectorAll("#trackList a")
+    .forEach(a => a.classList.remove("is-active"));
+  link.classList.add("is-active");
+}
+
+function selectTrack(link) {
+  const src = link.getAttribute("data-src");
+  setActive(link);
+
+  player.pause();
+  player.currentTime = 0;
+  player.src = src;
+  player.load();
+  player.play();
+
+  return false;
+}
+</script>
+
 </body>
 </html>
