@@ -365,8 +365,8 @@ section p {
 /* Signature auteur */
 .site-signature {
   margin-top: calc(var(--rhythm) * 6);
-  font-size: 0.7rem;
+  font-size: 0.3rem;
   line-height: 1.4;
   color: #8e8e8e;
-  opacity: 0.75;
+  opacity: 0.5;
 }
