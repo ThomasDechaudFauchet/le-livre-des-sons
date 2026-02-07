@@ -413,12 +413,12 @@ body.page-etude .wrap {
   z-index: 2;
 }
 
-/* Étude 001 */
+/* Etude 001 */
 body.etude-001::before {
-  background-image: url("../../image/fond-etude-001.jpg");
+  background-image: url("./image/fond-etude-001.jpg");
 }
 
-/* Étude 002 */
+/* Etude 002 */
 body.etude-002::before {
-  background-image: url("../../image/fond-etude-002.jpg");
+  background-image: url("./image/fond-etude-002.jpg");
 }
