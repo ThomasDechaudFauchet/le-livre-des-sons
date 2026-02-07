@@ -45,176 +45,96 @@
       <a href="#">Étude suivante →</a>
     </nav>
 
-    <!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Étude 001 — Taille et Volume</title>
-  <link rel="stylesheet" href="../../style.css?v=2">
-</head>
-
-<body>
-  <main class="wrap">
-
-    <header>
-      <div class="site-title">Le Livre des Sons</div>
-      <div class="site-subtitle">
-        Principes synesthésiques entre la forme visuelle et l'objet sonore
-      </div>
-    </header>
-
-    <h1 class="study-title">Étude 001 : Taille et Volume</h1>
-    <div class="cat">Étude laborieuse</div>
-
-    <!-- Zone d’écoute -->
-    <div class="audio-block">
-      <p>Écoute — un fichier sonore</p>
-
-      <!-- Playlist -->
-      <ul class="track-list" id="trackList">
-        <li>
-          <a href="#" data-src="../../audio/001.mp3"
-             onclick="return selectTrack(this);">
-            Taille et Volume
-          </a>
-        </li>
-      </ul>
-
-      <!-- Player -->
-      <audio id="player" controls preload="metadata"></audio>
-    </div>
-
-    <nav>
-      <a href="../../">Sommaire</a>
-      <a href="../002/">Étude suivante →</a>
-    </nav>
-
-     <!-- Signature -->
     <footer class="site-signature">
       Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
     </footer>
 
   </main>
 
-<script>
-const player = document.getElementById("player");
+  <script>
+  let audioCtx;
+  let gainNode;
+  let sourceNode;
 
-function setActive(link) {
-  document.querySelectorAll("#trackList a")
-    .forEach(a => a.classList.remove("is-active"));
-  link.classList.add("is-active");
-}
+  const player = document.getElementById("player");
+  let pendingSrc = null;
 
-function selectTrack(link) {
-  const src = link.getAttribute("data-src");
-  setActive(link);
+  let fadeOutDur = 0.35;
+  let resumeDur  = 0.08;
 
-  player.pause();
-  player.currentTime = 0;
-  player.src = src;
-  player.load();
-  player.play();
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      sourceNode = audioCtx.createMediaElementSource(player);
+      gainNode = audioCtx.createGain();
+      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
 
-  return false;
-}
-</script>
-
-</body>
-</html>
-
-  </main>
-
-<script>
-let audioCtx;
-let gainNode;
-let sourceNode;
-
-const player = document.getElementById("player");
-let pendingSrc = null;
-
-let fadeOutDur = 0.35; // 0.25 à 0.5
-let fadeInDur  = 0.12; // court et réactif
-let resumeDur  = 0.08; // anti-clic reprise en cours
-
-function initAudio() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    sourceNode = audioCtx.createMediaElementSource(player);
-    gainNode = audioCtx.createGain();
-    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-
-    sourceNode.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
+      sourceNode.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+    }
+    if (audioCtx.state === "suspended") audioCtx.resume();
   }
-  if (audioCtx.state === "suspended") audioCtx.resume();
-}
 
-function fadeTo(value, duration) {
-  const now = audioCtx.currentTime;
-  gainNode.gain.cancelScheduledValues(now);
-  gainNode.gain.setValueAtTime(gainNode.gain.value, now);
-  gainNode.gain.linearRampToValueAtTime(value, now + duration);
-}
+  function fadeTo(value, duration) {
+    const now = audioCtx.currentTime;
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+    gainNode.gain.linearRampToValueAtTime(value, now + duration);
+  }
 
-function setActive(link) {
-  document.querySelectorAll("#trackList a").forEach(a => a.classList.remove("is-active"));
-  link.classList.add("is-active");
-}
+  function setActive(link) {
+    document.querySelectorAll("#trackList a").forEach(a => a.classList.remove("is-active"));
+    link.classList.add("is-active");
+  }
 
-function selectTrack(link) {
-  initAudio();
-  setActive(link);
-  pendingSrc = link.getAttribute("data-src");
+  function selectTrack(link) {
+    initAudio();
+    setActive(link);
+    pendingSrc = link.getAttribute("data-src");
 
-  // fade-out avant coupure
-  fadeTo(0, fadeOutDur);
+    fadeTo(0, fadeOutDur);
 
-  const waitMs = Math.ceil(fadeOutDur * 1000) + 40;
-  setTimeout(() => {
-    // verrouille à 0 avant de couper le MediaElement
-    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    const waitMs = Math.ceil(fadeOutDur * 1000) + 40;
+    setTimeout(() => {
+      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
 
-    player.pause();
-    player.currentTime = 0;
-    player.src = pendingSrc;
-    player.load();
-  }, waitMs);
+      player.pause();
+      player.currentTime = 0;
+      player.src = pendingSrc;
+      player.load();
+    }, waitMs);
 
-  return false;
-}
+    return false;
+  }
 
-/// Autoplay quand la piste est prête après sélection
-player.addEventListener("canplay", () => {
-  if (!pendingSrc) return;
+  player.addEventListener("canplay", () => {
+    if (!pendingSrc) return;
 
-  const expectedFile = pendingSrc.split("/").pop();
-  const currentFile = (player.currentSrc || "").split("/").pop();
-  if (expectedFile !== currentFile) return;
+    const expectedFile = pendingSrc.split("/").pop();
+    const currentFile = (player.currentSrc || "").split("/").pop();
+    if (expectedFile !== currentFile) return;
 
-  player.play().then(() => {
-    pendingSrc = null;
-  }).catch(() => {});
-});
+    player.play().then(() => {
+      pendingSrc = null;
+    }).catch(() => {});
+  });
 
-// Anti-clic à chaque (re)play, y compris reprise en cours
-player.addEventListener("play", () => {
-  initAudio();
-  const now = audioCtx.currentTime;
+  player.addEventListener("play", () => {
+    initAudio();
+    const now = audioCtx.currentTime;
 
-  gainNode.gain.cancelScheduledValues(now);
-  gainNode.gain.setValueAtTime(0, now);
-  gainNode.gain.linearRampToValueAtTime(1, now + resumeDur);
-});
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(0, now);
+    gainNode.gain.linearRampToValueAtTime(1, now + resumeDur);
+  });
 
-player.addEventListener("pause", () => {
-  if (!audioCtx || !gainNode) return;
-  const now = audioCtx.currentTime;
-  gainNode.gain.cancelScheduledValues(now);
-  gainNode.gain.setValueAtTime(0, now);
-});
-  
-</script>
+  player.addEventListener("pause", () => {
+    if (!audioCtx || !gainNode) return;
+    const now = audioCtx.currentTime;
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(0, now);
+  });
+  </script>
 
 </body>
 </html>
