@@ -310,13 +310,20 @@ body.page-catalogue .wrap {
   padding: 2px 0;
 }
 
+/* Indication cliquable (toujours visible) */
+.track-list a::before {
+  content: "▶ ";
+  opacity: 0.5;
+}
+
+/* État actif */
 .track-list a.is-active {
   color: #ffffff;
   border-bottom-color: rgba(255,255,255,0.8);
 }
 
 .track-list a.is-active::before {
-  content: "▶ ";
+  opacity: 1;
   letter-spacing: 0.02em;
 }
 
