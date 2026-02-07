@@ -383,7 +383,7 @@ section p {
    Fonds spécifiques — Études
    ========================= */
 
-/* Base commune aux pages d’étude */
+/* Base commune à toutes les pages d’étude */
 body.page-etude::before {
   content: "";
   position: fixed;
@@ -392,33 +392,32 @@ body.page-etude::before {
   background-position: center;
   background-size: 68%;
   filter: invert(1) brightness(1);
-  opacity: 0.35;            /* ajuste ici (0.2 → 0.6) */
+  opacity: 0.35;
   pointer-events: none;
   z-index: 0;
 }
 
-/* Voile sombre pour la lisibilité (même logique que catalogue) */
+/* Voile sombre pour la lisibilité */
 body.page-etude::after {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.72);  /* ajuste ici (0.6 → 0.85) */
+  background: rgba(0,0,0,0.72);
   pointer-events: none;
   z-index: 1;
 }
 
-/* Le contenu doit passer AU-DESSUS */
+/* Le contenu passe au-dessus */
 body.page-etude .wrap {
   position: relative;
   z-index: 2;
 }
 
-/* Etude 001 */
+/* Étude 001 */
 body.etude-001::before {
   background-image: url("./image/fond-etude-001.jpg");
 }
 
-/* Etude 002 */
+/* Étude 002 */
 body.etude-002::before {
   background-image: url("./image/fond-etude-002.jpg");
-}
