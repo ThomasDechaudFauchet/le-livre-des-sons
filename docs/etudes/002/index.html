@@ -45,6 +45,84 @@
       <a href="#">Étude suivante →</a>
     </nav>
 
+    <!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Étude 001 — Taille et Volume</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+</head>
+
+<body>
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Étude 001 : Taille et Volume</h1>
+    <div class="cat">Étude laborieuse</div>
+
+    <!-- Zone d’écoute -->
+    <div class="audio-block">
+      <p>Écoute — un fichier sonore</p>
+
+      <!-- Playlist -->
+      <ul class="track-list" id="trackList">
+        <li>
+          <a href="#" data-src="../../audio/001.mp3"
+             onclick="return selectTrack(this);">
+            Taille et Volume
+          </a>
+        </li>
+      </ul>
+
+      <!-- Player -->
+      <audio id="player" controls preload="metadata"></audio>
+    </div>
+
+    <nav>
+      <a href="../../">Sommaire</a>
+      <a href="../002/">Étude suivante →</a>
+    </nav>
+
+     <!-- Signature -->
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+
+<script>
+const player = document.getElementById("player");
+
+function setActive(link) {
+  document.querySelectorAll("#trackList a")
+    .forEach(a => a.classList.remove("is-active"));
+  link.classList.add("is-active");
+}
+
+function selectTrack(link) {
+  const src = link.getAttribute("data-src");
+  setActive(link);
+
+  player.pause();
+  player.currentTime = 0;
+  player.src = src;
+  player.load();
+  player.play();
+
+  return false;
+}
+</script>
+
+</body>
+</html>
+
   </main>
 
 <script>
