@@ -361,3 +361,12 @@ section p {
 .ctrl:active {
   transform: translateY(1px);
 }
+
+/* Signature auteur */
+.site-signature {
+  margin-top: calc(var(--rhythm) * 6);
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: #8e8e8e;
+  opacity: 0.75;
+}
