@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Étude 003 — Hauteur et Fréquence</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+</head>
 
+<body class="page-etude etude-003">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Étude 003 : Hauteur et Fréquence</h1>
+    <div class="cat">Étude laborieuse</div>
+
+    <div class="audio-block">
+      <p>Écoute — plusieurs fichiers sonores</p>
+
+      <ul class="track-list" id="trackList">
+        <li>
+          <a href="#" class="is-active" data-src="../../audio/003-1.mp3" onclick="return selectTrack(this);">
+            Partie 1 — Montée (durée à préciser)
+          </a>
+        </li>
+        <li>
+          <a href="#" data-src="../../audio/003-2.mp3" onclick="return selectTrack(this);">
+            Partie 2 — Palier / variation (durée à préciser)
+          </a>
+        </li>
+        <li>
+          <a href="#" data-src="../../audio/003-3.mp3" onclick="return selectTrack(this);">
+            Partie 3 — Descente (durée à préciser)
+          </a>
+        </li>
+      </ul>
+
+      <audio id="player" controls preload="metadata" src="../../audio/003-1.mp3"></audio>
+    </div>
+
+    <nav>
+      <a href="../002/">← Étude précédente</a>
+      <a href="../../">Sommaire</a>
+      <a href="#">Étude suivante →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+
+<script>
+const player = document.getElementById("player");
+
+function setActive(link) {
+  document.querySelectorAll("#trackList a")
+    .forEach(a => a.classList.remove("is-active"));
+  link.classList.add("is-active");
+}
+
+function selectTrack(link) {
+  const src = link.getAttribute("data-src");
+  setActive(link);
+
+  // même comportement que tes pages playlist : clic = charge + lecture
+  player.pause();
+  player.currentTime = 0;
+  player.src = src;
+  player.load();
+  player.play();
+
+  return false;
+}
+</script>
+
+</body>
+</html>
