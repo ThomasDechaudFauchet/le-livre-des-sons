@@ -421,3 +421,9 @@ body.etude-001::before {
 /* Étude 002 */
 body.etude-002::before {
   background-image: url("./image/fond-etude-002.jpg");
+}
+
+/* Étude 003 */
+body.etude-003::before {
+  background-image: url("./image/fond-etude-003.jpg");
+}
