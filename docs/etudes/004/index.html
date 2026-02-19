@@ -1,1 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Étude 004 : Formes visuelles & Formes d'ondes</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
 
+<body class="page-etude etude-004">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Étude 004 : Formes visuelles & Formes d'ondes</h1>
+    <div class="cat">Étude laborieuse</div>
+
+    <div class="audio-block">
+      <p>Écoute — deux fichiers sonores</p>
+
+      <ul class="track-list" id="trackList">
+        <li>
+          <a href="#" data-src="../../audio/004-1.mp3" onclick="return selectTrack(this);">
+            Formes d'ondes - sinus, triangle, carrée (12 s)
+          </a>
+        </li>
+        <li>
+          <a href="#" data-src="../../audio/004-2.mp3" onclick="return selectTrack(this);">
+            Formes & Formes d'ondes - de l'onde carrée vers l'onde sinusoïdale (33 s)
+          </a>
+        </li>
+      </ul>
+
+      <audio id="player" controls preload="metadata"></audio>
+    </div>
+
+    <nav>
+      <a href="../001/">← Étude précédente</a>
+      <a href="../../">Sommaire</a>
+      <a href="../003/">Étude suivante →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+
+  <script>
+  let audioCtx;
+  let gainNode;
+  let sourceNode;
+
+  const player = document.getElementById("player");
+  let pendingSrc = null;
+
+  let fadeOutDur = 0.35;
+  let resumeDur  = 0.08;
+
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      sourceNode = audioCtx.createMediaElementSource(player);
+      gainNode = audioCtx.createGain();
+      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+
+      sourceNode.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+    }
+    if (audioCtx.state === "suspended") audioCtx.resume();
+  }
+
+  function fadeTo(value, duration) {
+    const now = audioCtx.currentTime;
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+    gainNode.gain.linearRampToValueAtTime(value, now + duration);
+  }
+
+  function setActive(link) {
+    document.querySelectorAll("#trackList a").forEach(a => a.classList.remove("is-active"));
+    link.classList.add("is-active");
+  }
+
+  function selectTrack(link) {
+    initAudio();
+    setActive(link);
+    pendingSrc = link.getAttribute("data-src");
+
+    fadeTo(0, fadeOutDur);
+
+    const waitMs = Math.ceil(fadeOutDur * 1000) + 40;
+    setTimeout(() => {
+      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+
+      player.pause();
+      player.currentTime = 0;
+      player.src = pendingSrc;
+      player.load();
+    }, waitMs);
+
+    return false;
+  }
+
+  player.addEventListener("canplay", () => {
+    if (!pendingSrc) return;
+
+    const expectedFile = pendingSrc.split("/").pop();
+    const currentFile = (player.currentSrc || "").split("/").pop();
+    if (expectedFile !== currentFile) return;
+
+    player.play().then(() => {
+      pendingSrc = null;
+    }).catch(() => {});
+  });
+
+  player.addEventListener("play", () => {
+    initAudio();
+    const now = audioCtx.currentTime;
+
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(0, now);
+    gainNode.gain.linearRampToValueAtTime(1, now + resumeDur);
+  });
+
+  player.addEventListener("pause", () => {
+    if (!audioCtx || !gainNode) return;
+    const now = audioCtx.currentTime;
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(0, now);
+  });
+  </script>
+
+</body>
+</html>
