@@ -453,3 +453,18 @@ body.etude-008::before {
   filter: none;
   background-image: url("./image/fond-etude-008.jpg");
 }
+
+/* Étude 009 */
+body.etude-009::before {
+  background-image: url("./image/fond-etude-009.jpg");
+}
+
+/* Étude 010 */
+body.etude-010::before {
+  background-image: url("./image/fond-etude-010.jpg");
+}
+
+/* Étude 011 */
+body.etude-011::before {
+  background-image: url("./image/fond-etude-011.jpg");
+}
