@@ -476,11 +476,13 @@ body.etude-012::before {
 
 /* Étude 013 */
 body.etude-013::before {
+  filter: none;
   background-image: url("./image/fond-etude-013.jpg");
 }
 
 /* Étude 014 */
 body.etude-014::before {
+  filter: none;
   background-image: url("./image/fond-etude-014.jpg");
 }
 
