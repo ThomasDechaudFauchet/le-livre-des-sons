@@ -491,3 +491,27 @@ body.etude-015::before {
   filter: none;
   background-image: url("./image/fond-etude-015.jpg");
 }
+
+/* Étude 016 */
+body.etude-016::before {
+  filter: none;
+  background-image: url("./image/fond-etude-016.jpg");
+}
+
+/* Étude 017 */
+body.etude-017::before {
+  filter: none;
+  background-image: url("./image/fond-etude-017.jpg");
+}
+
+/* Étude 018 */
+body.etude-018::before {
+  filter: none;
+  background-image: url("./image/fond-etude-018.jpg");
+}
+
+/* Étude 019 */
+body.etude-019::before {
+  filter: none;
+  background-image: url("./image/fond-etude-019.jpg");
+}
