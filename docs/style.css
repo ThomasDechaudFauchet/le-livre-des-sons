@@ -471,6 +471,7 @@ body.etude-011::before {
 
 /* Étude 012 */
 body.etude-012::before {
+  filter: none;
   background-image: url("./image/fond-etude-012.jpg");
 }
 
