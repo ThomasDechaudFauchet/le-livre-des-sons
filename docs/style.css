@@ -516,3 +516,29 @@ body.etude-019::before {
   filter: none;
   background-image: url("./image/fond-etude-019.jpg");
 }
+
+/* Étude 020 */
+body.etude-020::before {
+  filter: none;
+  background-image: url("./image/fond-etude-020.jpg");
+}
+
+/* Étude 021 */
+body.etude-021::before {
+  filter: none;
+  background-image: url("./image/fond-etude-021.jpg");
+}
+
+/* Étude 022 */
+body.etude-022::before {
+  filter: none;
+  background-image: url("./image/fond-etude-022.jpg");
+}
+
+/* Étude 023 */
+body.etude-023::before {
+  filter: none;
+  background-image: url("./image/fond-etude-023.jpg");
+}
+
+
