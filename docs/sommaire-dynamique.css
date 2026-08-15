@@ -1,0 +1,50 @@
+/* Sommaire dynamique — Le Livre des Sons */
+
+/* Désactive le fond statique du catalogue défini dans style.css. */
+body.page-catalogue::before {
+  content: none;
+}
+
+/* Conteneur des deux images utilisées pour le fondu. */
+.catalogue-slideshow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.catalogue-slide {
+  position: absolute;
+  inset: 8%;
+  width: 84%;
+  height: 84%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 2.5s ease;
+}
+
+.catalogue-slide.is-visible {
+  opacity: 0.3;
+}
+
+/* Le contenu du sommaire reste au-dessus des images. */
+body.page-catalogue .wrap {
+  position: relative;
+  z-index: 2;
+}
+
+/* Respecte le réglage d'accessibilité limitant les animations. */
+@media (prefers-reduced-motion: reduce) {
+  .catalogue-slide {
+    transition: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .catalogue-slide {
+    inset: 3%;
+    width: 94%;
+    height: 94%;
+  }
+}
