@@ -16,6 +16,39 @@
   </style>
 </head>
 <body>
+  <script>
+const sources = Array.from(
+  { length: 23 },
+  (_, index) =>
+    `./image/sommaire/sommaire-${String(index + 1).padStart(3, "0")}.webp`
+);
+
+const slides = document.querySelectorAll(".catalogue-slide");
+let imageIndex = 0;
+let visibleSlide = 0;
+
+slides[0].src = sources[0];
+
+function showNextImage() {
+  const nextImageIndex = (imageIndex + 1) % sources.length;
+  const nextSlideIndex = visibleSlide === 0 ? 1 : 0;
+  const nextSlide = slides[nextSlideIndex];
+
+  nextSlide.onload = () => {
+    slides[visibleSlide].classList.remove("is-visible");
+    nextSlide.classList.add("is-visible");
+
+    visibleSlide = nextSlideIndex;
+    imageIndex = nextImageIndex;
+  };
+
+  nextSlide.src = sources[nextImageIndex];
+}
+
+if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  window.setInterval(showNextImage, 6000);
+}
+</script>
   <h1>Études sonores</h1>
   <p class="lead">
     Ce site accompagne un ouvrage imprimé. Il donne accès à des études sonores
