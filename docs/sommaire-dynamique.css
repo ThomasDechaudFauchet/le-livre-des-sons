@@ -21,7 +21,7 @@ body.page-catalogue::before {
   height: 84%;
   object-fit: contain;
   opacity: 0;
-  transition: opacity 2.5s ease;
+  transition: opacity 1s ease;
 }
 
 .catalogue-slide.is-visible {
