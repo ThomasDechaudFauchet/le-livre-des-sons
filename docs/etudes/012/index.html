@@ -25,24 +25,45 @@ async src="https://gc.zgo.at/count.js"></script>
     <div class="audio-block">
       <p>Écoute — quatre fichiers audio par régime</p>
 
+     <div class="regime-switch" role="group" aria-label="Choix du régime d'écoute">
+        <button type="button" class="regime is-active" data-regime="spectral">Ouverture spectrale</button>
+        <button type="button" class="regime" data-regime="hauteur">Fréquence fondamentale</button>
+      </div>
+      <p class="regime-note" id="regimeNote">
+        La teinte désigne la région du spectre mise en avant dans l'objet sonore.
+        C'est la règle retenue par le livre.
+      </p>
+
       <ul class="track-list" id="trackList">
         <li>
-          <a href="#" data-src="../../audio/012-1.mp3" onclick="return selectTrack(this);">
+         <a href="#"
+   data-spectral="../../audio/012-1.mp3"
+   data-hauteur="../../audio/012-1-hauteur.mp3"
+   onclick="return selectTrack(this);">
             Couleurs - Longueurs d'ondes & Ouvertures spectrales - Formes simples colorisées 1/2
           </a>
         </li>
         <li>
-          <a href="#" data-src="../../audio/012-2.mp3" onclick="return selectTrack(this);">
+          <a href="#"
+   data-spectral="../../audio/012-1.mp3"
+   data-hauteur="../../audio/012-1-hauteur.mp3"
+   onclick="return selectTrack(this);">
             Couleurs - Longueurs d'ondes & Ouvertures spectrales - Formes simples colorisées 2/2
           </a>
         </li>
         <li>
-          <a href="#" data-src="../../audio/012-3.mp3" onclick="return selectTrack(this);">
+          <a href="#"
+   data-spectral="../../audio/012-1.mp3"
+   data-hauteur="../../audio/012-1-hauteur.mp3"
+   onclick="return selectTrack(this);">
             Couleurs - Longueurs d'ondes & Ouvertures spectrales - Pointés instrumentaux colorisés 1/2
           </a>
         </li>
          <li>
-          <a href="#" data-src="../../audio/012-4.mp3" onclick="return selectTrack(this);">
+      <a href="#"
+   data-spectral="../../audio/012-1.mp3"
+   data-hauteur="../../audio/012-1-hauteur.mp3"
+   onclick="return selectTrack(this);">
             Couleurs - Longueurs d'ondes & Ouvertures spectrales - Pointés instrumentaux colorisés 2/2
           </a>
         </li>
