@@ -573,4 +573,39 @@ body.page-catalogue::before {
   }
 }
 
+/* Sélecteur de régime — études 012 et 013 */
+.regime-switch {
+  display: inline-flex;
+  gap: 0;
+  margin: 0 0 .6rem;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.regime-switch .regime {
+  font: inherit;
+  font-size: .82em;
+  letter-spacing: .02em;
+  padding: .42em 1.1em;
+  background: transparent;
+  color: inherit;
+  border: 0;
+  cursor: pointer;
+  opacity: .55;
+  transition: opacity .18s, background-color .18s;
+}
+.regime-switch .regime + .regime { border-left: 1px solid currentColor; }
+.regime-switch .regime:hover { opacity: .85; }
+.regime-switch .regime.is-active {
+  opacity: 1;
+  background: currentColor;
+  color: #111;
+}
+.regime-note {
+  font-size: .8em;
+  opacity: .6;
+  max-width: 46em;
+  margin: 0 0 1.1rem;
+  line-height: 1.45;
+}
 
