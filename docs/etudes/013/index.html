@@ -25,25 +25,50 @@ async src="https://gc.zgo.at/count.js"></script>
     <div class="audio-block">
       <p>Écoute — quatre fichiers audio par régime</p>
 
+      <div class="regime-switch" role="group" aria-label="Choix du régime d'écoute">
+        <button type="button" class="regime is-active" data-regime="spectral">Ouverture spectrale</button>
+        <button type="button" class="regime" data-regime="hauteur">Fréquence fondamentale</button>
+      </div>
+      <p class="regime-note" id="regimeNote">
+        Le dégradé fait de la fenêtre spectrale un parcours : elle s'ouvre, se déplace
+        ou se resserre pendant que le son se déroule. C'est la règle retenue par le livre.
+      </p>
+
       <ul class="track-list" id="trackList">
         <li>
-          <a href="#" data-src="../../audio/013-1.mp3" onclick="return selectTrack(this);">
+          <a href="#"
+             data-spectral="../../audio/013-1.mp3"
+             data-hauteur="../../audio/013-1-hauteur.mp3"
+             data-nom-hauteur="Nuances - Dégradés &amp; Fréquence fondamentale évolutive - Formes simples 1/2"
+             onclick="return selectTrack(this);">
             Nuances - Dégradés & Ouverture spectrale évolutive - Formes simples 1/2
           </a>
         </li>
         <li>
-          <a href="#" data-src="../../audio/013-2.mp3" onclick="return selectTrack(this);">
-             Nuances - Dégradés & Ouverture spectrale évolutive - Formes simples 2/2
+          <a href="#"
+             data-spectral="../../audio/013-2.mp3"
+             data-hauteur="../../audio/013-2-hauteur.mp3"
+             data-nom-hauteur="Nuances - Dégradés &amp; Fréquence fondamentale évolutive - Formes simples 2/2"
+             onclick="return selectTrack(this);">
+            Nuances - Dégradés & Ouverture spectrale évolutive - Formes simples 2/2
           </a>
         </li>
         <li>
-          <a href="#" data-src="../../audio/013-3.mp3" onclick="return selectTrack(this);">
-             Nuances - Dégradés & Ouverture spectrale évolutive - Pointés instrumentaux 1/2
+          <a href="#"
+             data-spectral="../../audio/013-3.mp3"
+             data-hauteur="../../audio/013-3-hauteur.mp3"
+             data-nom-hauteur="Nuances - Dégradés &amp; Fréquence fondamentale évolutive - Pointés instrumentaux 1/2"
+             onclick="return selectTrack(this);">
+            Nuances - Dégradés & Ouverture spectrale évolutive - Pointés instrumentaux 1/2
           </a>
         </li>
-         <li>
-          <a href="#" data-src="../../audio/013-4.mp3" onclick="return selectTrack(this);">
-             Nuances - Dégradés & Ouverture spectrale évolutive - Pointés instrumentaux 2/2
+        <li>
+          <a href="#"
+             data-spectral="../../audio/013-4.mp3"
+             data-hauteur="../../audio/013-4-hauteur.mp3"
+             data-nom-hauteur="Nuances - Dégradés &amp; Fréquence fondamentale évolutive - Pointés instrumentaux 2/2"
+             onclick="return selectTrack(this);">
+            Nuances - Dégradés & Ouverture spectrale évolutive - Pointés instrumentaux 2/2
           </a>
         </li>
       </ul>
@@ -70,6 +95,56 @@ async src="https://gc.zgo.at/count.js"></script>
 
   const player = document.getElementById("player");
   let pendingSrc = null;
+
+  let regime = "spectral";
+  let reprise = null;
+
+  const NOTES = {
+    spectral: "Le dégradé fait de la fenêtre spectrale un parcours : elle s'ouvre, " +
+              "se déplace ou se resserre pendant que le son se déroule. " +
+              "C'est la règle retenue par le livre.",
+    hauteur:  "Le dégradé fait de la fréquence fondamentale un parcours : la note glisse " +
+              "pendant que le son se déroule. Régime alternatif, installé et démontré " +
+              "au Discours 2, que le livre ne retient pas."
+  };
+
+  // Le nom du régime spectral est déjà écrit dans la page : on le mémorise
+  // au chargement, pour pouvoir y revenir.
+  document.querySelectorAll("#trackList a").forEach(a => {
+    a.dataset.nomSpectral = a.textContent.trim();
+  });
+
+  function srcDe(link) {
+    return link.getAttribute("data-" + regime);
+  }
+
+  function majNoms() {
+    document.querySelectorAll("#trackList a").forEach(a => {
+      const nom = a.getAttribute("data-nom-" + regime);
+      if (nom) a.textContent = nom;
+    });
+  }
+
+  function setRegime(nouveau) {
+    if (nouveau === regime) return;
+    regime = nouveau;
+
+    document.querySelectorAll(".regime").forEach(b =>
+      b.classList.toggle("is-active", b.dataset.regime === regime));
+    document.getElementById("regimeNote").textContent = NOTES[regime];
+    majNoms();
+
+    const actif = document.querySelector("#trackList a.is-active");
+    if (!actif) return;
+
+    // Les deux fichiers ont la même durée et la même grille de 4 s :
+    // on retombe exactement sur la même case dans l'autre régime.
+    reprise = { t: player.currentTime, jouait: !player.paused };
+    selectTrack(actif);
+  }
+
+  document.querySelectorAll(".regime").forEach(b =>
+    b.addEventListener("click", () => setRegime(b.dataset.regime)));
 
   let fadeOutDur = 0.35;
   let resumeDur  = 0.08;
@@ -102,7 +177,7 @@ async src="https://gc.zgo.at/count.js"></script>
   function selectTrack(link) {
     initAudio();
     setActive(link);
-    pendingSrc = link.getAttribute("data-src");
+    pendingSrc = srcDe(link);
 
     fadeTo(0, fadeOutDur);
 
@@ -125,6 +200,15 @@ async src="https://gc.zgo.at/count.js"></script>
     const expectedFile = pendingSrc.split("/").pop();
     const currentFile = (player.currentSrc || "").split("/").pop();
     if (expectedFile !== currentFile) return;
+
+    if (reprise) {
+      try { player.currentTime = reprise.t; } catch (e) {}
+      const jouait = reprise.jouait;
+      reprise = null;
+      pendingSrc = null;
+      if (jouait) player.play().catch(() => {});
+      return;
+    }
 
     player.play().then(() => {
       pendingSrc = null;
