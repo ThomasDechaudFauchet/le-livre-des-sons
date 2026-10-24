@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Étude 012 : Couleurs - Longueurs d'ondes & Ouvertures spectrales</title>
+    <meta name="description" content="Étude 012 du Livre des Sons. 8 fichiers audio à écouter, planche par planche, case par case.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Le Livre des Sons">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="Étude 012 — Couleurs — Longueurs d&#x27;ondes &amp; Ouverture spectrale">
+  <meta property="og:description" content="Étude 012 du Livre des Sons. 8 fichiers audio à écouter, planche par planche, case par case.">
+  <meta property="og:url" content="https://www.lelivredessons.fr/etudes/012/">
+  <meta property="og:image" content="https://www.lelivredessons.fr/partage.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Étude 012 — Couleurs — Longueurs d&#x27;ondes &amp; Ouverture spectrale">
+  <meta name="twitter:description" content="Étude 012 du Livre des Sons. 8 fichiers audio à écouter, planche par planche, case par case.">
+  <meta name="twitter:image" content="https://www.lelivredessons.fr/partage.png">
+
+<link rel="stylesheet" href="../../style.css?v=6">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-012">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Étude 012 : Couleurs - Longueurs d'ondes & Ouvertures spectrales</h1>
+    <div class="cat">Étude laborieuse</div>
+
+    <div class="audio-block">
+      <p>Écoute — quatre fichiers audio par régime</p>
+
+     <div class="regime-switch" role="group" aria-label="Choix du régime d'écoute">
+        <button type="button" class="regime is-active" data-regime="spectral">Ouverture spectrale</button>
+        <button type="button" class="regime" data-regime="hauteur">Fréquence fondamentale</button>
+      </div>
+      <p class="regime-note" id="regimeNote">
+        La teinte désigne la région du spectre mise en avant dans l'objet sonore.
+        C'est la règle retenue par le livre.
+      </p>
+
+      <ul class="track-list" id="trackList">
+        <li>
+          <a href="#"
+             data-spectral="../../audio/012-1.mp3"
+             data-hauteur="../../audio/012-1-hauteur.mp3"
+             data-nom-hauteur="Couleurs - Longueurs d'ondes &amp; Fréquence fondamentale - Formes simples colorisées 1/2"
+             onclick="return selectTrack(this);">
+            Couleurs - Longueurs d'ondes & Ouvertures spectrales - Formes simples colorisées 1/2
+          </a>
+        </li>
+        <li>
+          <a href="#"
+             data-spectral="../../audio/012-2.mp3"
+             data-hauteur="../../audio/012-2-hauteur.mp3"
+             data-nom-hauteur="Couleurs - Longueurs d'ondes &amp; Fréquence fondamentale - Formes simples colorisées 2/2"
+             onclick="return selectTrack(this);">
+            Couleurs - Longueurs d'ondes & Ouvertures spectrales - Formes simples colorisées 2/2
+          </a>
+        </li>
+        <li>
+          <a href="#"
+             data-spectral="../../audio/012-3.mp3"
+             data-hauteur="../../audio/012-3-hauteur.mp3"
+             data-nom-hauteur="Couleurs - Longueurs d'ondes &amp; Fréquence fondamentale - Pointés instrumentaux colorisés 1/2"
+             onclick="return selectTrack(this);">
+            Couleurs - Longueurs d'ondes & Ouvertures spectrales - Pointés instrumentaux colorisés 1/2
+          </a>
+        </li>
+        <li>
+          <a href="#"
+             data-spectral="../../audio/012-4.mp3"
+             data-hauteur="../../audio/012-4-hauteur.mp3"
+             data-nom-hauteur="Couleurs - Longueurs d'ondes &amp; Fréquence fondamentale - Pointés instrumentaux colorisés 2/2"
+             onclick="return selectTrack(this);">
+            Couleurs - Longueurs d'ondes & Ouvertures spectrales - Pointés instrumentaux colorisés 2/2
+          </a>
+        </li>
+      </ul>
+
+      <audio id="player" controls preload="metadata"></audio>
+
+      <p class="planche-tete">La planche &middot; la case entendue s'éclaire &middot; cliquer pour s'y rendre</p>
+      <div id="planche" data-etude="012"></div>
+    </div>
+
+    <nav>
+      <a href="../011/">← Étude précédente</a>
+      <a href="../../">Sommaire</a>
+      <a href="../013/">Étude suivante →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+
+  <script>
+  let audioCtx;
+  let gainNode;
+  let sourceNode;
+
+  const player = document.getElementById("player");
+  let pendingSrc = null;
+
+  let fadeOutDur = 0.35;
+  let resumeDur  = 0.08;
+
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      sourceNode = audioCtx.createMediaElementSource(player);
+      gainNode = audioCtx.createGain();
+      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+
+      sourceNode.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+    }
+    if (audioCtx.state === "suspended") audioCtx.resume();
+  }
+
+  function fadeTo(value, duration) {
+    const now = audioCtx.currentTime;
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+    gainNode.gain.linearRampToValueAtTime(value, now + duration);
+  }
+
+  function setActive(link) {
+    document.querySelectorAll("#trackList a").forEach(a => a.classList.remove("is-active"));
+    link.classList.add("is-active");
+  }
+
+  function selectTrack(link) {
+    initAudio();
+    setActive(link);
+    pendingSrc = srcDe(link);
+
+    fadeTo(0, fadeOutDur);
+
+    const waitMs = Math.ceil(fadeOutDur * 1000) + 40;
+    setTimeout(() => {
+      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+
+      player.pause();
+      player.currentTime = 0;
+      player.src = pendingSrc;
+      player.load();
+    }, waitMs);
+
+    return false;
+  }
+
+  player.addEventListener("canplay", () => {
+    if (!pendingSrc) return;
+
+    const expectedFile = pendingSrc.split("/").pop();
+    const currentFile = (player.currentSrc || "").split("/").pop();
+    if (expectedFile !== currentFile) return;
+
+     if (reprise) {
+      try { player.currentTime = reprise.t; } catch (e) {}
+      const jouait = reprise.jouait;
+      reprise = null;
+      pendingSrc = null;
+      if (jouait) player.play().catch(() => {});
+      return;
+    }
+
+    player.play().then(() => {
+      pendingSrc = null;
+    }).catch(() => {});
+  });
+
+  player.addEventListener("play", () => {
+    initAudio();
+    const now = audioCtx.currentTime;
+
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(0, now);
+    gainNode.gain.linearRampToValueAtTime(1, now + resumeDur);
+  });
+
+  player.addEventListener("pause", () => {
+    if (!audioCtx || !gainNode) return;
+    const now = audioCtx.currentTime;
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(0, now);
+  });
+
+  let regime = "spectral";
+  let reprise = null;
+
+  const NOTES = {
+    spectral: "La teinte désigne la région du spectre mise en avant dans l'objet sonore. " +
+              "C'est la règle retenue par le livre.",
+    hauteur:  "La teinte désigne la fréquence fondamentale du son. Régime alternatif, " +
+              "installé et démontré au Discours 2, que le livre ne retient pas."
+  };
+
+  // Le nom du régime spectral est déjà écrit dans la page : on le mémorise
+  // au chargement, pour pouvoir y revenir.
+  document.querySelectorAll("#trackList a").forEach(a => {
+    a.dataset.nomSpectral = a.textContent.trim();
+  });
+
+  function srcDe(link) {
+    return link.getAttribute("data-" + regime);
+  }
+
+  function majNoms() {
+    document.querySelectorAll("#trackList a").forEach(a => {
+      const nom = a.getAttribute("data-nom-" + regime);
+      if (nom) a.textContent = nom;
+    });
+  }
+
+  function setRegime(nouveau) {
+    if (nouveau === regime) return;
+    regime = nouveau;
+
+    document.querySelectorAll(".regime").forEach(b =>
+      b.classList.toggle("is-active", b.dataset.regime === regime));
+    document.getElementById("regimeNote").textContent = NOTES[regime];
+    majNoms();
+
+    const actif = document.querySelector("#trackList a.is-active");
+    if (!actif) return;
+
+    // Les deux fichiers ont la même durée et la même grille de 4 s :
+    // on retombe exactement sur la même case dans l'autre régime.
+    reprise = { t: player.currentTime, jouait: !player.paused };
+    selectTrack(actif);
+  }
+
+  document.querySelectorAll(".regime").forEach(b =>
+    b.addEventListener("click", () => setRegime(b.dataset.regime)));
+    
+  </script>
+
+  <script src="../../planches.js"></script>
+
+  
+
+  <script src="../../partage.js"></script>
+
+</body>
+</html>
