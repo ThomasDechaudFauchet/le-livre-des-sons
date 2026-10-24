@@ -1,0 +1,1287 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* Base graphique – Le Livre des Sons */
+/* Fond sombre + texte de base */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #121212;   /* anthracite doux */
+  color: #e6e6e6;        /* gris clair lisible */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+/* Hiérarchie typographique */
+h1 {
+  font-size: 1.9rem;
+  font-weight: 500;
+  margin: 0.2rem 0 0.6rem 0;
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 2rem 0 0.6rem 0;
+}
+
+.id {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+
+.cat {
+  font-size: 0.8rem;
+  color: #b0b0b0;
+  margin-bottom: 1.5rem;
+}
+
+p {
+  max-width: 720px;
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+/* Layout global : centré */
+.wrap{
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 48px 20px 64px;
+}
+
+/* Typo de base : Arial partout */
+html, body{
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Titres “forts” : serif expressive (présente partout) */
+.site-title{
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin: 0 0 0.3rem 0;
+}
+
+.site-subtitle{
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #cfcfcf;
+  margin: 0 0 2rem 0;
+  max-width: 760px;
+}
+
+/* Bloc étude */
+.study-title{
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 0.4rem 0 0.6rem 0;
+}
+
+.id{
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+
+.cat{
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #bdbdbd;
+  margin-bottom: 1.5rem;
+}
+
+/* Nav : visible sur fond sombre */
+nav a{
+  color: #e6e6e6;
+  text-decoration: none;
+  margin-right: 1rem;
+  opacity: 0.85;
+}
+nav a:hover{
+  text-decoration: underline;
+  opacity: 1;
+}
+
+/* Audio : respirer */
+audio{
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  margin: 0.8rem 0 1.2rem 0;
+}
+
+/* NAV : forcer la lisibilité même si un CSS local traîne */
+nav { margin-top: 1.6rem; }
+nav a, nav a:visited {
+  color: #e6e6e6 !important;
+  text-decoration: none;
+  opacity: 0.9;
+}
+nav a:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
+
+/* Respiration responsive : plus d'air sur grands écrans */
+@media (min-width: 900px) {
+  .wrap { padding-top: 72px; padding-bottom: 96px; }
+  header { margin-bottom: 3rem; }
+  .study-title { margin-top: 0.8rem; margin-bottom: 1rem; }
+  .cat { margin-bottom: 2rem; }
+  audio { margin-top: 1.2rem; margin-bottom: 1.8rem; }
+  nav { margin-top: 2.2rem; }
+}
+
+@media (min-width: 1200px) {
+  .wrap { max-width: 960px; }
+  .site-title { font-size: 2.5rem; }
+  .study-title { font-size: 2.1rem; }
+  body { font-size: 18px; }
+}
+
+/* Espacement global : effet visible partout */
+header { margin-bottom: 2.6rem; }
+
+.study-title { margin-top: 0.8rem; margin-bottom: 1.1rem; }
+.cat { margin-bottom: 2rem; }
+
+audio { margin-top: 1.4rem; margin-bottom: 1.6rem; }
+
+nav { margin-top: 2rem; display: flex; gap: 1.4rem; flex-wrap: wrap; }
+nav a { margin-right: 0 !important; } /* annule les vieux styles */
+
+@media (min-width: 1100px) {
+  .wrap { padding-top: 84px; padding-bottom: 110px; }
+  header { margin-bottom: 3.4rem; }
+  nav { margin-top: 2.6rem; }
+}
+
+/* Liens – style éditorial sobre */
+a,
+a:visited {
+  color: #e6e6e6;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(230,230,230,0.25);
+}
+
+a:hover {
+  color: #ffffff;
+  border-bottom-color: rgba(255,255,255,0.8);
+}
+
+/* Catalogue — hiérarchie chapitres / études */
+
+/* Titres de chapitres (Études laborieuses, etc.) */
+section h2 {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-top: 2.6rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Liens d’études (Étude 001, 002…) */
+section p {
+  margin: 0.2rem 0;
+}
+
+section p a {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #d6d6d6;
+  border-bottom: 1px solid rgba(214,214,214,0.25);
+}
+
+section p a:hover {
+  color: #ffffff;
+  border-bottom-color: rgba(255,255,255,0.8);
+}
+
+/* "À venir" discret */
+section p em {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #9a9a9a;
+}
+
+/* Grille éditoriale — rythme vertical */
+
+:root {
+  --rhythm: 0.6rem;
+}
+
+/* Blocs principaux alignés sur la grille */
+header {
+  margin-bottom: calc(var(--rhythm) * 6);
+}
+
+.study-title {
+  margin-bottom: calc(var(--rhythm) * 2);
+}
+
+.cat {
+  margin-bottom: calc(var(--rhythm) * 4);
+}
+
+section {
+  margin-bottom: calc(var(--rhythm) * 5);
+}
+
+/* Chapitres */
+section h2 {
+  margin-top: calc(var(--rhythm) * 4);
+  margin-bottom: calc(var(--rhythm) * 2);
+}
+
+/* Entrées d’études (liens) */
+section p {
+  margin: calc(var(--rhythm) * 0.6) 0;
+}
+
+/* Navigation et audio (pour les pages d’étude) */
+audio {
+  margin-top: calc(var(--rhythm) * 3);
+  margin-bottom: calc(var(--rhythm) * 4);
+}
+
+nav {
+  margin-top: calc(var(--rhythm) * 4);
+}
+
+/* Fond image — page catalogue (solution robuste) */
+body.page-catalogue::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("./image/fond-sommaire.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 68%;
+  filter: invert(1) brightness(1);
+  opacity: 1;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Voile sombre pour la lisibilité */
+body.page-catalogue::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Le contenu doit passer AU-DESSUS */
+body.page-catalogue .wrap {
+  position: relative;
+  z-index: 2;
+}
+
+/* Zone d’écoute — mise en valeur */
+.audio-block {
+  margin-top: calc(var(--rhythm) * 4);
+  padding-top: calc(var(--rhythm) * 2);
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.audio-block p {
+  font-size: 0.9rem;
+  color: #cfcfcf;
+  margin-bottom: 0.6rem;
+}
+
+/* Playlist — état actif */
+.track-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 calc(var(--rhythm) * 2) 0;
+}
+
+.track-list li {
+  margin: calc(var(--rhythm) * 0.7) 0;
+}
+
+.track-list a {
+  display: inline-block;
+  font-style: italic;
+  border-bottom: 1px solid rgba(214,214,214,0.25);
+  padding: 2px 0;
+}
+
+/* Indication cliquable (toujours visible) */
+.track-list a::before {
+  content: "▶ ";
+  opacity: 0.5;
+}
+
+/* État actif */
+.track-list a.is-active {
+  color: #ffffff;
+  border-bottom-color: rgba(255,255,255,0.8);
+}
+
+.track-list a.is-active::before {
+  opacity: 1;
+  letter-spacing: 0.02em;
+}
+
+/* Métadonnées du sommaire */
+.meta {
+  font-size: 0.8rem;
+  color: #9a9a9a;
+  margin-left: 0.4rem;
+  white-space: nowrap;
+}
+
+section p {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+/* Contrôles audio custom */
+.controls {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: calc(var(--rhythm) * 2);
+  flex-wrap: wrap;
+}
+
+.ctrl {
+  background: transparent;
+  color: #e6e6e6;
+  border: 1px solid rgba(230,230,230,0.35);
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.ctrl:hover {
+  border-color: rgba(255,255,255,0.8);
+}
+
+.ctrl:active {
+  transform: translateY(1px);
+}
+
+/* Signature auteur */
+.site-signature {
+  margin-top: calc(var(--rhythm) * 6);
+  font-size: 0.5rem;
+  line-height: 1.4;
+  color: #8e8e8e;
+  opacity: 0.5;
+  text-align: right;
+}
+
+/* =========================
+   Fonds spécifiques — Études
+   ========================= */
+
+/* Base commune à toutes les pages d’étude */
+body.page-etude::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 68%;
+  filter: invert(1) brightness(1);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Voile sombre pour la lisibilité */
+body.page-etude::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.72);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Le contenu passe au-dessus */
+body.page-etude .wrap {
+  position: relative;
+  z-index: 2;
+}
+
+/* Étude 001 */
+body.etude-001::before {
+  background-image: url("./image/fond-etude-001.jpg");
+}
+
+/* Étude 002 */
+body.etude-002::before {
+  background-image: url("./image/fond-etude-002.jpg");
+}
+
+/* Étude 003 */
+body.etude-003::before {
+  background-image: url("./image/fond-etude-003.jpg");
+}
+
+/* Étude 004 */
+body.etude-004::before {
+  background-image: url("./image/fond-etude-004.jpg");
+}
+
+/* Étude 005 */
+body.etude-005::before {
+  background-image: url("./image/fond-etude-005.jpg");
+}
+
+/* Étude 006 */
+body.etude-006::before {
+  background-image: url("./image/fond-etude-006.jpg");
+}
+
+/* Étude 007 */
+body.etude-007::before {
+  background-image: url("./image/fond-etude-007.jpg");
+}
+
+/* Étude 008 */
+body.etude-008::before {
+  filter: none;
+  background-image: url("./image/fond-etude-008.jpg");
+}
+
+/* Étude 009 */
+body.etude-009::before {
+  background-image: url("./image/fond-etude-009.jpg");
+}
+
+/* Étude 010 */
+body.etude-010::before {
+  background-image: url("./image/fond-etude-010.jpg");
+}
+
+/* Étude 011 */
+body.etude-011::before {
+  background-image: url("./image/fond-etude-011.jpg");
+}
+
+/* Étude 012 */
+body.etude-012::before {
+  filter: none;
+  background-image: url("./image/fond-etude-012.jpg");
+}
+
+/* Étude 013 */
+body.etude-013::before {
+  filter: none;
+  background-image: url("./image/fond-etude-013.jpg");
+}
+
+/* Étude 014 */
+body.etude-014::before {
+  filter: none;
+  background-image: url("./image/fond-etude-014.jpg");
+}
+
+/* Étude 015 */
+body.etude-015::before {
+  filter: none;
+  background-image: url("./image/fond-etude-015.jpg");
+}
+
+/* Étude 016 */
+body.etude-016::before {
+  filter: none;
+  background-image: url("./image/fond-etude-016.jpg");
+}
+
+/* Étude 017 */
+body.etude-017::before {
+  filter: none;
+  background-image: url("./image/fond-etude-017.jpg");
+}
+
+/* Étude 018 */
+body.etude-018::before {
+  filter: none;
+  background-image: url("./image/fond-etude-018.jpg");
+}
+
+/* Étude 019 */
+body.etude-019::before {
+  filter: none;
+  background-image: url("./image/fond-etude-019.jpg");
+}
+
+/* Étude 020 */
+body.etude-020::before {
+  filter: none;
+  background-image: url("./image/fond-etude-020.jpg");
+}
+
+/* Étude 021 */
+body.etude-021::before {
+  filter: none;
+  background-image: url("./image/fond-etude-021.jpg");
+}
+
+/* Étude 022 */
+body.etude-022::before {
+  filter: none;
+  background-image: url("./image/fond-etude-022.jpg");
+}
+
+/* Étude 023 */
+body.etude-023::before {
+  filter: none;
+  background-image: url("./image/fond-etude-023.jpg");
+}
+
+body.page-catalogue::before {
+  content: none;
+}
+
+.catalogue-slideshow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.catalogue-slide {
+  position: absolute;
+  inset: 8%;
+  width: 84%;
+  height: 84%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 2.5s ease;
+}
+
+.catalogue-slide.is-visible {
+  opacity: 0.3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalogue-slide {
+    transition: none;
+  }
+}
+
+/* Sélecteur de régime — études 012 et 013 */
+.regime-switch {
+  display: inline-flex;
+  gap: 0;
+  margin: 0 0 .6rem;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.regime-switch .regime {
+  font: inherit;
+  font-size: .82em;
+  letter-spacing: .02em;
+  padding: .42em 1.1em;
+  background: transparent;
+  color: inherit;
+  border: 0;
+  cursor: pointer;
+  opacity: .55;
+  transition: opacity .18s, background-color .18s;
+}
+.regime-switch .regime + .regime { border-left: 1px solid currentColor; }
+.regime-switch .regime:hover { opacity: .85; }
+.regime-switch .regime.is-active {
+  opacity: 1;
+  background: currentColor;
+  color: #111;
+}
+.regime-note {
+  font-size: .8em;
+  opacity: .6;
+  max-width: 46em;
+  margin: 0 0 1.1rem;
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   CHARTE TYPOGRAPHIQUE — 23 octobre 2026
+   Les rôles du livre : le sans en titre (Campton → Jost),
+   le serif en texte (ITC Garamond → Newsreader).
+   Le fond de chaque page d'étude suit celui de sa planche :
+   blanc jusqu'à l'étude 011, noir à partir de l'étude 012.
+   Tout ce bloc est additif : le supprimer rend le site à son état d'avant.
+   ========================================================================== */
+
+:root {
+  /* les deux familles */
+  --titre: "Jost", "Century Gothic", "Futura", sans-serif;
+  --texte: "Newsreader", "Adobe Garamond Pro", Garamond, "Times New Roman", serif;
+
+  /* encres et fonds — valeurs sombres par défaut (études 012 à 023) */
+  --fond:       #14110f;
+  --encre:      #e8e6e1;
+  --encre-doux: #a7a39b;
+  --encre-tenu: #6f6b64;
+  --filet:      #302b27;
+  --vif:        #d8a657;
+  --voile:      rgba(10, 8, 7, 0.76);
+}
+
+/* --- les onze premières études sont sur fond clair, comme leurs planches --- */
+body.etude-001, body.etude-002, body.etude-003, body.etude-004,
+body.etude-005, body.etude-006, body.etude-007, body.etude-008,
+body.etude-009, body.etude-010, body.etude-011 {
+  --fond:       #f7f4ee;
+  --encre:      #16130f;
+  --encre-doux: #55504a;
+  --encre-tenu: #8a847c;
+  --filet:      #ded8cc;
+  --vif:        #8a5e12;
+  --voile:      rgba(247, 244, 238, 0.82);
+}
+
+html, body {
+  background: var(--fond);
+  color: var(--encre);
+  font-family: var(--texte);
+}
+
+/* le voile posé sur la planche prend la couleur du fond de la page */
+body.page-etude::after { background: var(--voile); }
+
+/* La planche de fond n'est plus mise en négatif.
+   L'ancienne feuille l'inversait parce que le site était sombre partout
+   alors que la moitié des planches sont noires sur blanc. Maintenant que
+   chaque page prend le fond de sa planche, l'inversion n'a plus lieu d'être
+   et rendait les onze premières études en négatif. */
+body.page-etude::before { filter: none; opacity: 0.38; }
+
+/* --- titres : le sans --- */
+.site-title {
+  font-family: var(--titre);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.05;
+  color: var(--encre);
+}
+
+.study-title, h1, h2, h3, h4 {
+  font-family: var(--titre);
+  font-weight: 600;
+  letter-spacing: -0.008em;
+  line-height: 1.18;
+  text-wrap: balance;
+  color: var(--encre);
+}
+
+/* --- textes : le serif --- */
+.site-subtitle {
+  font-family: var(--texte);
+  font-style: italic;
+  font-size: 1.06rem;
+  line-height: 1.45;
+  color: var(--encre-doux);
+}
+
+p, li, blockquote {
+  font-family: var(--texte);
+  line-height: 1.62;
+  color: var(--encre);
+}
+
+/* --- surtitres, catégories, compteurs : le sans en capitales --- */
+.cat, .id {
+  font-family: var(--titre);
+  font-weight: 400;
+  font-size: 0.72rem;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--encre-tenu);
+}
+
+.meta {
+  font-family: var(--titre);
+  font-size: 0.74rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  color: var(--encre-tenu);
+}
+
+/* --- liens et navigation --- */
+a { color: var(--encre); }
+a:hover { color: var(--vif); }
+
+nav a {
+  font-family: var(--titre);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  color: var(--encre-doux);
+}
+nav a:hover { color: var(--encre); }
+
+.track-list a {
+  font-family: var(--texte);
+  font-size: 1.02rem;
+  line-height: 1.35;
+  color: var(--encre-doux);
+}
+.track-list a:hover,
+.track-list a.is-active { color: var(--encre); }
+
+.site-signature {
+  font-family: var(--titre);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--encre-tenu);
+}
+
+/* --- sélecteur de régime : il suit maintenant le fond de la page --- */
+.regime-switch { border-color: var(--filet); }
+.regime-switch .regime {
+  font-family: var(--titre);
+  color: var(--encre-doux);
+  opacity: 1;
+}
+.regime-switch .regime + .regime { border-left-color: var(--filet); }
+.regime-switch .regime:hover { color: var(--encre); }
+.regime-switch .regime.is-active {
+  background: var(--encre);
+  color: var(--fond);
+}
+.regime-note {
+  font-family: var(--texte);
+  color: var(--encre-doux);
+  opacity: 1;
+}
+
+/* --- correctifs de contraste -----------------------------------------
+   L'ancienne feuille fixait des gris clairs en dur, et une règle de
+   navigation portait un !important. Sur fond blanc ces couleurs
+   devenaient illisibles. On les repasse par les jetons.
+   --------------------------------------------------------------------- */
+a, a:visited { color: var(--encre); }
+a:hover, a:visited:hover { color: var(--vif); }
+
+nav a, nav a:visited { color: var(--encre-doux) !important; opacity: 1; }
+nav a:hover, nav a:visited:hover { color: var(--encre) !important; }
+
+section p a { color: var(--encre); }
+section p a:hover { color: var(--vif); }
+section p em { color: var(--encre-doux); }
+
+.audio-block p.regime-note { color: var(--encre-doux); }
+.track-list a.is-active { color: var(--encre); }
+.site-signature { opacity: 0.85; }
+.ctrl { color: var(--encre); }
+
+/* --- le bloc d'écoute --- */
+.audio-block > p:first-child {
+  font-family: var(--titre);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--encre-tenu);
+}
+
+/* ==========================================================================
+   LA BANDE DES CASES
+   Une rangée de repères sous le lecteur, aux couleurs réelles de la planche.
+   Pilotée par docs/bande.js.
+   ========================================================================== */
+.bande-tete {
+  display: flex; flex-wrap: wrap; gap: .5rem 1rem;
+  align-items: baseline; justify-content: space-between;
+  margin: 1.6rem 0 .5rem;
+}
+.bande-tete span {
+  font-family: var(--titre); font-size: .68rem; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--encre-tenu);
+}
+.bande { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; }
+.bande .case {
+  position: relative; aspect-ratio: 1; max-width: 100%;
+  border: 0; padding: 0; cursor: pointer; border-radius: 1px;
+  opacity: .32; transform: scale(.86);
+  transition: opacity .22s, transform .22s, box-shadow .22s;
+}
+.bande .case:hover { opacity: .78; transform: scale(.95); }
+.bande .case.on { opacity: 1; transform: scale(1); box-shadow: 0 0 0 1px var(--encre); }
+.bande .case:focus-visible { outline: 2px solid var(--vif); outline-offset: 2px; }
+
+.bande-lecture {
+  display: flex; flex-wrap: wrap; gap: .4rem 1.1rem;
+  align-items: baseline; margin-top: .7rem; min-height: 2.6em;
+}
+.bande-nom { font-family: var(--texte); font-size: 1.02rem; color: var(--encre); }
+.bande-hz {
+  font-family: var(--titre); font-size: .8rem; font-variant-numeric: tabular-nums;
+  letter-spacing: .04em; color: var(--vif);
+}
+.bande-deg {
+  font-family: var(--titre); font-size: .74rem; font-variant-numeric: tabular-nums;
+  letter-spacing: .04em; color: var(--encre-tenu);
+}
+@media (prefers-reduced-motion: reduce) {
+  .bande .case { transition: none; }
+}
+
+/* ==========================================================================
+   LA PLANCHE ET SA CASE
+   La planche du livre sous le lecteur, la case entendue éclairée.
+   Pilotée par docs/planches.js.
+   ========================================================================== */
+:root { --voile-case: rgba(10, 8, 7, 0.46); }
+body.etude-001, body.etude-002, body.etude-003, body.etude-004,
+body.etude-005, body.etude-006, body.etude-007, body.etude-008,
+body.etude-009, body.etude-010, body.etude-011 {
+  --voile-case: rgba(247, 244, 238, 0.55);
+}
+
+.planche-tete {
+  font-family: var(--titre); font-size: .68rem; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--encre-tenu);
+  margin: 1.8rem 0 .6rem;
+}
+#planche[hidden] { display: none; }
+.planche-boite {
+  position: relative; width: 100%; max-width: 560px; margin: 0 auto;
+}
+.planche-boite img { width: 100%; height: auto; display: block; }
+.planche-case {
+  position: absolute; border: 0; padding: 0; margin: 0;
+  background: var(--voile-case);
+  cursor: pointer;
+  transition: background-color .35s ease, box-shadow .35s ease;
+}
+.planche-case:hover { background: color-mix(in srgb, var(--voile-case) 55%, transparent); }
+.planche-case.on {
+  background: transparent;
+  box-shadow: 0 0 0 3px var(--vif), 0 0 22px rgba(0,0,0,.35);
+}
+.planche-case:focus-visible { outline: 2px solid var(--vif); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .planche-case { transition: none; } }
+
+/* --- la planche passe devant pendant l'écoute --- */
+body.planche-devant > *:not(#planche):not(.planche-fermer) { filter: blur(7px); transition: filter .35s; }
+body.planche-devant { overflow: hidden; }
+
+#planche.au-dessus {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(16px, env(safe-area-inset-left, 0px));
+  padding-top: calc(1.2rem + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(1.2rem + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in srgb, var(--fond) 72%, transparent);
+  overflow: auto;
+}
+#planche.au-dessus .planche-boite {
+  max-width: min(92vw, 58rem);
+  max-height: 86vh;
+  width: auto;
+  margin: 0;
+}
+#planche.au-dessus .planche-boite img { max-height: 86vh; width: auto; }
+
+.planche-fermer {
+  position: fixed;
+  top: calc(.9rem + env(safe-area-inset-top, 0px));
+  right: calc(.9rem + env(safe-area-inset-right, 0px));
+  font-family: var(--titre);
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .5em 1.1em;
+  background: var(--encre);
+  color: var(--fond);
+  border: 0;
+  border-radius: 2px;
+  cursor: pointer;
+  z-index: 61;
+}
+.planche-fermer:focus-visible { outline: 2px solid var(--vif); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  body.planche-devant > *:not(#planche) { transition: none; }
+}
+
+/* ==========================================================================
+   L'OUVERTURE — l'écran que le visiteur traverse avant le sommaire
+   Pilotée par docs/teaser.js.
+   ========================================================================== */
+body.ouverture-active { overflow: hidden; }
+
+#ouverture {
+  position: fixed; inset: 0; z-index: 90;
+  display: flex; align-items: center; justify-content: center;
+  background: #0b0908;
+  opacity: 1; transition: opacity .85s ease;
+}
+#ouverture.sortie { opacity: 0; pointer-events: none; }
+
+.ouverture-scene {
+  position: relative;
+  width: min(62vmin, 30rem);
+  aspect-ratio: 1;
+}
+.ouverture-case {
+  position: absolute; inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(.965);
+  transition: opacity .09s linear, transform .09s linear;
+}
+.ouverture-case.on { opacity: 1; transform: scale(1); }
+.ouverture-case img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+}
+
+.ouverture-entree {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1.6rem;
+  background: #0b0908;
+  border: 0; cursor: pointer;
+  color: #e8e6e1;
+  padding: max(16px, env(safe-area-inset-left, 0px));
+  transition: opacity .5s ease;
+}
+.ouverture-entree.partie { opacity: 0; pointer-events: none; }
+.ouverture-entree .nom {
+  font-family: var(--titre); font-weight: 600;
+  font-size: clamp(1.8rem, 6vw, 3rem); letter-spacing: -.015em;
+  line-height: 1.05; text-align: center;
+}
+.ouverture-entree .geste {
+  font-family: var(--titre); font-size: .72rem; font-weight: 500;
+  letter-spacing: .2em; text-transform: uppercase; opacity: .62;
+}
+
+.ouverture-titre {
+  position: absolute; left: 0; right: 0; bottom: 8vh;
+  text-align: center;
+  font-family: var(--titre); font-weight: 600;
+  font-size: clamp(1.4rem, 4.5vw, 2.4rem); letter-spacing: -.012em;
+  color: #e8e6e1;
+  opacity: 0; transform: translateY(.4rem);
+  transition: opacity .9s ease, transform .9s ease;
+  pointer-events: none;
+}
+.ouverture-titre.on { opacity: 1; transform: none; }
+
+.ouverture-passer {
+  position: absolute;
+  bottom: calc(1.3rem + env(safe-area-inset-bottom, 0px));
+  right: calc(1.3rem + env(safe-area-inset-right, 0px));
+  font-family: var(--titre); font-size: .7rem;
+  letter-spacing: .16em; text-transform: uppercase;
+  background: transparent; color: #e8e6e1; opacity: .5;
+  border: 0; cursor: pointer; padding: .5em .4em;
+}
+.ouverture-passer:hover { opacity: .9; }
+.ouverture-passer:focus-visible { outline: 2px solid #d8a657; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ouverture-case { transition: opacity .09s linear; transform: none; }
+  #ouverture { transition: none; }
+}
+
+/* ==========================================================================
+   LE SOMMAIRE — une descente, pas une liste
+   Vingt-trois rangées dans l'ordre du livre. Le fond bascule du blanc au
+   noir à l'étude 012, là où la Rupture 2 retourne le système.
+   ========================================================================== */
+body.page-catalogue {
+  --fond:       #f7f4ee;
+  --encre:      #16130f;
+  --encre-doux: #55504a;
+  --encre-tenu: #8a847c;
+  --filet:      #ded8cc;
+  --vif:        #8a5e12;
+  background: var(--fond);
+  color: var(--encre);
+  transition: background-color .6s ease, color .6s ease;
+}
+body.page-catalogue::before,
+body.page-catalogue::after { content: none; }
+
+.descente {
+  max-width: 54rem;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 3.2rem 5rem;
+}
+
+.descente .enseigne { margin-bottom: 3.4rem; }
+.descente .mode-emploi {
+  font-family: var(--texte);
+  font-size: .95rem;
+  line-height: 1.55;
+  color: var(--encre-tenu);
+  max-width: 30em;
+  margin: 1.4rem 0 0;
+}
+
+.partie h2 {
+  font-family: var(--titre);
+  font-size: .72rem; font-weight: 500;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--encre-tenu);
+  margin: 0 0 2.2rem;
+  display: flex; flex-wrap: wrap; gap: .9rem; align-items: baseline;
+}
+.partie h2 span {
+  font-family: var(--texte);
+  font-size: 1.05rem; font-style: italic;
+  letter-spacing: 0; text-transform: none;
+  color: var(--encre-doux);
+}
+
+.chapitre {
+  font-family: var(--titre);
+  font-size: .7rem; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--vif);
+  margin: 3rem 0 1rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--filet);
+}
+.chapitre:first-of-type { margin-top: 0; }
+
+/* le basculement du livre, au milieu de la page */
+.bascule {
+  display: flex; align-items: center; gap: 1.2rem;
+  margin: 3.4rem 0 2.6rem;
+}
+.bascule-trait { flex: 1; height: 1px; background: var(--filet); }
+.bascule p {
+  font-family: var(--titre);
+  font-size: .68rem; font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--encre-tenu);
+  margin: 0; text-align: center;
+}
+
+.rangee {
+  display: grid;
+  grid-template-columns: 5.6rem 1fr;
+  gap: 1.4rem;
+  align-items: center;
+  padding: .8rem .6rem;
+  margin: 0 -.6rem;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 2px;
+  transition: background-color .25s ease;
+}
+.rangee:hover { background: color-mix(in srgb, var(--encre) 6%, transparent); }
+.rangee:focus-visible { outline: 2px solid var(--vif); outline-offset: 2px; }
+
+.vignette {
+  display: block; aspect-ratio: 1;
+  overflow: hidden; border: 1px solid var(--filet);
+  background: var(--fond);
+}
+.vignette img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  opacity: .88; transition: opacity .25s ease, transform .4s ease;
+}
+.rangee:hover .vignette img { opacity: 1; transform: scale(1.04); }
+
+.rangee .texte { display: flex; flex-direction: column; gap: .18rem; min-width: 0; }
+.rangee .rang {
+  font-family: var(--titre); font-size: .68rem; font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--encre-tenu);
+}
+.rangee .nom {
+  font-family: var(--texte); font-size: 1.14rem; line-height: 1.3;
+  color: var(--encre);
+}
+.rangee .compte {
+  font-family: var(--titre); font-size: .7rem; letter-spacing: .06em;
+  font-variant-numeric: tabular-nums; color: var(--encre-tenu);
+}
+
+.a-venir { margin-top: 4.5rem; }
+.a-venir p {
+  font-family: var(--texte); font-style: italic;
+  color: var(--encre-tenu); margin: 0;
+}
+
+.descente .site-signature {
+  margin-top: 4.5rem; padding-top: 1.6rem;
+  border-top: 1px solid var(--filet);
+  text-align: left;
+}
+
+@media (max-width: 30rem) {
+  .rangee { grid-template-columns: 4rem 1fr; gap: 1rem; }
+  .rangee .nom { font-size: 1.02rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.page-catalogue, .rangee, .vignette img { transition: none; }
+}
+
+/* passé la Rupture 2, la page prend le fond des planches qu'elle annonce */
+body.page-catalogue.nuit {
+  --fond:       #14110f;
+  --encre:      #e8e6e1;
+  --encre-doux: #a7a39b;
+  --encre-tenu: #6f6b64;
+  --filet:      #302b27;
+  --vif:        #d8a657;
+}
+
+/* le fond vivant du sommaire : la planche survolée, derrière la page */
+.fond-vivant {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+}
+.fond-vivant > div {
+  position: absolute; inset: -6%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity 1.1s ease, transform 2.4s ease;
+  /* Sur fond clair, la planche est noire sur blanc : en fondu simple, son
+     blanc couvre la page et les formes disparaissent. En multipliant, le
+     blanc devient transparent et seules les formes impriment. Sur fond
+     noir c'est l'inverse : l'écran efface le noir et laisse les couleurs. */
+  mix-blend-mode: multiply;
+  filter: blur(22px) contrast(1.08);
+}
+.fond-vivant > div.on { opacity: .34; transform: scale(1); }
+
+body.page-catalogue.nuit .fond-vivant > div {
+  mix-blend-mode: screen;
+  filter: blur(26px) saturate(1.2);
+}
+body.page-catalogue.nuit .fond-vivant > div.on { opacity: .34; }
+.descente { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .fond-vivant > div { transition: opacity .3s ease; transform: none; }
+}
+
+/* --- le bouton de partage --- */
+.partage {
+  font-family: var(--titre);
+  font-size: .72rem; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
+  padding: .5em 1.1em;
+  background: transparent;
+  color: var(--encre-doux);
+  border: 1px solid var(--filet);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: color .2s, border-color .2s, background-color .2s;
+}
+.partage:hover { color: var(--encre); border-color: var(--encre-tenu); }
+.partage:focus-visible { outline: 2px solid var(--vif); outline-offset: 2px; }
+
+nav { display: flex; flex-wrap: wrap; gap: .9rem 1.4rem; align-items: center; }
+nav .partage { margin-left: auto; }
+
+.enseigne .partage { margin-top: 1.6rem; }
+
+/* page d'étude : en haut à droite de la colonne de texte */
+body.page-etude header { position: relative; padding-right: 7.5rem; }
+body.page-etude header .partage {
+  position: absolute; top: 0; right: 0;
+}
+@media (max-width: 34rem) {
+  body.page-etude header { padding-right: 0; }
+  body.page-etude header .partage { position: static; margin-top: 1.1rem; }
+}
+
+.partage-lien {
+  font-family: var(--titre); font-size: .78rem;
+  padding: .5em .8em; margin-left: .6rem;
+  background: transparent; color: var(--encre);
+  border: 1px solid var(--vif); border-radius: 2px;
+  min-width: 16em; max-width: 100%;
+}
+
+/* --- l'inscription : être prévenu de la parution --- */
+.inscription-bloc {
+  margin-top: 4.5rem;
+  padding-top: 2.2rem;
+  border-top: 1px solid var(--filet);
+}
+.inscription-bloc h2 {
+  font-family: var(--titre);
+  font-size: .72rem; font-weight: 500;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--encre-tenu);
+  margin: 0 0 1rem;
+  display: block;
+}
+.inscription-texte {
+  font-family: var(--texte);
+  font-size: 1.02rem; line-height: 1.6;
+  color: var(--encre-doux);
+  max-width: 34em; margin: 0 0 1.6rem;
+}
+.inscription-champs {
+  display: flex; flex-wrap: wrap; gap: .7rem;
+  align-items: stretch;
+}
+.inscription-champs[hidden] { display: none; }
+#inscription input[type="email"] {
+  font-family: var(--texte); font-size: 1rem;
+  padding: .72em .95em;
+  min-width: 0; flex: 1 1 18rem; max-width: 26rem;
+  background: transparent;
+  color: var(--encre);
+  border: 1px solid var(--filet);
+  border-radius: 2px;
+}
+#inscription input[type="email"]:focus {
+  outline: none; border-color: var(--vif);
+}
+#inscription input[type="email"]::placeholder { color: var(--encre-tenu); }
+#inscription button {
+  font-family: var(--titre); font-size: .74rem; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
+  padding: .72em 1.5em;
+  background: var(--encre); color: var(--fond);
+  border: 1px solid var(--encre); border-radius: 2px;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+#inscription button:hover { opacity: .86; }
+#inscription button:disabled { opacity: .5; cursor: default; }
+#inscription button:focus-visible { outline: 2px solid var(--vif); outline-offset: 2px; }
+
+.inscription-etat {
+  font-family: var(--titre); font-size: .8rem;
+  letter-spacing: .03em;
+  color: var(--encre-tenu);
+  margin: .9rem 0 0; min-height: 1.3em;
+}
+.inscription-etat.merci { color: var(--vif); }
+.inscription-etat.souci { color: var(--encre); }
+
+.visuellement-cachee {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
