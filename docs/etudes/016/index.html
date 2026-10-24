@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Étude 016 : Tremblement & Effet de phase</title>
+    <meta name="description" content="Étude 016 du Livre des Sons. 2 fichiers audio à écouter, planche par planche, case par case.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Le Livre des Sons">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="Étude 016 — Tremblement &amp; Effet de phase">
+  <meta property="og:description" content="Étude 016 du Livre des Sons. 2 fichiers audio à écouter, planche par planche, case par case.">
+  <meta property="og:url" content="https://www.lelivredessons.fr/etudes/016/">
+  <meta property="og:image" content="https://www.lelivredessons.fr/partage.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Étude 016 — Tremblement &amp; Effet de phase">
+  <meta name="twitter:description" content="Étude 016 du Livre des Sons. 2 fichiers audio à écouter, planche par planche, case par case.">
+  <meta name="twitter:image" content="https://www.lelivredessons.fr/partage.png">
+
+<link rel="stylesheet" href="../../style.css?v=7">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-016">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Étude 016 : Tremblement & Effet de phase</h1>
+    <div class="cat">Étude laborieuse</div>
+
+    <div class="audio-block">
+      <p>Écoute — deux fichiers audio</p>
+
+      <ul class="track-list" id="trackList">
+        <li>
+          <a href="#" data-src="../../audio/016-1.mp3" onclick="return selectTrack(this);">
+            Tremblement & Effet de phase - Principes généraux et gradation d'effet 1/2
+          </a>
+        </li>
+        <li>
+          <a href="#" data-src="../../audio/016-2.mp3" onclick="return selectTrack(this);">
+            Tremblement & Effet de phase - Principes généraux et gradation d'effet 2/2
+          </a>
+        </li>
+      </ul>
+
+      <audio id="player" controls preload="metadata"></audio>
+
+      <p class="planche-tete">La planche &middot; la case entendue s'éclaire &middot; cliquer pour s'y rendre</p>
+      <div id="planche" data-etude="016"></div>
+    </div>
+
+    <nav>
+      <a href="../015/">← Étude précédente</a>
+      <a href="../../">Sommaire</a>
+      <a href="../017/">Étude suivante →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+
+  <script>
+  let audioCtx;
+  let gainNode;
+  let sourceNode;
+
+  const player = document.getElementById("player");
+  let pendingSrc = null;
+
+  let fadeOutDur = 0.35;
+  let resumeDur  = 0.08;
+
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      sourceNode = audioCtx.createMediaElementSource(player);
+      gainNode = audioCtx.createGain();
+      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+
+      sourceNode.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+    }
+    if (audioCtx.state === "suspended") audioCtx.resume();
+  }
+
+  function fadeTo(value, duration) {
+    const now = audioCtx.currentTime;
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+    gainNode.gain.linearRampToValueAtTime(value, now + duration);
+  }
+
+  function setActive(link) {
+    document.querySelectorAll("#trackList a").forEach(a => a.classList.remove("is-active"));
+    link.classList.add("is-active");
+  }
+
+  function selectTrack(link) {
+    initAudio();
+    setActive(link);
+    pendingSrc = link.getAttribute("data-src");
+
+    fadeTo(0, fadeOutDur);
+
+    const waitMs = Math.ceil(fadeOutDur * 1000) + 40;
+    setTimeout(() => {
+      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+
+      player.pause();
+      player.currentTime = 0;
+      player.src = pendingSrc;
+      player.load();
+    }, waitMs);
+
+    return false;
+  }
+
+  player.addEventListener("canplay", () => {
+    if (!pendingSrc) return;
+
+    const expectedFile = pendingSrc.split("/").pop();
+    const currentFile = (player.currentSrc || "").split("/").pop();
+    if (expectedFile !== currentFile) return;
+
+    player.play().then(() => {
+      pendingSrc = null;
+    }).catch(() => {});
+  });
+
+  player.addEventListener("play", () => {
+    initAudio();
+    const now = audioCtx.currentTime;
+
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(0, now);
+    gainNode.gain.linearRampToValueAtTime(1, now + resumeDur);
+  });
+
+  player.addEventListener("pause", () => {
+    if (!audioCtx || !gainNode) return;
+    const now = audioCtx.currentTime;
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(0, now);
+  });
+  </script>
+
+  <script src="../../planches.js"></script>
+
+  <script src="../../partage.js"></script>
+
+</body>
+</html>

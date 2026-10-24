@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Étude 001 : Taille visuelle & Volume sonore</title>
+    <meta name="description" content="Étude 001 du Livre des Sons. 1 fichier audio à écouter, planche par planche, case par case.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Le Livre des Sons">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="Étude 001 — Taille visuelle &amp; Volume sonore">
+  <meta property="og:description" content="Étude 001 du Livre des Sons. 1 fichier audio à écouter, planche par planche, case par case.">
+  <meta property="og:url" content="https://www.lelivredessons.fr/etudes/001/">
+  <meta property="og:image" content="https://www.lelivredessons.fr/partage.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Étude 001 — Taille visuelle &amp; Volume sonore">
+  <meta name="twitter:description" content="Étude 001 du Livre des Sons. 1 fichier audio à écouter, planche par planche, case par case.">
+  <meta name="twitter:image" content="https://www.lelivredessons.fr/partage.png">
+
+<link rel="stylesheet" href="../../style.css?v=7">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-001">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Étude 001 : Taille visuelle & Volume sonore</h1>
+    <div class="cat">Étude laborieuse</div>
+
+    <!-- Zone d’écoute -->
+    <div class="audio-block">
+      <p>Écoute — un fichier audio</p>
+
+      <!-- Playlist -->
+      <ul class="track-list" id="trackList">
+        <li>
+          <a href="#" data-src="../../audio/001.mp3"
+   onclick="return selectTrack(this);">
+  Taille visuelle & Volume sonore (31 s)
+          </a>
+        </li>
+      </ul>
+
+      <!-- Player -->
+      <audio id="player" controls preload="metadata" src="../../audio/001.mp3"></audio>
+
+      <p class="planche-tete">La planche &middot; la case entendue s'éclaire &middot; cliquer pour s'y rendre</p>
+      <div id="planche" data-etude="001"></div>
+    </div>
+
+    <nav>
+      <a href="../../">Sommaire</a>
+      <a href="../002/">Étude suivante →</a>
+    </nav>
+
+     <!-- Signature -->
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+
+<script>
+const player = document.getElementById("player");
+
+function setActive(link) {
+  document.querySelectorAll("#trackList a")
+    .forEach(a => a.classList.remove("is-active"));
+  link.classList.add("is-active");
+}
+
+function selectTrack(link) {
+  const src = link.getAttribute("data-src");
+  setActive(link);
+
+  player.pause();
+  player.currentTime = 0;
+  player.src = src;
+  player.load();
+  player.play();
+
+  return false;
+}
+</script>
+
+  <script src="../../planches.js"></script>
+
+  <script src="../../partage.js"></script>
+
+</body>
+</html>
