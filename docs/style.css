@@ -255,7 +255,7 @@ body.page-catalogue::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: url("./image/fond-sommaire.jpg");
+  background-image: url("./images/fonds/fond-sommaire.webp");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 68%;
@@ -417,130 +417,130 @@ body.page-etude .wrap {
 
 /* Étude 001 */
 body.etude-001::before {
-  background-image: url("./image/fond-etude-001.jpg");
+  background-image: url("./images/fonds/fond-etude-001.webp");
 }
 
 /* Étude 002 */
 body.etude-002::before {
-  background-image: url("./image/fond-etude-002.jpg");
+  background-image: url("./images/fonds/fond-etude-002.webp");
 }
 
 /* Étude 003 */
 body.etude-003::before {
-  background-image: url("./image/fond-etude-003.jpg");
+  background-image: url("./images/fonds/fond-etude-003.webp");
 }
 
 /* Étude 004 */
 body.etude-004::before {
-  background-image: url("./image/fond-etude-004.jpg");
+  background-image: url("./images/fonds/fond-etude-004.webp");
 }
 
 /* Étude 005 */
 body.etude-005::before {
-  background-image: url("./image/fond-etude-005.jpg");
+  background-image: url("./images/fonds/fond-etude-005.webp");
 }
 
 /* Étude 006 */
 body.etude-006::before {
-  background-image: url("./image/fond-etude-006.jpg");
+  background-image: url("./images/fonds/fond-etude-006.webp");
 }
 
 /* Étude 007 */
 body.etude-007::before {
-  background-image: url("./image/fond-etude-007.jpg");
+  background-image: url("./images/fonds/fond-etude-007.webp");
 }
 
 /* Étude 008 */
 body.etude-008::before {
   filter: none;
-  background-image: url("./image/fond-etude-008.jpg");
+  background-image: url("./images/fonds/fond-etude-008.webp");
 }
 
 /* Étude 009 */
 body.etude-009::before {
-  background-image: url("./image/fond-etude-009.jpg");
+  background-image: url("./images/fonds/fond-etude-009.webp");
 }
 
 /* Étude 010 */
 body.etude-010::before {
-  background-image: url("./image/fond-etude-010.jpg");
+  background-image: url("./images/fonds/fond-etude-010.webp");
 }
 
 /* Étude 011 */
 body.etude-011::before {
-  background-image: url("./image/fond-etude-011.jpg");
+  background-image: url("./images/fonds/fond-etude-011.webp");
 }
 
 /* Étude 012 */
 body.etude-012::before {
   filter: none;
-  background-image: url("./image/fond-etude-012.jpg");
+  background-image: url("./images/fonds/fond-etude-012.webp");
 }
 
 /* Étude 013 */
 body.etude-013::before {
   filter: none;
-  background-image: url("./image/fond-etude-013.jpg");
+  background-image: url("./images/fonds/fond-etude-013.webp");
 }
 
 /* Étude 014 */
 body.etude-014::before {
   filter: none;
-  background-image: url("./image/fond-etude-014.jpg");
+  background-image: url("./images/fonds/fond-etude-014.webp");
 }
 
 /* Étude 015 */
 body.etude-015::before {
   filter: none;
-  background-image: url("./image/fond-etude-015.jpg");
+  background-image: url("./images/fonds/fond-etude-015.webp");
 }
 
 /* Étude 016 */
 body.etude-016::before {
   filter: none;
-  background-image: url("./image/fond-etude-016.jpg");
+  background-image: url("./images/fonds/fond-etude-016.webp");
 }
 
 /* Étude 017 */
 body.etude-017::before {
   filter: none;
-  background-image: url("./image/fond-etude-017.jpg");
+  background-image: url("./images/fonds/fond-etude-017.webp");
 }
 
 /* Étude 018 */
 body.etude-018::before {
   filter: none;
-  background-image: url("./image/fond-etude-018.jpg");
+  background-image: url("./images/fonds/fond-etude-018.webp");
 }
 
 /* Étude 019 */
 body.etude-019::before {
   filter: none;
-  background-image: url("./image/fond-etude-019.jpg");
+  background-image: url("./images/fonds/fond-etude-019.webp");
 }
 
 /* Étude 020 */
 body.etude-020::before {
   filter: none;
-  background-image: url("./image/fond-etude-020.jpg");
+  background-image: url("./images/fonds/fond-etude-020.webp");
 }
 
 /* Étude 021 */
 body.etude-021::before {
   filter: none;
-  background-image: url("./image/fond-etude-021.jpg");
+  background-image: url("./images/fonds/fond-etude-021.webp");
 }
 
 /* Étude 022 */
 body.etude-022::before {
   filter: none;
-  background-image: url("./image/fond-etude-022.jpg");
+  background-image: url("./images/fonds/fond-etude-022.webp");
 }
 
 /* Étude 023 */
 body.etude-023::before {
   filter: none;
-  background-image: url("./image/fond-etude-023.jpg");
+  background-image: url("./images/fonds/fond-etude-023.webp");
 }
 
 body.page-catalogue::before {
@@ -1477,7 +1477,7 @@ sup.appel a:hover { text-decoration: underline; }
 .vers-lecture + .vers-lecture { margin-left: 1.6rem; }
 
 /* l'entrée vers le référentiel, posée au basculement du sommaire */
-a.vers-referentiel {
+a.vers-cercle {
   display: block;
   margin: 0 0 3rem;
   padding: 1.6rem 0 1.7rem;
@@ -1486,17 +1486,17 @@ a.vers-referentiel {
   text-decoration: none; color: inherit;
   transition: border-color .25s ease;
 }
-a.vers-referentiel:hover { border-color: var(--encre-tenu); }
-a.vers-referentiel:hover .vers-titre { color: var(--encre); }
-a.vers-referentiel .vers-titre {
+a.vers-cercle:hover { border-color: var(--encre-tenu); }
+a.vers-cercle:hover .vers-titre { color: var(--encre); }
+a.vers-cercle .vers-titre {
   display: block;
   font-family: var(--titre); font-size: .72rem; font-weight: 500;
   letter-spacing: .16em; text-transform: uppercase; color: var(--vif);
   margin-bottom: .7rem;
   transition: color .25s ease;
 }
-a.vers-referentiel .vers-titre::after { content: " →"; }
-a.vers-referentiel .vers-sous {
+a.vers-cercle .vers-titre::after { content: " →"; }
+a.vers-cercle .vers-sous {
   display: block;
   font-family: var(--texte); font-size: 1.1rem; line-height: 1.62;
   color: var(--encre-doux); max-width: 33em;
