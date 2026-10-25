@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Le cercle colorimétrique et fréquentiel — Le Livre des Sons</title>
+  <link rel="stylesheet" href="../style.css?v=15">
+  <meta name="description" content="La loi du Livre des Sons, à entendre : promenez le doigt sur la roue chromatique et écoutez la fréquence que chaque teinte désigne, dans les deux régimes.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Le Livre des Sons">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="Le cercle colorimétrique et fréquentiel — Le Livre des Sons">
+  <meta property="og:description" content="Promenez le doigt sur la roue chromatique et écoutez la fréquence que chaque teinte désigne.">
+  <meta property="og:url" content="https://www.lelivredessons.fr/cercle/">
+  <meta property="og:image" content="https://www.lelivredessons.fr/images/partage.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Le cercle colorimétrique et fréquentiel — Le Livre des Sons">
+  <meta name="twitter:description" content="La loi du livre, à entendre.">
+  <meta name="twitter:image" content="https://www.lelivredessons.fr/images/partage.png">
+  <script
+    data-goatcounter="https://lelivredessons.goatcounter.com/count"
+    async
+    src="//gc.zgo.at/count.js">
+  </script>
+</head>
+
+<body class="page-referentiel">
+  <main class="referentiel">
+
+    <header>
+      <div class="site-title"><a href="../">Le Livre des Sons</a></div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <p class="rang">Chapitre 4 · la loi, à entendre</p>
+    <h1>Le cercle colorimétrique<br>et fréquentiel</h1>
+    <p class="sous-titre">Une teinte désigne une fréquence. Promenez le doigt sur la roue.</p>
+
+    <div id="regimes" class="bascule-regime" role="group" aria-label="Choix du régime">
+      <button type="button" data-regime="spectral" aria-pressed="true"
+        data-note="La teinte désigne la région du spectre mise en avant dans l'objet sonore. Une source riche — ici une dent de scie à 220 Hz, comme les planches de formes simples — passe dans un filtre en cloche dont la fréquence centrale suit la teinte. C'est la règle que le livre retient, et ce sont les réglages qui ont servi à fabriquer les fichiers du site.">Ouverture spectrale</button>
+      <button type="button" data-regime="hauteur" aria-pressed="false"
+        data-note="La teinte désigne la fréquence fondamentale du son : la hauteur elle-même. Régime alternatif, installé et démontré au Discours 2, que le livre ne retient pas. Son échelle est plus large — tout le champ audible, de 20 Hz à 20 000 Hz.">Fréquence fondamentale</button>
+    </div>
+    <p class="regime-note" id="regime-note">La teinte désigne la région du spectre mise en avant dans l'objet sonore. Une source riche — ici une dent de scie à 220 Hz, comme les planches de formes simples — passe dans un filtre en cloche dont la fréquence centrale suit la teinte. C'est la règle que le livre retient, et ce sont les réglages qui ont servi à fabriquer les fichiers du site.</p>
+
+    <div class="instrument">
+      <div class="roue-cadre">
+        <div id="roue" class="roue" role="slider" aria-label="Teinte"
+             aria-valuemin="0" aria-valuemax="360" aria-valuenow="0">
+          <div id="aiguille" class="aiguille"><span id="pastille" class="pastille"></span></div>
+          <div class="moyeu">
+            <span class="lecture-freq" id="lecture-freq">50 Hz</span>
+            <span class="lecture-note" id="lecture-note"></span>
+            <span class="lecture-teinte" id="lecture-teinte">0,0°</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="lecture-nature" id="lecture-nature">fenêtre spectrale — la région du spectre mise en avant</p>
+      <p class="mode-emploi">
+        Maintenez le doigt ou la souris sur la roue pour entendre. Au clavier :
+        les flèches déplacent d'un degré, la barre d'espace fait sonner.
+      </p>
+    </div>
+
+    <section class="teintes-livre">
+      <h2>Les teintes du livre</h2>
+      <p>Les quinze couleurs employées dans les planches du chapitre 4, mesurées sur le fichier d'impression. Touchez-en une pour l'entendre à sa place exacte.</p>
+      <div class="teintes-grille">
+          <button type="button" class="teinte-livre" data-h="0.00" data-hex="#FF0000" title="rouge — 0.0°"><span>rouge</span></button>
+          <button type="button" class="teinte-livre" data-h="20.68" data-hex="#FF6514" title="rouge-orangé — 20.7°"><span>rouge-orangé</span></button>
+          <button type="button" class="teinte-livre" data-h="34.82" data-hex="#FF9400" title="orange — 34.8°"><span>orange</span></button>
+          <button type="button" class="teinte-livre" data-h="57.18" data-hex="#FFF300" title="jaune — 57.2°"><span>jaune</span></button>
+          <button type="button" class="teinte-livre" data-h="94.94" data-hex="#6CC82A" title="jaune-vert — 94.9°"><span>jaune-vert</span></button>
+          <button type="button" class="teinte-livre" data-h="119.76" data-hex="#01FF00" title="vert — 119.8°"><span>vert</span></button>
+          <button type="button" class="teinte-livre" data-h="140.11" data-hex="#00B63D" title="vert moyen — 140.1°"><span>vert moyen</span></button>
+          <button type="button" class="teinte-livre" data-h="175.44" data-hex="#00AB9E" title="vert-cyan — 175.4°"><span>vert-cyan</span></button>
+          <button type="button" class="teinte-livre" data-h="196.86" data-hex="#00AEF2" title="cyan — 196.9°"><span>cyan</span></button>
+          <button type="button" class="teinte-livre" data-h="204.69" data-hex="#0071C0" title="bleu-cyan — 204.7°"><span>bleu-cyan</span></button>
+          <button type="button" class="teinte-livre" data-h="240.00" data-hex="#0000FF" title="bleu — 240.0°"><span>bleu</span></button>
+          <button type="button" class="teinte-livre" data-h="239.44" data-hex="#2B2C97" title="bleu-indigo — 239.4°"><span>bleu-indigo</span></button>
+          <button type="button" class="teinte-livre" data-h="282.22" data-hex="#752995" title="violet — 282.2°"><span>violet</span></button>
+          <button type="button" class="teinte-livre" data-h="310.07" data-hex="#AA2193" title="magenta foncé — 310.1°"><span>magenta foncé</span></button>
+          <button type="button" class="teinte-livre" data-h="326.12" data-hex="#FF0090" title="magenta — 326.1°"><span>magenta</span></button>
+      </div>
+    </section>
+
+    <section class="explication">
+      <h2>Ce que fait la roue</h2>
+      <p>
+        Le rouge ouvre la fenêtre dans le grave, le violet dans l'aigu, et les
+        teintes intermédiaires se répartissent entre les deux. L'échelle est
+        géométrique : des degrés égaux sur la roue donnent des intervalles
+        égaux à l'oreille, pas des hertz égaux. C'est pourquoi la moitié basse
+        de la roue couvre quelques centaines de hertz quand la moitié haute en
+        couvre plusieurs milliers.
+      </p>
+      <p>
+        En régime spectral, les bornes sont <strong>50 Hz</strong> et
+        <strong>16 000 Hz</strong> : elles ne sont pas choisies au hasard mais
+        mesurées sur le corpus du livre — la contrebasse descend à 47 Hz, la
+        brillance du charleston s'éteint vers 16 kHz. Cela fait 8,32 octaves.
+        En régime de hauteur, ce sont les bornes du champ auditif,
+        <strong>20 Hz</strong> à <strong>20 000 Hz</strong>, soit 9,97 octaves.
+        Les deux régimes ne peuvent donc pas partager la même échelle.
+      </p>
+      <p>
+        Au-delà de <strong>282,22°</strong> — la teinte du violet du livre,
+        mesurée sur sa valeur colorimétrique — la roue entre dans la
+        <em>ligne des pourpres</em>. Ces teintes-là n'existent dans aucune
+        longueur d'onde : aucune lumière simple ne fait un magenta. Le livre y
+        superpose donc une composante rouge et une composante bleue, pondérées
+        selon la position. On n'entend plus une note mais un intervalle, et la
+        roue s'y assombrit pour le signaler.
+      </p>
+      <p class="renvoi">
+        La règle est posée à l'<a href="../etudes/012/">étude 012</a> et
+        fondée au Discours 2. Son échelle et ses bornes sont
+        <em>instituées</em> : elles auraient pu être autres, et c'est
+        précisément ce que les deux boutons ci-dessus font entendre.
+      </p>
+    </section>
+
+    <nav>
+      <a href="../">Sommaire</a>
+      <a href="../lire/">Lire le début du livre</a>
+      <a href="../etudes/012/">Étude 012 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+
+  <script src="./cercle.js?v=1"></script>
+  <script src="../scripts/partage.js"></script>
+
+</body>
+</html>
