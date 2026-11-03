@@ -10,8 +10,8 @@ async src="https://gc.zgo.at/count.js"></script>
   <style>
     /* ==========================================================================
        EXPÉRIENCE : LA FORME DE VOTRE VOIX — styles propres à cette page.
-       Même facture que les deux expériences précédentes : la feuille du site n'est
-       pas modifiée, les couleurs reprennent les variables de la charte.
+       Même facture que les deux expériences précédentes : la feuille du site
+       n'est pas modifiée, les couleurs reprennent les variables de la charte.
        ========================================================================== */
     .experience {
       --a-fond: var(--fond, #f7f4ee);
@@ -30,6 +30,7 @@ async src="https://gc.zgo.at/count.js"></script>
     .experience .etiquette {
       font-family: var(--titre, "Jost", sans-serif); font-size: .68rem; font-weight: 500;
       letter-spacing: .14em; text-transform: uppercase; color: var(--a-tenu);
+      min-width: 7.2em;
     }
     .experience .case-onde {
       position: relative; width: 100%; aspect-ratio: 4 / 1; background: var(--a-noir); margin: 0 0 .9rem;
@@ -40,7 +41,42 @@ async src="https://gc.zgo.at/count.js"></script>
       letter-spacing: .14em; text-transform: uppercase; color: var(--a-tenu); margin: .35rem 0 0;
     }
 
-    .experience .scene { display: grid; grid-template-columns: minmax(0, 440px) minmax(12rem, 1fr); gap: 16px 22px; align-items: start; }
+    /* Le second temps : il n'apparaît qu'une fois un son capté. */
+    .experience .second { border-top: 1px solid var(--a-filet); margin-top: 2rem; padding-top: 1.4rem; }
+    .experience .second[hidden] { display: none; }
+    .experience h2.palier {
+      font-family: var(--titre, "Jost", sans-serif); font-size: 1.05rem; font-weight: 500;
+      margin: 0 0 .5rem; color: var(--a-encre);
+    }
+
+    .experience .reglages { display: grid; gap: .9rem; margin: 1.2rem 0; }
+    .experience .rangee { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .7rem; }
+    .experience .rangee input[type="range"] { flex: 1 1 14rem; accent-color: var(--a-encre); }
+    .experience .valeur {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .85rem; font-variant-numeric: tabular-nums;
+      color: var(--a-vif); min-width: 7.5em;
+    }
+
+    .experience .scene { display: grid; grid-template-columns: 64px minmax(0, 420px) minmax(12rem, 1fr); gap: 16px 22px; align-items: start; }
+    .experience .colonne-axe { display: flex; flex-direction: column; }
+    .experience .axe {
+      position: relative; height: var(--cote, 380px);
+      border-left: 1px solid var(--a-encre); margin-left: 34px; cursor: ns-resize;
+      touch-action: none; user-select: none; -webkit-user-select: none;
+    }
+    .experience .axe .graduation {
+      position: absolute; left: -34px; width: 30px; text-align: right; transform: translateY(-50%);
+      font-family: var(--titre, "Jost", sans-serif); font-size: .62rem; font-variant-numeric: tabular-nums;
+      color: var(--a-tenu); pointer-events: none;
+    }
+    .experience .axe .graduation::after {
+      content: ""; position: absolute; right: -8px; top: 50%; width: 6px; border-top: 1px solid var(--a-tenu);
+    }
+    .experience .axe .enregistree {
+      position: absolute; left: -4px; width: 26px; border-top: 1px dashed var(--a-vif); pointer-events: none;
+    }
+    .experience .axe canvas.repere { position: absolute; left: 0; width: 30px; height: 30px; transform: translate(-2px, -50%); pointer-events: none; }
+
     .experience .case-pointe {
       position: relative; width: 100%; aspect-ratio: 1; background: var(--a-case);
       border: 1.5px solid var(--a-encre); box-sizing: border-box; cursor: pointer;
@@ -49,6 +85,10 @@ async src="https://gc.zgo.at/count.js"></script>
     .experience .cote { display: flex; flex-direction: column; gap: 1rem; }
     .experience .releve { margin: 0; line-height: 1.5; }
     .experience .releve .nom { font-family: var(--texte, serif); font-size: 1.15rem; display: block; }
+    .experience .releve .note {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .95rem; font-variant-numeric: tabular-nums;
+      color: var(--a-vif); letter-spacing: .02em; display: block; margin-top: .15rem;
+    }
     .experience .releve .rapport {
       font-family: var(--titre, "Jost", sans-serif); font-size: .78rem; font-variant-numeric: tabular-nums;
       color: var(--a-doux); display: block; margin-top: .25rem; letter-spacing: .02em;
@@ -69,9 +109,9 @@ async src="https://gc.zgo.at/count.js"></script>
       background: var(--a-encre); color: var(--a-fond); border-color: var(--a-encre);
       font-size: .95rem; padding: .6rem 1.2rem;
     }
-    .experience .bouton:focus-visible, .experience .case-pointe:focus-visible { outline: 2px solid var(--a-vif); outline-offset: 3px; }
+    .experience .bouton:focus-visible, .experience .case-pointe:focus-visible,
+    .experience .axe:focus-visible { outline: 2px solid var(--a-vif); outline-offset: 3px; }
 
-    /* Le vu-mètre : un seul trait qui monte pendant la prise. */
     .experience .niveau { position: relative; height: 6px; background: var(--a-filet); margin: .2rem 0 1rem; max-width: 26rem; }
     .experience .niveau i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--a-vif); }
     .experience .compte {
@@ -80,7 +120,6 @@ async src="https://gc.zgo.at/count.js"></script>
     }
     .experience .etat { font-size: .82rem; color: var(--a-tenu); margin: .6rem 0 0; min-height: 1.3em; }
 
-    /* L'encart de confidentialité : il doit se lire avant qu'on touche au micro. */
     .experience .prive {
       border-left: 2px solid var(--a-filet); padding: .1rem 0 .1rem 1rem;
       max-width: 40em; margin: 0 0 1.4rem;
@@ -96,7 +135,11 @@ async src="https://gc.zgo.at/count.js"></script>
     .experience details.precisions li { margin: .45rem 0; }
 
     @media (max-width: 760px) {
-      .experience .scene { grid-template-columns: minmax(0, 1fr); }
+      .experience .scene { grid-template-columns: 52px minmax(0, 1fr); }
+      .experience .cote { grid-column: 1 / -1; }
+      .experience .axe { margin-left: 26px; }
+      .experience .axe .graduation { left: -28px; width: 24px; font-size: .56rem; }
+      .experience .etiquette { min-width: 100%; }
     }
   </style>
 </head>
@@ -117,10 +160,11 @@ async src="https://gc.zgo.at/count.js"></script>
     <section class="experience" aria-label="Expérience : la forme de votre voix">
       <p class="intro">
         Jusqu'ici, une forme produisait un son. Ici, un son produit sa forme.
-        Prononcez une voyelle, soufflez, claquez des doigts — le son capté est relevé
-        et son pointé en est extrait par le procédé de l'étude 008 : l'enveloppe
-        s'enroule depuis le sommet sur un demi-tour, et la symétrie referme la figure.
-        Rien n'est choisi : la figure est celle de ce que vous venez d'émettre.
+        Prononcez une voyelle, soufflez, claquez des doigts — ou tendez le micro vers
+        n'importe quelle source. Le son capté est relevé et son pointé en est extrait
+        par le procédé de l'étude 008 : l'enveloppe s'enroule depuis le sommet sur un
+        demi-tour, et la symétrie referme la figure. Rien n'est choisi : la figure est
+        celle de ce que vous venez d'émettre. Ensuite, vous pourrez en jouer.
       </p>
 
       <div class="prive">
@@ -135,14 +179,40 @@ async src="https://gc.zgo.at/count.js"></script>
         <button class="bouton capital" id="capter">● Capter un son</button>
         <button class="bouton" id="ecouter" disabled>▶ Réécouter</button>
         <button class="bouton" id="rejouer" disabled>↻ Revoir l'enroulement</button>
-        <button class="bouton" id="emporter" disabled>↓ Emporter la figure</button>
+        <button class="bouton" id="emporter" disabled>↓ La figure</button>
+        <button class="bouton" id="emporterSon" disabled>↓ Le son</button>
       </div>
       <div class="niveau" aria-hidden="true"><i id="jauge"></i></div>
       <p class="compte" id="compte"></p>
 
       <div class="case-onde"><canvas id="onde" aria-label="Forme d'onde du son capté"></canvas></div>
 
+      <section class="second" id="second" hidden aria-label="Jouer du son capté">
+        <h2 class="palier">Maintenant, jouez-en</h2>
+        <p class="intro">
+          Votre son devient un objet comme ceux du livre. Montez-le ou descendez-le le long
+          de l'axe des hauteurs — il est transposé sans changer de durée, comme à l'étude 003.
+          Frappez-le plus ou moins fort — comme à l'étude 009. À chaque geste, sa figure est
+          recalculée sur le son qui sonne.
+        </p>
+        <div class="reglages">
+          <div class="rangee">
+            <span class="etiquette">Frappe</span>
+            <input type="range" id="velocite" min="1" max="127" value="110"
+                   aria-label="Vélocité, de 1 à 127" />
+            <span class="valeur" id="valeurVelocite">110</span>
+          </div>
+        </div>
+      </section>
+
       <div class="scene">
+        <div class="colonne-axe">
+          <div class="axe" id="axe" tabindex="0" role="slider" aria-orientation="vertical"
+               aria-label="Hauteur du son capté" aria-valuemin="21.8" aria-valuemax="12500">
+            <canvas class="repere" id="repere" aria-hidden="true"></canvas>
+          </div>
+        </div>
+
         <div>
           <div class="case-pointe" id="case-pointe" tabindex="0" role="button" aria-label="Pointé. Cliquer pour écouter.">
             <canvas id="pointe"></canvas>
@@ -167,13 +237,22 @@ async src="https://gc.zgo.at/count.js"></script>
           <li>Le micro est demandé sans correction : ni réduction de bruit, ni écho annulé,
             ni gain automatique. Ces traitements lissent l'enveloppe, et c'est précisément
             l'enveloppe qu'on relève ici.</li>
-          <li>La prise dure deux secondes et demie au plus : le livre traite des objets sonores
-            de durée mesurable, et au-delà la figure se charge de tout et ne dit plus rien.
-            Les silences de début et de fin sont retirés, et le son est ramené à son maximum —
-            seule compte sa forme, pas son niveau d'entrée.</li>
-          <li>Le pointé est calculé selon le procédé de l'étude 008, le même que celui des deux
-            expériences précédentes et du logiciel SIGN. Les pointés imprimés dans le livre ont
-            été finalisés à la main : les silhouettes sont de la même famille, pas identiques.</li>
+          <li>Le début de l'objet sonore est cherché, pas deviné. On mesure le fond — le souffle
+            du micro, le bruit de la pièce — puis on repère le premier instant où le signal
+            s'en détache nettement, et l'on remonte juste avant pour ne pas couper l'attaque.
+            Ce qui précède est retiré, et la page dit combien.</li>
+          <li>La prise dure trois secondes au plus : le livre traite des objets sonores de durée
+            mesurable, et au-delà la figure se charge de tout et ne dit plus rien.</li>
+          <li>La transposition se fait à durée constante, comme à l'étude 003 : la morphologie
+            dessinée reste celle qu'on entend. Loin de la hauteur d'origine, la voix cesse
+            d'être une voix — c'est ce que le régime coûte, et cela se voit sur la figure.</li>
+          <li>La frappe, sur un son enregistré une seule fois, ne peut pas changer le timbre :
+            il faudrait plusieurs couches, comme les trois frappes des instruments de l'étude 009.
+            Elle change ici ce qu'elle peut changer honnêtement : le niveau, qu'on entend, et la
+            raideur de l'attaque, qu'on voit au sommet de la figure.</li>
+          <li>Le pointé est normalisé (étude 008) : seule sa forme compte, pas le niveau. La forme
+            d'onde, au-dessus, est en revanche montrée à son niveau réel — elle rétrécit quand la
+            frappe faiblit, et le niveau est aussi écrit en décibels.</li>
           <li>Le rapport entre le rayon des pics et celui du corps sépare les familles : sous 1,25
             pour les sons soutenus — une voyelle tenue —, au-delà de 1,39 pour les sons percussifs —
             un claquement, un « t », un « k » (étude 008).</li>
@@ -203,14 +282,267 @@ async src="https://gc.zgo.at/count.js"></script>
      un demi-tour depuis le sommet, l'amplitude un rayon, symétrie verticale.
      C'est la même fonction que dans les deux expériences précédentes et dans le
      prototype SIGN ; seul l'amont change — un micro au lieu d'un enregistrement.
+     Dans un second temps, le son capté se manipule comme un objet du livre :
+     hauteur (étude 003) et frappe (étude 009).
      Rien ne sort du navigateur : pas de requête, pas de stockage.
      ========================================================================== */
+  /* ==========================================================================
+   DSP — transposition à durée constante, en JavaScript pur.
+   Sert quand Signalsmith ne peut pas tourner (fichier ouvert en local, aperçu
+   en ligne qui refuse WebAssembly). Aucune dépendance, déterministe.
+   Méthode : changement de vitesse à bande limitée (la hauteur bouge, la durée
+   aussi), puis vocodeur de phase qui rend la durée d'origine. Fréquence
+   instantanée mesurée sur deux trames rapprochées, phases verrouillées sur
+   les pics du spectre (Laroche et Dolson).
+   ========================================================================== */
+function fabriquerDSP() {
+  const DEUX_PI = 2 * Math.PI;
+  const princarg = a => a - DEUX_PI * Math.round(a / DEUX_PI);
+
+  const plans = new Map();
+  function planFFT(N) {
+    if (plans.has(N)) return plans.get(N);
+    const niveaux = Math.round(Math.log2(N)), rev = new Uint32Array(N);
+    for (let i = 0; i < N; i++) {
+      let r = 0;
+      for (let b = 0; b < niveaux; b++) r |= ((i >> b) & 1) << (niveaux - 1 - b);
+      rev[i] = r;
+    }
+    const cos = new Float64Array(N / 2), sin = new Float64Array(N / 2);
+    for (let i = 0; i < N / 2; i++) { cos[i] = Math.cos(DEUX_PI * i / N); sin[i] = Math.sin(DEUX_PI * i / N); }
+    const p = { N, rev, cos, sin };
+    plans.set(N, p);
+    return p;
+  }
+  /** FFT complexe en place, radix 2. */
+  function fft(P, re, im, inverse) {
+    const { N, rev, cos, sin } = P;
+    for (let i = 0; i < N; i++) {
+      const j = rev[i];
+      if (j > i) { let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; }
+    }
+    for (let taille = 2; taille <= N; taille <<= 1) {
+      const moitie = taille >> 1, pas = N / taille;
+      for (let i = 0; i < N; i += taille) {
+        for (let j = 0, k = 0; j < moitie; j++, k += pas) {
+          const wr = cos[k], wi = inverse ? sin[k] : -sin[k];
+          const a = i + j, b = a + moitie;
+          const tr = re[b] * wr - im[b] * wi, ti = re[b] * wi + im[b] * wr;
+          re[b] = re[a] - tr; im[b] = im[a] - ti;
+          re[a] += tr; im[a] += ti;
+        }
+      }
+    }
+    if (inverse) for (let i = 0; i < N; i++) { re[i] /= N; im[i] /= N; }
+  }
+
+  /**
+   * Lecture à la vitesse p (p = 2 : une octave plus haut, deux fois plus court).
+   * Sinus cardinal fenêtré (Blackman, 12 passages par zéro) ; quand on accélère,
+   * la coupure descend à 1/p pour que rien ne se replie sous Nyquist.
+   */
+  const TABLE = 4096, ZEROS = 12;
+  const noyau = (() => {
+    const t = new Float64Array(ZEROS * TABLE + 2);
+    for (let i = 0; i < t.length; i++) {
+      const x = i / TABLE, u = x / ZEROS;
+      const fen = u >= 1 ? 0 : 0.42 + 0.5 * Math.cos(Math.PI * u) + 0.08 * Math.cos(DEUX_PI * u);
+      t[i] = (x === 0 ? 1 : Math.sin(Math.PI * x) / (Math.PI * x)) * fen;
+    }
+    return t;
+  })();
+  function changerVitesse(x, p) {
+    const L = x.length, Lo = Math.max(1, Math.floor(L / p));
+    const fc = Math.min(1, 1 / p), W = ZEROS / fc;
+    const y = new Float32Array(Lo);
+    for (let n = 0; n < Lo; n++) {
+      const t = n * p;
+      const k0 = Math.max(0, Math.ceil(t - W)), k1 = Math.min(L - 1, Math.floor(t + W));
+      let s = 0;
+      for (let k = k0; k <= k1; k++) {
+        const pos = Math.abs(t - k) * fc * TABLE, i = pos | 0, f = pos - i;
+        s += x[k] * (noyau[i] + f * (noyau[i + 1] - noyau[i]));
+      }
+      y[n] = s * fc;
+    }
+    return y;
+  }
+
+  /**
+   * Vocodeur de phase : ramène s à la longueur Lout sans toucher à la hauteur.
+   * centre (facultatif) : m → position de lecture de la trame m dans s, pour un étirement
+   * qui varie dans le temps ; par défaut, la lecture avance d'un pas constant.
+   */
+  function etirer(s, Lout, N = 2048, centre = null) {
+    const Ls = s.length, alpha = Lout / Ls;
+    const Hs = N / 4, Ha = Hs / alpha, d = N / 8, B = N / 2 + 1;
+    const P = planFFT(N);
+    const fen = new Float64Array(N);
+    for (let i = 0; i < N; i++) fen[i] = 0.5 - 0.5 * Math.cos(DEUX_PI * i / N);
+    const sortie = new Float64Array(Lout + N), norme = new Float64Array(Lout + N);
+    const re = new Float64Array(N), im = new Float64Array(N), re0 = new Float64Array(N), im0 = new Float64Array(N);
+    const mag = new Float64Array(B), phA = new Float64Array(B), omega = new Float64Array(B);
+    let phS = new Float64Array(B), nouv = new Float64Array(B);
+    const pics = new Int32Array(B);
+    let premier = true;
+    const remplir = (centre, r, i0) => {
+      const debut = centre - N / 2;
+      for (let i = 0; i < N; i++) {
+        const k = debut + i;
+        r[i] = k >= 0 && k < Ls ? s[k] * fen[i] : 0;
+        i0[i] = 0;
+      }
+    };
+    const mDebut = -3, mFin = Math.ceil(Lout / Hs) + 3;
+    for (let m = mDebut; m <= mFin; m++) {
+      const ca = Math.round(centre ? centre(m) : m * Ha), cs = m * Hs;
+      remplir(ca, re, im); remplir(ca - d, re0, im0);
+      fft(P, re, im, false); fft(P, re0, im0, false);
+      for (let k = 0; k < B; k++) {
+        mag[k] = Math.hypot(re[k], im[k]);
+        phA[k] = Math.atan2(im[k], re[k]);
+        const wk = DEUX_PI * k / N;
+        omega[k] = wk + princarg(phA[k] - Math.atan2(im0[k], re0[k]) - wk * d) / d;
+      }
+      if (premier) { phS.set(phA); premier = false; }
+      else {
+        let n = 0;
+        for (let k = 2; k < B - 2; k++)
+          if (mag[k] > mag[k - 1] && mag[k] >= mag[k + 1] && mag[k] > mag[k - 2] && mag[k] >= mag[k + 2]) pics[n++] = k;
+        if (n === 0) { for (let k = 0; k < B; k++) nouv[k] = phS[k] + omega[k] * Hs; }
+        else {
+          for (let q = 0; q < n; q++) { const k = pics[q]; nouv[k] = phS[k] + omega[k] * Hs; }
+          // Chaque case suit le pic le plus proche : phases verrouillées.
+          let q = 0;
+          for (let k = 0; k < B; k++) {
+            while (q < n - 1 && Math.abs(pics[q + 1] - k) <= Math.abs(pics[q] - k)) q++;
+            const j = pics[q];
+            if (k !== j) nouv[k] = nouv[j] + (phA[k] - phA[j]);
+          }
+        }
+        const t = phS; phS = nouv; nouv = t;
+      }
+      for (let k = 0; k < B; k++) { re[k] = mag[k] * Math.cos(phS[k]); im[k] = mag[k] * Math.sin(phS[k]); }
+      for (let k = 1; k < N / 2; k++) { re[N - k] = re[k]; im[N - k] = -im[k]; }
+      fft(P, re, im, true);
+      const debut = cs - N / 2;
+      for (let i = 0; i < N; i++) {
+        const k = debut + i;
+        if (k < 0 || k >= sortie.length) continue;
+        sortie[k] += re[i] * fen[i];
+        norme[k] += fen[i] * fen[i];
+      }
+    }
+    const y = new Float32Array(Lout);
+    for (let i = 0; i < Lout; i++) y[i] = norme[i] > 1e-6 ? sortie[i] / norme[i] : 0;
+    return y;
+  }
+
+  /**
+   * Transpose x de demi demi-tons et lui donne la longueur voulue (par défaut la sienne) :
+   * hauteur et durée sont réglées séparément.
+   */
+  function transposer(x, demi, longueur = x.length) {
+    if (Math.abs(demi) < 0.005 && longueur === x.length) return Float32Array.from(x);
+    const p = Math.pow(2, demi / 12);
+    return etirer(Math.abs(demi) < 0.005 ? x : changerVitesse(x, p), longueur);
+  }
+
+  /**
+   * Lecture de z à vitesse variable : la sortie n lit z en phi[n] (phi croissant, phi[n + 1] - phi[n]
+   * est la vitesse locale). Même noyau que changerVitesse ; la coupure suit la vitesse locale.
+   */
+  function changerVitesseVariable(z, phi, Lout) {
+    const L = z.length, y = new Float32Array(Lout);
+    for (let n = 0; n < Lout; n++) {
+      const t = phi[n], p = Math.max(1e-6, phi[n + 1] - phi[n]);
+      const fc = Math.min(1, 1 / p), W = ZEROS / fc;
+      const k0 = Math.max(0, Math.ceil(t - W)), k1 = Math.min(L - 1, Math.floor(t + W));
+      let s = 0;
+      for (let k = k0; k <= k1; k++) {
+        const pos = Math.abs(t - k) * fc * TABLE, i = pos | 0, f = pos - i;
+        if (i + 1 >= noyau.length) continue;
+        s += z[k] * (noyau[i] + f * (noyau[i + 1] - noyau[i]));
+      }
+      y[n] = s * fc;
+    }
+    return y;
+  }
+
+  /**
+   * Transposition qui suit une courbe (étude 05 : la hauteur suit le trait).
+   * courbe : demi-tons par rapport à x, relevés à intervalles réguliers du début à la fin de
+   * la sortie ; Lout : longueur de la sortie. Le contenu de x avance régulièrement sur toute
+   * la durée (la longueur du trait donne la durée), la hauteur suit la courbe.
+   * Méthode : on transpose d'abord tout x de la médiane de la courbe (vocodeur, durée gardée),
+   * puis on l'étire à pas variable et on le relit à vitesse variable : la vitesse de relecture
+   * porte l'écart à la médiane, l'étirement compense pour que le contenu reste régulier.
+   */
+  const ECART_MAX = 36;   // demi-tons de part et d'autre de la médiane
+  function transposerCourbe(x, courbe, Lout) {
+    const K = courbe.length;
+    const tri = Array.from(courbe).sort((a, b) => a - b), B = tri[K >> 1];
+    const base = Math.abs(B) < 0.005 ? x : transposer(x, B, x.length);
+    const demiA = n => {
+      const i = Math.min(K - 1, Math.max(0, n / Math.max(1, Lout - 1) * (K - 1))), k = Math.floor(i), f = i - k;
+      return courbe[k] * (1 - f) + courbe[Math.min(K - 1, k + 1)] * f;
+    };
+    const vitesse = n => Math.pow(2, Math.max(-ECART_MAX, Math.min(ECART_MAX, demiA(n) - B)) / 12);
+    const phi = new Float64Array(Lout + 1);
+    for (let n = 0; n < Lout; n++) phi[n + 1] = phi[n] + vitesse(n);
+    const Lz = Math.ceil(phi[Lout]) + 4, Lx = base.length, Hs = 2048 / 4, echelle = Lx / Lout;
+    let j = 0;
+    const centre = m => {
+      const tau = m * Hs;
+      if (tau <= 0) return tau * echelle / vitesse(0);
+      if (tau >= phi[Lout]) return Lx + (tau - phi[Lout]) * echelle / vitesse(Lout - 1);
+      while (j > 0 && phi[j] > tau) j--;
+      while (j < Lout - 1 && phi[j + 1] <= tau) j++;
+      const t = j + (tau - phi[j]) / Math.max(1e-9, phi[j + 1] - phi[j]);
+      return t * echelle;
+    };
+    const z = etirer(base, Lz, 2048, centre);
+    return changerVitesseVariable(z, phi, Lout);
+  }
+
+  return { transposer, transposerCourbe, changerVitesse, changerVitesseVariable, etirer, fft, planFFT };
+}
+const DSP = fabriquerDSP();
+
+/* Transposition des expériences. Vers l'aigu, le vocodeur adoucit les attaques ; on
+   garde donc les 30 premières millisecondes lues à la vitesse transposée (l'attaque
+   reste nette), puis on fond en 12 ms vers le son à durée constante. Vers le grave,
+   le vocodeur seul : l'attaque ralentie serait coupée en son milieu. */
+function transposerExperience(x, demi) {
+  if (Math.abs(demi) < 0.005) return Float32Array.from(x);
+  const y = DSP.transposer(x, demi);
+  if (demi > 0) {
+    const v = DSP.changerVitesse(x, Math.pow(2, demi / 12));
+    const a = Math.round(0.03 * 44100), f = Math.round(0.012 * 44100);
+    for (let i = 0; i < a + f && i < y.length; i++) {
+      const g = i < a ? 1 : 1 - (i - a) / f;
+      y[i] = g * (i < v.length ? v[i] : 0) + (1 - g) * y[i];
+    }
+  }
+  return y;
+}
+
   (function () {
     "use strict";
-    const DUREE_MAX = 2.5;            // secondes : objet sonore de durée mesurable
-    const SEUIL_SILENCE = 0.02;       // ≈ −34 dB sous la crête : début et fin de l'objet
+    const DUREE_MAX = 3.0;            // secondes : objet sonore de durée mesurable
+    const F_BAS = 21.8, F_HAUT = 12500;                       // étude 003
+    const frequence = y => F_BAS * Math.pow(F_HAUT / F_BAS, 1 - y);
+    const ordonnee = f => 1 - Math.log(f / F_BAS) / Math.log(F_HAUT / F_BAS);
     const $ = id => document.getElementById(id);
     const reduit = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const fmt = (v, d = 0) => v.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
+
+    /* ---------------- État ---------------- */
+    const etat = { f: 440, velo: 110, u: 1 };
+    let brut = null;          // le son capté, nettoyé, normalisé : la source de tout
+    let refHz = null;         // sa hauteur mesurée, ou null
+    let retireMs = 0;         // ce qui a été ôté avant l'attaque
+    let courant = null;       // { y, sr, profil, rapport, duree, db }
 
     /* ---------------- Son ---------------- */
     let ctx = null, bus = null, voix = null, flux = null;
@@ -225,9 +557,37 @@ async src="https://gc.zgo.at/count.js"></script>
       return ctx;
     }
 
-    /* ---------------- Le pointé (étude 008) ----------------
-       Les deux mesures sont celles du prototype SIGN, au chiffre près : l'enveloppe
-       sur 120 pas pour le rapport pics/corps, et un relevé fin (S pas) pour le dessin. */
+    /* ---------------- Hauteur mesurée ----------------
+       Reprise telle quelle de SIGN (lois.js, detecterHauteur) : autocorrélation
+       normalisée, premier sommet assez haut pour ne pas tomber d'une octave. */
+    function detecterHauteur(x, sr) {
+      let ip = 0, crete = 0;
+      for (let i = 0; i < x.length; i++) { const a = Math.abs(x[i]); if (a > crete) { crete = a; ip = i; } }
+      const debut = Math.min(ip + Math.round(0.03 * sr), Math.max(0, x.length - 2048));
+      const N = Math.min(8192, x.length - debut);
+      if (N < 1024 || crete === 0) return { f: null, confiance: 0 };
+      const w = x.subarray(debut, debut + N);
+      const tMin = Math.floor(sr / 2000), tMax = Math.min(Math.floor(sr / 25), N >> 1);
+      const n = new Float32Array(tMax + 2);
+      for (let t = tMin; t <= tMax + 1; t++) {
+        let ac = 0, m = 0;
+        for (let i = 0; i + t < N; i++) { ac += w[i] * w[i + t]; m += w[i] * w[i] + w[i + t] * w[i + t]; }
+        n[t] = m ? 2 * ac / m : 0;
+      }
+      let max = 0;
+      for (let t = tMin; t <= tMax; t++) if (n[t] > max) max = n[t];
+      if (max <= 0) return { f: null, confiance: 0 };
+      for (let t = tMin + 1; t <= tMax; t++) {
+        if (n[t] >= 0.85 * max && n[t] >= n[t - 1] && n[t] >= n[t + 1]) {
+          const a = n[t - 1], b = n[t], c = n[t + 1], d = a - 2 * b + c;
+          const decal = d ? 0.5 * (a - c) / d : 0;
+          return { f: sr / (t + decal), confiance: Math.round(b * 1000) / 1000 };
+        }
+      }
+      return { f: null, confiance: 0 };
+    }
+
+    /* ---------------- Le pointé (étude 008) ---------------- */
     function rapportPicsCorps(x, sr) {
       const P = 120, n = x.length, demiF = Math.max(n / P, 0.03 * sr) / 2, env = new Float64Array(P);
       let max = 0;
@@ -267,9 +627,6 @@ async src="https://gc.zgo.at/count.js"></script>
     const couleur = (nom, secours) => (getComputedStyle(document.querySelector(".experience")).getPropertyValue(nom) || secours).trim() || secours;
     const doux = t => t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
 
-    let courant = null;        // { y, sr, profil, rapport, duree }
-    let u = 1;
-
     function dessinerOnde(tLecture) {
       const { c, w, h } = preparer($("onde"));
       c.clearRect(0, 0, w, h);
@@ -278,7 +635,10 @@ async src="https://gc.zgo.at/count.js"></script>
       c.beginPath(); c.moveTo(marge * 0.5, mi); c.lineTo(w - marge * 0.5, mi); c.stroke();
       if (!courant) return;
       const x = courant.y, n = x.length, larg = w - 2 * marge;
-      let max = 0; for (let i = 0; i < n; i++) max = Math.max(max, Math.abs(x[i]));
+      /* La forme d'onde est montrée à son NIVEAU RÉEL, et non ramenée au cadre :
+         elle rétrécit quand la frappe faiblit. Le pointé, lui, reste normalisé —
+         c'est une morphologie, pas un niveau (étude 008). */
+      const max = 1;
       const cols = Math.max(2, Math.round(larg));
       const hauts = new Float32Array(cols), bass = new Float32Array(cols);
       for (let k = 0; k < cols; k++) {
@@ -380,28 +740,88 @@ async src="https://gc.zgo.at/count.js"></script>
       tracerPointe(c, w, h, v, courant.profil, couleur("--a-noir", "#1d1a1a"), tLecture, courant.duree);
     }
 
+    /* Le repère de l'axe : le pointé en petit, à sa hauteur. */
+    function dessinerRepere() {
+      const cv = $("repere"), axe = $("axe");
+      cv.style.top = (ordonnee(etat.f) * axe.clientHeight) + "px";
+      const { c, w, h } = preparer(cv);
+      c.clearRect(0, 0, w, h);
+      if (!courant) return;
+      c.fillStyle = couleur("--a-noir", "#1d1a1a");
+      const cx = w / 2, cy = h / 2, R0 = Math.min(w, h) * 0.48, p = courant.profil;
+      c.beginPath();
+      for (let k = 0; k < S; k += 3) { const a = Math.PI * k / (S - 1), r = R0 * (0.5 + 0.5 * p.haut[k]); c.lineTo(cx + r * Math.sin(a), cy - r * Math.cos(a)); }
+      for (let k = S - 1; k >= 0; k -= 3) { const a = Math.PI * k / (S - 1), r = R0 * (0.5 + 0.5 * p.haut[k]); c.lineTo(cx - r * Math.sin(a), cy - r * Math.cos(a)); }
+      c.closePath(); c.fill();
+    }
+
+    function graduer() {
+      const axe = $("axe");
+      axe.querySelectorAll(".graduation, .enregistree").forEach(e => e.remove());
+      for (const f of [12500, 5000, 2000, 1000, 500, 200, 100, 50, 21.8]) {
+        const e = document.createElement("span");
+        e.className = "graduation";
+        e.textContent = f >= 1000 ? (f / 1000).toLocaleString("fr-FR") + "k" : String(f).replace(".", ",");
+        e.style.top = (ordonnee(f) * 100) + "%";
+        axe.appendChild(e);
+      }
+      if (refHz) {
+        const m = document.createElement("span");
+        m.className = "enregistree"; m.title = "La hauteur captée";
+        m.style.top = (ordonnee(refHz) * 100) + "%";
+        axe.appendChild(m);
+      }
+    }
+
+    const NOTES = ["do", "do♯", "ré", "mi♭", "mi", "fa", "fa♯", "sol", "sol♯", "la", "si♭", "si"];
+    function nomNote(f) {
+      const r = Math.round(69 + 12 * Math.log2(f / 440));
+      return NOTES[((r % 12) + 12) % 12] + (Math.floor(r / 12) - 2);
+    }
+
+    function majReleve() {
+      if (!courant) { $("releve").innerHTML = ""; return; }
+      const q = courant.rapport;
+      const famille = q < 1.25 ? "sous 1,25 : soutenu" : q > 1.39 ? "au-delà de 1,39 : percussif" : "entre 1,25 et 1,39 : entre les deux familles";
+      const demi = 12 * Math.log2(etat.f / (refHz || 440));
+      let ecart;
+      if (!refHz) ecart = "Sans hauteur mesurable : le son capté est posé à 440 Hz";
+      else if (Math.abs(demi) < 0.05) ecart = "La hauteur captée";
+      else ecart = `${demi > 0 ? "+" : "−"}${fmt(Math.abs(demi), 1)} demi-ton${Math.abs(demi) >= 2 ? "s" : ""} depuis la hauteur captée`;
+      $("releve").innerHTML =
+        `<span class="nom">Votre son</span>` +
+        `<span class="note">${nomNote(etat.f)} · ${fmt(etat.f, etat.f < 100 ? 1 : 0)} Hz</span>` +
+        `<span class="rapport">${ecart}</span>` +
+        `<span class="rapport">Durée ${fmt(courant.duree, 2)} s · frappe ${etat.velo} · ${fmt(courant.db, 1)} dB</span>` +
+        `<span class="rapport">Pics / corps ${fmt(q, 2)} — ${famille}</span>` +
+        (retireMs > 12 ? `<span class="rapport">${fmt(retireMs)} ms de souffle retirés avant l'attaque</span>` : "");
+      const axe = $("axe");
+      axe.setAttribute("aria-valuenow", etat.f.toFixed(1));
+      axe.setAttribute("aria-valuetext", `${nomNote(etat.f)}, ${Math.round(etat.f)} hertz`);
+    }
+
     /* ---------------- Animation et lecture ---------------- */
     let anim = null, lecture = null;
     function dessiner() {
       const t = lecture && ctx ? ctx.currentTime - lecture.depart : null;
       const dedans = t != null && t <= lecture.duree;
       dessinerOnde(dedans ? t : null);
-      dessinerPointe(u, dedans ? t : null);
+      dessinerPointe(etat.u, dedans ? t : null);
       if (lecture && t > lecture.duree + 0.05) lecture = null;
     }
     function boucle() {
       if (anim) {
         const v = Math.min(1, (performance.now() - anim.debut) / anim.duree);
-        u = anim.de + (1 - anim.de) * v;
-        $("enroulement").value = Math.round(u * 1000);
-        $("etape").textContent = etapeDe(u);
+        etat.u = anim.de + (1 - anim.de) * v;
+        $("enroulement").value = Math.round(etat.u * 1000);
+        $("etape").textContent = etapeDe(etat.u);
         if (v >= 1) { const fin = anim.fin; anim = null; if (fin) fin(); }
       }
       dessiner();
       if (anim || lecture) requestAnimationFrame(boucle);
     }
     function enrouler(fin) {
-      if (reduit) { u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); dessiner(); if (fin) fin(); return; }
+      if (reduit) { etat.u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); dessiner(); if (fin) fin(); return; }
       anim = { debut: performance.now(), duree: 2600, de: 0, fin };
       requestAnimationFrame(boucle);
     }
@@ -419,23 +839,14 @@ async src="https://gc.zgo.at/count.js"></script>
       requestAnimationFrame(boucle);
     }
 
-    /* ---------------- La prise au micro ----------------
-       On demande le micro SANS correction : la réduction de bruit, l'annulation d'écho
-       et le gain automatique lissent l'enveloppe, et c'est l'enveloppe qu'on relève. */
-    const CONTRAINTES = {
-      audio: {
-        echoCancellation: false, noiseSuppression: false, autoGainControl: false,
-        channelCount: 1
-      }
-    };
-    let enPrise = false;
+    /* ---------------- La prise au micro ---------------- */
+    const CONTRAINTES = { audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false, channelCount: 1 } };
+    let enPrise = false, arret = null;
 
     function arreterFlux() {
       if (flux) { try { flux.getTracks().forEach(t => t.stop()); } catch (e) {} flux = null; }
     }
 
-    /* Le collecteur : un AudioWorklet si le navigateur en a un, sinon un
-       ScriptProcessor. Les deux rendent la même chose : les échantillons bruts. */
     async function collecteur(c, source, surBloc) {
       const CODE = `
         class Collecte extends AudioWorkletProcessor {
@@ -454,7 +865,6 @@ async src="https://gc.zgo.at/count.js"></script>
           const n = new AudioWorkletNode(c, "collecte");
           n.port.onmessage = e => surBloc(e.data);
           source.connect(n);
-          // Un worklet non relié à la sortie peut être suspendu : on le relie à un gain muet.
           const muet = c.createGain(); muet.gain.value = 0; n.connect(muet); muet.connect(c.destination);
           return () => { try { source.disconnect(n); n.disconnect(); muet.disconnect(); } catch (e) {} };
         } catch (e) { /* on retombe sur le ScriptProcessor */ }
@@ -466,23 +876,57 @@ async src="https://gc.zgo.at/count.js"></script>
       return () => { try { source.disconnect(p); p.disconnect(); muet.disconnect(); } catch (e) {} };
     }
 
-    /* Rognage des silences de début et de fin, puis remise au maximum : seule la
-       forme compte, pas le niveau auquel on a parlé. */
+    /* ---------------- Trouver le début de l'objet sonore ----------------
+       Le seuil n'est pas posé d'avance : on mesure d'abord le FOND — souffle du
+       micro, bruit de la pièce, ventilateur — comme le quinzième centile des
+       énergies courtes. Le son utile commence là où le signal s'en détache
+       franchement et s'y maintient. On remonte ensuite juste avant ce point,
+       tant qu'on reste au-dessus du fond : l'attaque ne doit pas être coupée,
+       c'est elle qui fait le sommet de la figure. */
+    const FEN = 0.010, PAS = 0.005;          // fenêtre de 10 ms, tous les 5 ms
+    const TENUE = 0.030;                     // il faut tenir 30 ms pour que ce soit un début
+    const AU_DESSUS_DU_FOND = 3.2;           // ≈ +10 dB
+    const PART_DU_SOMMET = 0.10;             // et au moins un dixième du plus fort
     function nettoyer(x, sr) {
+      const nf = Math.max(1, Math.round(FEN * sr)), np = Math.max(1, Math.round(PAS * sr));
+      const K = Math.floor((x.length - nf) / np) + 1;
+      if (K < 4) return null;
+      const rms = new Float64Array(K);
+      for (let k = 0; k < K; k++) {
+        let s = 0; const a = k * np;
+        for (let i = a; i < a + nf; i++) s += x[i] * x[i];
+        rms[k] = Math.sqrt(s / nf);
+      }
+      const tri = Array.from(rms).sort((a, b) => a - b);
+      const fond = tri[Math.floor(K * 0.15)] || 0;
+      const sommet = tri[K - 1];
+      if (sommet < 1e-4) return null;
+      const seuil = Math.max(fond * AU_DESSUS_DU_FOND, sommet * PART_DU_SOMMET);
+      const tenue = Math.max(1, Math.round(TENUE / PAS));
+      let k0 = -1;
+      for (let k = 0; k + tenue <= K; k++) {
+        let bon = true;
+        for (let j = 0; j < tenue; j++) if (rms[k + j] < seuil) { bon = false; break; }
+        if (bon) { k0 = k; break; }
+      }
+      if (k0 < 0) return null;
+      // on remonte avant le franchissement, tant que le signal dépasse encore le fond
+      const marge = fond * 1.6;
+      while (k0 > 0 && rms[k0 - 1] > marge) k0--;
+      let k1 = K - 1;
+      while (k1 > k0 && rms[k1] < seuil) k1--;
+      let a = Math.max(0, k0 * np - Math.round(0.006 * sr));          // 6 ms avant
+      let b = Math.min(x.length - 1, (k1 + 1) * np + nf + Math.round(0.060 * sr));  // 60 ms après
+      if (b - a < 0.04 * sr) return null;
+      if ((b - a) > DUREE_MAX * sr) b = a + Math.round(DUREE_MAX * sr);
       let crete = 0;
-      for (let i = 0; i < x.length; i++) { const v = Math.abs(x[i]); if (v > crete) crete = v; }
+      for (let i = a; i <= b; i++) { const v = Math.abs(x[i]); if (v > crete) crete = v; }
       if (crete < 1e-4) return null;
-      const seuil = crete * SEUIL_SILENCE;
-      let a = 0, b = x.length - 1;
-      while (a < b && Math.abs(x[a]) < seuil) a++;
-      while (b > a && Math.abs(x[b]) < seuil) b--;
-      a = Math.max(0, a - Math.round(0.01 * sr));          // on garde 10 ms avant l'attaque
-      b = Math.min(x.length - 1, b + Math.round(0.03 * sr));
-      if (b - a < 0.04 * sr) return null;                   // moins de 40 ms : rien à relever
-      const y = new Float32Array(b - a + 1);
-      const g = 0.99 / crete;
+      const y = new Float32Array(b - a + 1), g = 0.99 / crete;
       for (let i = 0; i < y.length; i++) y[i] = x[a + i] * g;
-      return y;
+      const fd = Math.min(Math.round(0.003 * sr), y.length >> 2);     // 3 ms, contre les clics
+      for (let i = 0; i < fd; i++) { y[i] *= i / fd; y[y.length - 1 - i] *= i / fd; }
+      return { y, retire: a / sr };
     }
 
     async function capter() {
@@ -497,16 +941,15 @@ async src="https://gc.zgo.at/count.js"></script>
           : "Le micro n'est pas disponible sur cet appareil (" + (e && e.name ? e.name : "inconnu") + ").";
         return;
       }
-      flux = s;
-      enPrise = true;
+      flux = s; enPrise = true;
       $("capter").textContent = "■ Arrêter";
       $("capter").classList.remove("capital");
       const source = c.createMediaStreamSource(s);
       const blocs = [];
       let total = 0, crete = 0;
       const sr = c.sampleRate;
-      /* Déclaré avant le collecteur : les premiers blocs peuvent arriver pendant que
-         le reste se met en place, et ils doivent déjà savoir si la prise est close. */
+      // on capte un peu plus longtemps que la durée gardée : le souffle d'avant sera ôté
+      const LIMITE = (DUREE_MAX + 1.5) * sr;
       let fini = false;
       const surBloc = b => {
         if (fini) return;
@@ -514,8 +957,8 @@ async src="https://gc.zgo.at/count.js"></script>
         for (let i = 0; i < b.length; i++) { const v = Math.abs(b[i]); if (v > crete) crete = v; }
         $("jauge").style.width = Math.min(100, crete * 130) + "%";
         crete *= 0.86;
-        $("compte").textContent = "Prise en cours · " + (total / sr).toFixed(1).replace(".", ",") + " s sur " + String(DUREE_MAX).replace(".", ",");
-        if (total >= DUREE_MAX * sr) finir();
+        $("compte").textContent = "Prise en cours · " + (total / sr).toFixed(1).replace(".", ",") + " s";
+        if (total >= LIMITE) finir();
       };
       const defaire = await collecteur(c, source, surBloc);
 
@@ -530,36 +973,108 @@ async src="https://gc.zgo.at/count.js"></script>
         $("jauge").style.width = "0%";
         const x = new Float32Array(total);
         let o = 0; for (const b of blocs) { x.set(b, o); o += b.length; }
-        const y = nettoyer(x, sr);
-        if (!y) {
+        const net = nettoyer(x, sr);
+        if (!net) {
           $("compte").textContent = "";
-          $("etat").textContent = "Rien d'assez fort n'a été capté. Approchez-vous du micro et réessayez.";
+          $("etat").textContent = "Rien d'assez net n'a été capté. Approchez-vous du micro, ou émettez un son plus franc, et réessayez.";
           return;
         }
-        courant = { y, sr, profil: profil(y, sr), rapport: rapportPicsCorps(y, sr), duree: y.length / sr };
-        ["ecouter", "rejouer", "emporter"].forEach(id => { $(id).disabled = false; });
-        $("compte").textContent = "Pris · " + courant.duree.toFixed(2).replace(".", ",") + " s";
-        majReleve();
-        enrouler(() => jouer());
+        brut = net.y; retireMs = net.retire * 1000;
+        const h = detecterHauteur(brut, sr);
+        refHz = h.f && h.confiance >= 0.6 ? h.f : null;
+        etat.f = refHz || 440;
+        etat.velo = 110; $("velocite").value = 110; $("valeurVelocite").textContent = "110";
+        courant = null;
+        $("second").hidden = false;
+        ["ecouter", "rejouer", "emporter", "emporterSon"].forEach(id => { $(id).disabled = false; });
+        $("compte").textContent = "Pris · " + (brut.length / sr).toFixed(2).replace(".", ",") + " s gardées"
+          + (retireMs > 12 ? " · " + Math.round(retireMs) + " ms de souffle ôtés" : "");
+        ajuster();
+        recalculer("enrouler", sr);
       }
       arret = finir;
     }
-    let arret = null;
 
-    const fmt = (v, d = 0) => v.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
-    function majReleve() {
-      if (!courant) { $("releve").innerHTML = ""; return; }
-      const q = courant.rapport;
-      const famille = q < 1.25 ? "sous 1,25 : soutenu" : q > 1.39 ? "au-delà de 1,39 : percussif" : "entre 1,25 et 1,39 : entre les deux familles";
-      $("releve").innerHTML =
-        `<span class="nom">Votre son</span>` +
-        `<span class="rapport">Durée ${fmt(courant.duree, 2)} s</span>` +
-        `<span class="rapport">Pics / corps ${fmt(q, 2)} — ${famille}</span>`;
+    /* ---------------- Transformer : hauteur et frappe ----------------
+       La hauteur transpose à durée constante (étude 003). La frappe, sur un son
+       enregistré une seule fois, ne peut pas inventer un timbre : elle agit sur
+       le niveau — qu'on entend — et sur la raideur de l'attaque — qu'on voit au
+       sommet de la figure. Le reste demanderait plusieurs couches. */
+    const DOUCEUR_MAX = 0.14;                 // secondes d'adoucissement à la frappe la plus faible
+    function appliquerFrappe(x, sr, velo) {
+      const v = Math.min(127, Math.max(1, velo)) / 127;
+      const y = Float32Array.from(x);
+      const d = Math.round(Math.pow(1 - v, 2) * DOUCEUR_MAX * sr);
+      for (let i = 0; i < d && i < y.length; i++) { const t = i / d; y[i] *= t * t * (3 - 2 * t); }
+      const g = Math.pow(v, 1.6);
+      for (let i = 0; i < y.length; i++) y[i] *= g;
+      return y;
     }
 
-    /* ---------------- Emporter la figure ----------------
-       Le dessin est refait à 1400 px sur fond clair, avec une ligne de provenance. */
-    function emporter() {
+    /* La transposition tourne dans un fil à part pour ne pas figer la page ;
+       si le navigateur le refuse, elle tourne ici même. */
+    let fil = null, filEnPanne = false, numero = 0;
+    const attentes = new Map();
+    function lancerFil() {
+      if (fil || filEnPanne) return;
+      try {
+        const code = `const DSP = (${fabriquerDSP.toString()})();\n${transposerExperience.toString()}\n` +
+          `onmessage = e => { const y = transposerExperience(e.data.x, e.data.demi); postMessage({ id: e.data.id, y }, [y.buffer]); };`;
+        fil = new Worker(URL.createObjectURL(new Blob([code], { type: "text/javascript" })));
+        fil.onmessage = e => { const a = attentes.get(e.data.id); if (a) { attentes.delete(e.data.id); a.ok(e.data.y); } };
+        fil.onerror = () => {
+          filEnPanne = true; fil = null;
+          for (const [id, a] of attentes) { attentes.delete(id); a.ok(transposerExperience(a.x, a.demi)); }
+        };
+      } catch (e) { filEnPanne = true; fil = null; }
+    }
+    function transposer(x, demi) {
+      if (Math.abs(demi) < 0.005) return Promise.resolve(Float32Array.from(x));
+      lancerFil();
+      if (!fil) return Promise.resolve(transposerExperience(x, demi));
+      const id = ++numero;
+      return new Promise(ok => {
+        attentes.set(id, { ok, x, demi });
+        fil.postMessage({ id, x: Float32Array.from(x), demi });
+        setTimeout(() => { if (attentes.has(id)) { attentes.delete(id); filEnPanne = true; ok(transposerExperience(x, demi)); } }, 6000);
+      });
+    }
+
+    let enCours = false, enAttente = null, srSon = 44100;
+    function recalculer(mode, sr) {
+      if (sr) srSon = sr;
+      enAttente = { mode: enAttente && enAttente.mode === "enrouler" ? "enrouler" : mode };
+      if (!enCours) suivant();
+    }
+    async function suivant() {
+      if (!enAttente || !brut) return;
+      const { mode } = enAttente; enAttente = null; enCours = true;
+      const f = etat.f, velo = etat.velo;
+      const demi = Math.round(12 * Math.log2(f / (refHz || 440)) * 20) / 20;
+      try {
+        const z = await transposer(brut, demi);
+        const y = appliquerFrappe(z, srSon, velo);
+        let crete = 0; for (let i = 0; i < y.length; i++) { const v = Math.abs(y[i]); if (v > crete) crete = v; }
+        courant = { y, sr: srSon, profil: profil(y, srSon), rapport: rapportPicsCorps(y, srSon),
+                    duree: y.length / srSon, db: 20 * Math.log10(crete || 1e-6) };
+        majReleve(); dessinerRepere();
+        if (mode === "enrouler") enrouler(() => jouer());
+        else { dessiner(); if (mode === "direct" && ctx) jouer(); }
+      } catch (e) {
+        $("etat").textContent = "Le son n'a pas pu être transformé (" + e.message + ").";
+      }
+      enCours = false;
+      if (enAttente) suivant();
+    }
+
+    /* ---------------- Emporter ---------------- */
+    function telecharger(blob, nom) {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob); a.download = nom;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    }
+    function emporterFigure() {
       if (!courant) return;
       const T = 1400, cv = document.createElement("canvas");
       cv.width = T; cv.height = T;
@@ -572,29 +1087,94 @@ async src="https://gc.zgo.at/count.js"></script>
       c.font = "500 26px Jost, system-ui, sans-serif";
       c.textAlign = "center";
       c.fillText("Le Livre des Sons · lelivredessons.fr", T / 2, T - 54);
-      const fin = () => { $("etat").textContent = ""; };
-      if (cv.toBlob) cv.toBlob(b => {
-        if (!b) { $("etat").textContent = "La figure n'a pas pu être enregistrée."; return; }
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(b);
-        a.download = "pointe-le-livre-des-sons.png";
-        document.body.appendChild(a); a.click(); a.remove();
-        setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-        fin();
-      }, "image/png");
-      else { const a = document.createElement("a"); a.href = cv.toDataURL("image/png"); a.download = "pointe-le-livre-des-sons.png"; a.click(); fin(); }
+      if (cv.toBlob) cv.toBlob(b => { if (b) telecharger(b, "pointe-le-livre-des-sons.png"); }, "image/png");
+      else telecharger(null, "");
+    }
+    /* Le son transformé, en WAV 16 bits : lisible partout, sans encodeur. */
+    function emporterLeSon() {
+      if (!courant) return;
+      const x = courant.y, sr = courant.sr, n = x.length;
+      const b = new ArrayBuffer(44 + 2 * n), v = new DataView(b);
+      const txt = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+      txt(0, "RIFF"); v.setUint32(4, 36 + 2 * n, true); txt(8, "WAVE");
+      txt(12, "fmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+      v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+      txt(36, "data"); v.setUint32(40, 2 * n, true);
+      for (let i = 0; i < n; i++) {
+        const s = Math.max(-1, Math.min(1, x[i]));
+        v.setInt16(44 + 2 * i, Math.round(s * 32767), true);
+      }
+      telecharger(new Blob([b], { type: "audio/wav" }), "son-le-livre-des-sons.wav");
     }
 
     /* ---------------- Gestes ---------------- */
     $("capter").addEventListener("click", () => { if (enPrise) { if (arret) arret(); } else capter(); });
-    $("ecouter").addEventListener("click", () => { if (u < 1) { anim = null; u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); } jouer(); });
+    $("ecouter").addEventListener("click", () => { ouvrirSon(); if (etat.u < 1) { anim = null; etat.u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); } jouer(); });
     $("rejouer").addEventListener("click", () => { ouvrirSon(); enrouler(() => jouer()); });
-    $("emporter").addEventListener("click", emporter);
-    $("enroulement").addEventListener("input", e => { anim = null; u = Number(e.target.value) / 1000; $("etape").textContent = etapeDe(u); dessiner(); });
+    $("emporter").addEventListener("click", emporterFigure);
+    $("emporterSon").addEventListener("click", emporterLeSon);
+    $("enroulement").addEventListener("input", e => { anim = null; etat.u = Number(e.target.value) / 1000; $("etape").textContent = etapeDe(etat.u); dessiner(); });
+
+    $("velocite").addEventListener("input", e => {
+      etat.velo = Number(e.target.value);
+      $("valeurVelocite").textContent = String(etat.velo);
+      if (brut) recalculer("silence");
+    });
+    $("velocite").addEventListener("change", () => { if (brut) { ouvrirSon(); recalculer("direct"); } });
+
+    // L'axe des hauteurs : glisser le repère.
+    const axe = $("axe");
+    let glisse = false, dernier = 0;
+    function placer(e) {
+      if (!brut) return;
+      const r = axe.getBoundingClientRect();
+      const y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+      etat.f = Math.min(F_HAUT, Math.max(F_BAS, frequence(y)));
+      majReleve(); dessinerRepere();
+      const t = performance.now();
+      if (t - dernier > 140) { dernier = t; recalculer("direct"); }
+    }
+    axe.addEventListener("pointerdown", e => {
+      if (!brut) return;
+      ouvrirSon(); glisse = true; anim = null; etat.u = 1;
+      $("enroulement").value = 1000; $("etape").textContent = etapeDe(1);
+      try { axe.setPointerCapture(e.pointerId); } catch (err) {}
+      placer(e); e.preventDefault();
+    });
+    axe.addEventListener("pointermove", e => { if (glisse) placer(e); });
+    const lacher = () => { if (!glisse) return; glisse = false; recalculer("direct"); };
+    axe.addEventListener("pointerup", lacher);
+    axe.addEventListener("pointercancel", lacher);
+    axe.addEventListener("keydown", e => {
+      if (!brut) return;
+      const ref = refHz || 440;
+      let m = 12 * Math.log2(etat.f / ref);
+      const pas = { ArrowUp: 1, ArrowDown: -1, PageUp: 12, PageDown: -12 }[e.key];
+      if (pas) m = Math.round(m) + pas;
+      else if (e.key === "Home") m = 12 * Math.log2(F_HAUT / ref);
+      else if (e.key === "End") m = 12 * Math.log2(F_BAS / ref);
+      else return;
+      e.preventDefault(); ouvrirSon();
+      etat.f = Math.min(F_HAUT, Math.max(F_BAS, ref * Math.pow(2, m / 12)));
+      majReleve(); dessinerRepere(); recalculer("direct");
+    });
+
     const casePointe = $("case-pointe");
-    casePointe.addEventListener("pointerup", () => { if (!courant) return; if (u < 1) { anim = null; u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); } jouer(); });
-    casePointe.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (courant) jouer(); } });
-    window.addEventListener("resize", () => dessiner());
+    casePointe.addEventListener("pointerup", () => {
+      if (!courant) return;
+      ouvrirSon();
+      if (etat.u < 1) { anim = null; etat.u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); }
+      jouer();
+    });
+    casePointe.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (courant) { ouvrirSon(); jouer(); } } });
+
+    function ajuster() {
+      const cote = casePointe.getBoundingClientRect().height;
+      axe.style.setProperty("--cote", cote + "px");
+      graduer(); dessinerRepere(); dessiner();
+    }
+    if (window.ResizeObserver) new ResizeObserver(ajuster).observe(casePointe);
+    window.addEventListener("resize", ajuster);
     window.addEventListener("pagehide", () => { try { if (voix) voix.s.stop(); } catch (e) {} arreterFlux(); });
 
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -602,7 +1182,7 @@ async src="https://gc.zgo.at/count.js"></script>
       $("etat").textContent = "Ce navigateur ne donne pas accès au micro. Sur iPhone et iPad, l'accès au micro demande Safari.";
     }
     $("etape").textContent = "Captez un son : sa figure se construira ici.";
-    dessiner();
+    ajuster();
   })();
   </script>
 
