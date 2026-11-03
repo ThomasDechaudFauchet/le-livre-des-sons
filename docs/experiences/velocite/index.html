@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience : vélocité et pointé</title>
+  <link rel="stylesheet" href="../../style.css?v=15">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+  <style>
+    /* ==========================================================================
+       EXPÉRIENCE : VÉLOCITÉ ET POINTÉ — styles propres à cette page.
+       Même facture que l'expérience du pointé (entre 008 et 009). La feuille du site
+       n'est pas modifiée ; les couleurs reprennent la charte claire des études
+       001 à 011, avec des valeurs de secours.
+       ========================================================================== */
+    .experience {
+      --a-fond: var(--fond, #f7f4ee);
+      --a-encre: var(--encre, #16130f);
+      --a-doux: var(--encre-doux, #55504a);
+      --a-tenu: var(--encre-tenu, #8a847c);
+      --a-filet: var(--filet, #ded8cc);
+      --a-vif: var(--vif, #8a5e12);
+      --a-case: #ffffff;
+      --a-noir: #1d1a1a;
+      margin-top: 1.6rem;
+    }
+    .experience p { display: block; margin: 0 0 1rem; }
+    .experience .intro { max-width: 40em; }
+
+    .experience .reglages { display: grid; gap: .9rem; margin: 1.4rem 0 1.2rem; }
+    .experience .rangee { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .5rem; }
+    .experience .etiquette {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .68rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--a-tenu);
+      min-width: 7.2em;
+    }
+    .experience .choix {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .9rem; letter-spacing: .01em;
+      background: transparent; color: var(--a-encre);
+      border: 1px solid color-mix(in srgb, var(--a-encre) 28%, transparent);
+      border-radius: 999px; padding: .38rem .85rem; cursor: pointer;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .experience .choix:hover { border-color: var(--a-encre); }
+    .experience .choix[aria-pressed="true"] { background: var(--a-encre); color: var(--a-fond); border-color: var(--a-encre); }
+    .experience .choix:focus-visible, .experience .bouton:focus-visible, .experience .axe:focus-visible,
+    .experience .case-pointe:focus-visible, .experience .reference:focus-visible { outline: 2px solid var(--a-vif); outline-offset: 3px; }
+
+    .experience .case-onde { position: relative; width: 100%; aspect-ratio: 4 / 1; background: var(--a-noir); margin: 0 0 .9rem; }
+    .experience canvas { display: block; width: 100%; height: 100%; }
+    .experience .legende {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .68rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--a-tenu);
+      margin: .35rem 0 0;
+    }
+
+    .experience .scene { display: grid; grid-template-columns: 64px minmax(0, 440px) minmax(12rem, 1fr); gap: 16px 22px; align-items: start; }
+    .experience .axe {
+      position: relative; height: var(--cote, 380px);
+      border-left: 1px solid var(--a-encre); margin-left: 34px; cursor: ns-resize;
+      touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+    }
+    .experience .axe .graduation {
+      position: absolute; left: -34px; width: 30px; text-align: right; transform: translateY(-50%);
+      font-family: var(--titre, "Jost", sans-serif); font-size: .62rem; font-variant-numeric: tabular-nums;
+      color: var(--a-tenu); pointer-events: none;
+    }
+    .experience .axe .graduation::after { content: ""; position: absolute; right: -8px; top: 50%; width: 6px; border-top: 1px solid var(--a-tenu); }
+    .experience .axe .enregistree { position: absolute; left: -4px; width: 26px; border-top: 1px dashed var(--a-vif); pointer-events: none; }
+    .experience .axe .graduation.forte { color: var(--a-vif); }
+    .experience .axe canvas.repere { position: absolute; left: 0; width: 30px; height: 30px; transform: translate(-2px, -50%); pointer-events: none; }
+
+    .experience .case-pointe {
+      position: relative; width: 100%; aspect-ratio: 1; background: var(--a-case);
+      border: 1.5px solid var(--a-encre); box-sizing: border-box; cursor: pointer;
+      touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+    }
+
+    /* Les trois frappes enregistrées, en petit, comme une rangée de la planche 009. */
+    .experience .references { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+    .experience .reference { display: flex; flex-direction: column; gap: .3rem; background: none; border: 0; padding: 0; cursor: pointer; text-align: center; color: var(--a-doux); }
+    .experience .reference .vignette { width: 100%; aspect-ratio: 1; background: var(--a-case); border: 1px solid color-mix(in srgb, var(--a-encre) 45%, transparent); box-sizing: border-box; }
+    .experience .reference[aria-pressed="true"] .vignette { border: 1.5px solid var(--a-encre); }
+    .experience .reference span { font-family: var(--titre, "Jost", sans-serif); font-size: .72rem; font-variant-numeric: tabular-nums; letter-spacing: .06em; }
+
+    .experience .cote { display: flex; flex-direction: column; gap: 1rem; }
+    .experience .releve { margin: 0; line-height: 1.5; }
+    .experience .releve .nom { font-family: var(--texte, serif); font-size: 1.15rem; display: block; }
+    .experience .releve .note {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .95rem; font-variant-numeric: tabular-nums;
+      color: var(--a-vif); letter-spacing: .02em; display: block; margin-top: .15rem;
+    }
+    .experience .releve .ecart, .experience .releve .rapport {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .78rem; font-variant-numeric: tabular-nums;
+      color: var(--a-doux); display: block; margin-top: .25rem; letter-spacing: .02em;
+    }
+    .experience .etape { font-style: italic; color: var(--a-doux); min-height: 4.8em; margin: 0; font-size: .98rem; }
+    .experience .curseur { display: flex; flex-direction: column; gap: .35rem; }
+    .experience input[type="range"] { width: 100%; accent-color: var(--a-encre); }
+    .experience .boutons { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .experience .bouton {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .85rem;
+      background: transparent; color: var(--a-encre);
+      border: 1px solid color-mix(in srgb, var(--a-encre) 35%, transparent);
+      border-radius: 8px; padding: .45rem .8rem; cursor: pointer;
+    }
+    .experience .bouton:hover { border-color: var(--a-encre); }
+    .experience .stylet { font-size: .8rem; color: var(--a-doux); margin: 0; min-height: 1.2em; }
+    .experience .etat { font-size: .82rem; color: var(--a-tenu); margin: .6rem 0 0; min-height: 1.3em; }
+
+    .experience details.precisions { margin-top: 2rem; max-width: 44em; }
+    .experience details.precisions summary {
+      cursor: pointer; font-family: var(--titre, "Jost", sans-serif); font-size: .74rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--a-doux);
+    }
+    .experience details.precisions ul { padding-left: 1.1em; margin: .8rem 0 0; }
+    .experience details.precisions li { margin: .45rem 0; }
+
+    @media (max-width: 760px) {
+      .experience .scene { grid-template-columns: 52px minmax(0, 1fr); }
+      .experience .cote { grid-column: 1 / -1; }
+      .experience .axe { margin-left: 26px; }
+      .experience .axe .graduation { left: -28px; width: 24px; font-size: .56rem; }
+      .experience .etiquette { min-width: 100%; }
+    }
+  </style>
+</head>
+
+<body class="page-etude etude-009 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience : vélocité et pointé</h1>
+    <div class="cat">Après l'étude 009 · à manipuler</div>
+
+    <section class="experience" aria-label="Expérience de la vélocité et du pointé">
+      <p class="intro">
+        Choisis un instrument, puis joue sa note plus ou moins fort. Au stylet, frappe le
+        pointé : la pression du geste donne la vélocité. À la souris ou au doigt, règle-la
+        sur l'axe. La note reste la même ; seule la manière de la jouer change, et le
+        pointé avec elle.
+      </p>
+
+      <div class="reglages">
+        <div class="rangee" role="group" aria-label="Instruments mélodiques">
+          <span class="etiquette">Mélodiques</span>
+          <button class="choix" data-instrument="Piano">Piano</button>
+          <button class="choix" data-instrument="Violoncelle">Violoncelle</button>
+          <button class="choix" data-instrument="Flute">Flûte</button>
+          <button class="choix" data-instrument="Voix">Voix</button>
+        </div>
+        <div class="rangee" role="group" aria-label="Instruments percussifs">
+          <span class="etiquette">Percussifs</span>
+          <button class="choix" data-instrument="Kalimba">Kalimba</button>
+          <button class="choix" data-instrument="Kick">Kick</button>
+          <button class="choix" data-instrument="Clave">Clave</button>
+          <button class="choix" data-instrument="Shaker">Shaker</button>
+        </div>
+      </div>
+
+      <div class="case-onde"><canvas id="onde" aria-label="Forme d'onde du son"></canvas></div>
+
+      <div class="scene">
+        <div>
+          <div class="axe" id="axe" tabindex="0" role="slider" aria-orientation="vertical"
+               aria-label="Vélocité" aria-valuemin="1" aria-valuemax="127">
+            <canvas class="repere" id="repere" aria-hidden="true"></canvas>
+          </div>
+        </div>
+
+        <div>
+          <div class="case-pointe" id="case-pointe" tabindex="0" role="button" aria-label="Pointé instrumental. Frapper pour jouer la note.">
+            <canvas id="pointe"></canvas>
+          </div>
+          <p class="legende">Pointé instrumental · frapper pour jouer</p>
+          <div class="references" role="group" aria-label="Les trois frappes enregistrées">
+            <button class="reference" data-velocite="20"><canvas class="vignette" aria-hidden="true"></canvas><span>20 · faible</span></button>
+            <button class="reference" data-velocite="70"><canvas class="vignette" aria-hidden="true"></canvas><span>70 · moyenne</span></button>
+            <button class="reference" data-velocite="120"><canvas class="vignette" aria-hidden="true"></canvas><span>120 · forte</span></button>
+          </div>
+          <p class="legende">Les trois frappes enregistrées de l'étude 009</p>
+        </div>
+
+        <div class="cote">
+          <p class="releve" id="releve" aria-live="polite"></p>
+          <p class="etape" id="etape"></p>
+          <div class="curseur">
+            <label class="etiquette" for="enroulement">Du son au pointé</label>
+            <input type="range" id="enroulement" min="0" max="1000" value="1000" />
+          </div>
+          <div class="boutons">
+            <button class="bouton" id="rejouer">↻ Revoir l'enroulement</button>
+            <button class="bouton" id="ecouter">▶ Écouter</button>
+          </div>
+          <p class="stylet" id="stylet"></p>
+        </div>
+      </div>
+      <p class="etat" id="etat" aria-live="polite"></p>
+
+      <details class="precisions">
+        <summary>Ce que montre l'expérience, et ce qu'il ne montre pas</summary>
+        <ul>
+          <li>Chaque instrument a trois frappes enregistrées, celles de l'étude 009 : 20, 70 et 120.
+            Entre deux frappes, la page mêle les deux enregistrements, accordés et calés sur leur
+            attaque. C'est une interpolation, pas un son enregistré. Sous 20, c'est la frappe 20
+            jouée plus doucement ; au-delà de 120, la frappe 120.</li>
+          <li>Le pointé est normalisé en taille (étude 008) : si la frappe ne faisait que monter le
+            volume, il ne changerait pas. Ce qui change, c'est l'attaque, la densité, le corps.
+            Le niveau réel est donné en décibels sous le nom de l'instrument.</li>
+          <li>La forme d'onde, elle aussi, est ramenée à la même hauteur pour qu'on en compare
+            le dessin.</li>
+          <li>Le shaker se distingue : sa frappe épaissit le corps du pointé au lieu d'accentuer
+            ses pointes (étude 009).</li>
+          <li>Au stylet, la pression la plus forte des 150 premières millisecondes du geste donne
+            la vélocité, de 1 à 127 : c'est l'équivalent que l'étude 009 envisage pour SIGN.</li>
+          <li>La note reste celle de l'enregistrement : l'expérience précédente fait varier la hauteur,
+            celui-ci la seule frappe.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/009/">← Étude 009</a>
+      <a href="../../">Sommaire</a>
+      <a href="../voix/">Expérience : la voix →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+
+  
+  <script>
+  /* ==========================================================================
+     EXPÉRIENCE : VÉLOCITÉ ET POINTÉ
+     La vélocité choisit un mélange des frappes enregistrées de l'étude 009, puis
+     le pointé est extrait du son obtenu selon le procédé de l'étude 008.
+     ========================================================================== */
+  /* ==========================================================================
+   DSP — transposition à durée constante, en JavaScript pur.
+   Sert quand Signalsmith ne peut pas tourner (fichier ouvert en local, aperçu
+   en ligne qui refuse WebAssembly). Aucune dépendance, déterministe.
+   Méthode : changement de vitesse à bande limitée (la hauteur bouge, la durée
+   aussi), puis vocodeur de phase qui rend la durée d'origine. Fréquence
+   instantanée mesurée sur deux trames rapprochées, phases verrouillées sur
+   les pics du spectre (Laroche et Dolson).
+   ========================================================================== */
+function fabriquerDSP() {
+  const DEUX_PI = 2 * Math.PI;
+  const princarg = a => a - DEUX_PI * Math.round(a / DEUX_PI);
+
+  const plans = new Map();
+  function planFFT(N) {
+    if (plans.has(N)) return plans.get(N);
+    const niveaux = Math.round(Math.log2(N)), rev = new Uint32Array(N);
+    for (let i = 0; i < N; i++) {
+      let r = 0;
+      for (let b = 0; b < niveaux; b++) r |= ((i >> b) & 1) << (niveaux - 1 - b);
+      rev[i] = r;
+    }
+    const cos = new Float64Array(N / 2), sin = new Float64Array(N / 2);
+    for (let i = 0; i < N / 2; i++) { cos[i] = Math.cos(DEUX_PI * i / N); sin[i] = Math.sin(DEUX_PI * i / N); }
+    const p = { N, rev, cos, sin };
+    plans.set(N, p);
+    return p;
+  }
+  /** FFT complexe en place, radix 2. */
+  function fft(P, re, im, inverse) {
+    const { N, rev, cos, sin } = P;
+    for (let i = 0; i < N; i++) {
+      const j = rev[i];
+      if (j > i) { let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; }
+    }
+    for (let taille = 2; taille <= N; taille <<= 1) {
+      const moitie = taille >> 1, pas = N / taille;
+      for (let i = 0; i < N; i += taille) {
+        for (let j = 0, k = 0; j < moitie; j++, k += pas) {
+          const wr = cos[k], wi = inverse ? sin[k] : -sin[k];
+          const a = i + j, b = a + moitie;
+          const tr = re[b] * wr - im[b] * wi, ti = re[b] * wi + im[b] * wr;
+          re[b] = re[a] - tr; im[b] = im[a] - ti;
+          re[a] += tr; im[a] += ti;
+        }
+      }
+    }
+    if (inverse) for (let i = 0; i < N; i++) { re[i] /= N; im[i] /= N; }
+  }
+
+  /**
+   * Lecture à la vitesse p (p = 2 : une octave plus haut, deux fois plus court).
+   * Sinus cardinal fenêtré (Blackman, 12 passages par zéro) ; quand on accélère,
+   * la coupure descend à 1/p pour que rien ne se replie sous Nyquist.
+   */
+  const TABLE = 4096, ZEROS = 12;
+  const noyau = (() => {
+    const t = new Float64Array(ZEROS * TABLE + 2);
+    for (let i = 0; i < t.length; i++) {
+      const x = i / TABLE, u = x / ZEROS;
+      const fen = u >= 1 ? 0 : 0.42 + 0.5 * Math.cos(Math.PI * u) + 0.08 * Math.cos(DEUX_PI * u);
+      t[i] = (x === 0 ? 1 : Math.sin(Math.PI * x) / (Math.PI * x)) * fen;
+    }
+    return t;
+  })();
+  function changerVitesse(x, p) {
+    const L = x.length, Lo = Math.max(1, Math.floor(L / p));
+    const fc = Math.min(1, 1 / p), W = ZEROS / fc;
+    const y = new Float32Array(Lo);
+    for (let n = 0; n < Lo; n++) {
+      const t = n * p;
+      const k0 = Math.max(0, Math.ceil(t - W)), k1 = Math.min(L - 1, Math.floor(t + W));
+      let s = 0;
+      for (let k = k0; k <= k1; k++) {
+        const pos = Math.abs(t - k) * fc * TABLE, i = pos | 0, f = pos - i;
+        s += x[k] * (noyau[i] + f * (noyau[i + 1] - noyau[i]));
+      }
+      y[n] = s * fc;
+    }
+    return y;
+  }
+
+  /**
+   * Vocodeur de phase : ramène s à la longueur Lout sans toucher à la hauteur.
+   * centre (facultatif) : m → position de lecture de la trame m dans s, pour un étirement
+   * qui varie dans le temps ; par défaut, la lecture avance d'un pas constant.
+   */
+  function etirer(s, Lout, N = 2048, centre = null) {
+    const Ls = s.length, alpha = Lout / Ls;
+    const Hs = N / 4, Ha = Hs / alpha, d = N / 8, B = N / 2 + 1;
+    const P = planFFT(N);
+    const fen = new Float64Array(N);
+    for (let i = 0; i < N; i++) fen[i] = 0.5 - 0.5 * Math.cos(DEUX_PI * i / N);
+    const sortie = new Float64Array(Lout + N), norme = new Float64Array(Lout + N);
+    const re = new Float64Array(N), im = new Float64Array(N), re0 = new Float64Array(N), im0 = new Float64Array(N);
+    const mag = new Float64Array(B), phA = new Float64Array(B), omega = new Float64Array(B);
+    let phS = new Float64Array(B), nouv = new Float64Array(B);
+    const pics = new Int32Array(B);
+    let premier = true;
+    const remplir = (centre, r, i0) => {
+      const debut = centre - N / 2;
+      for (let i = 0; i < N; i++) {
+        const k = debut + i;
+        r[i] = k >= 0 && k < Ls ? s[k] * fen[i] : 0;
+        i0[i] = 0;
+      }
+    };
+    const mDebut = -3, mFin = Math.ceil(Lout / Hs) + 3;
+    for (let m = mDebut; m <= mFin; m++) {
+      const ca = Math.round(centre ? centre(m) : m * Ha), cs = m * Hs;
+      remplir(ca, re, im); remplir(ca - d, re0, im0);
+      fft(P, re, im, false); fft(P, re0, im0, false);
+      for (let k = 0; k < B; k++) {
+        mag[k] = Math.hypot(re[k], im[k]);
+        phA[k] = Math.atan2(im[k], re[k]);
+        const wk = DEUX_PI * k / N;
+        omega[k] = wk + princarg(phA[k] - Math.atan2(im0[k], re0[k]) - wk * d) / d;
+      }
+      if (premier) { phS.set(phA); premier = false; }
+      else {
+        let n = 0;
+        for (let k = 2; k < B - 2; k++)
+          if (mag[k] > mag[k - 1] && mag[k] >= mag[k + 1] && mag[k] > mag[k - 2] && mag[k] >= mag[k + 2]) pics[n++] = k;
+        if (n === 0) { for (let k = 0; k < B; k++) nouv[k] = phS[k] + omega[k] * Hs; }
+        else {
+          for (let q = 0; q < n; q++) { const k = pics[q]; nouv[k] = phS[k] + omega[k] * Hs; }
+          // Chaque case suit le pic le plus proche : phases verrouillées.
+          let q = 0;
+          for (let k = 0; k < B; k++) {
+            while (q < n - 1 && Math.abs(pics[q + 1] - k) <= Math.abs(pics[q] - k)) q++;
+            const j = pics[q];
+            if (k !== j) nouv[k] = nouv[j] + (phA[k] - phA[j]);
+          }
+        }
+        const t = phS; phS = nouv; nouv = t;
+      }
+      for (let k = 0; k < B; k++) { re[k] = mag[k] * Math.cos(phS[k]); im[k] = mag[k] * Math.sin(phS[k]); }
+      for (let k = 1; k < N / 2; k++) { re[N - k] = re[k]; im[N - k] = -im[k]; }
+      fft(P, re, im, true);
+      const debut = cs - N / 2;
+      for (let i = 0; i < N; i++) {
+        const k = debut + i;
+        if (k < 0 || k >= sortie.length) continue;
+        sortie[k] += re[i] * fen[i];
+        norme[k] += fen[i] * fen[i];
+      }
+    }
+    const y = new Float32Array(Lout);
+    for (let i = 0; i < Lout; i++) y[i] = norme[i] > 1e-6 ? sortie[i] / norme[i] : 0;
+    return y;
+  }
+
+  /**
+   * Transpose x de demi demi-tons et lui donne la longueur voulue (par défaut la sienne) :
+   * hauteur et durée sont réglées séparément.
+   */
+  function transposer(x, demi, longueur = x.length) {
+    if (Math.abs(demi) < 0.005 && longueur === x.length) return Float32Array.from(x);
+    const p = Math.pow(2, demi / 12);
+    return etirer(Math.abs(demi) < 0.005 ? x : changerVitesse(x, p), longueur);
+  }
+
+  /**
+   * Lecture de z à vitesse variable : la sortie n lit z en phi[n] (phi croissant, phi[n + 1] - phi[n]
+   * est la vitesse locale). Même noyau que changerVitesse ; la coupure suit la vitesse locale.
+   */
+  function changerVitesseVariable(z, phi, Lout) {
+    const L = z.length, y = new Float32Array(Lout);
+    for (let n = 0; n < Lout; n++) {
+      const t = phi[n], p = Math.max(1e-6, phi[n + 1] - phi[n]);
+      const fc = Math.min(1, 1 / p), W = ZEROS / fc;
+      const k0 = Math.max(0, Math.ceil(t - W)), k1 = Math.min(L - 1, Math.floor(t + W));
+      let s = 0;
+      for (let k = k0; k <= k1; k++) {
+        const pos = Math.abs(t - k) * fc * TABLE, i = pos | 0, f = pos - i;
+        if (i + 1 >= noyau.length) continue;
+        s += z[k] * (noyau[i] + f * (noyau[i + 1] - noyau[i]));
+      }
+      y[n] = s * fc;
+    }
+    return y;
+  }
+
+  /**
+   * Transposition qui suit une courbe (étude 05 : la hauteur suit le trait).
+   * courbe : demi-tons par rapport à x, relevés à intervalles réguliers du début à la fin de
+   * la sortie ; Lout : longueur de la sortie. Le contenu de x avance régulièrement sur toute
+   * la durée (la longueur du trait donne la durée), la hauteur suit la courbe.
+   * Méthode : on transpose d'abord tout x de la médiane de la courbe (vocodeur, durée gardée),
+   * puis on l'étire à pas variable et on le relit à vitesse variable : la vitesse de relecture
+   * porte l'écart à la médiane, l'étirement compense pour que le contenu reste régulier.
+   */
+  const ECART_MAX = 36;   // demi-tons de part et d'autre de la médiane
+  function transposerCourbe(x, courbe, Lout) {
+    const K = courbe.length;
+    const tri = Array.from(courbe).sort((a, b) => a - b), B = tri[K >> 1];
+    const base = Math.abs(B) < 0.005 ? x : transposer(x, B, x.length);
+    const demiA = n => {
+      const i = Math.min(K - 1, Math.max(0, n / Math.max(1, Lout - 1) * (K - 1))), k = Math.floor(i), f = i - k;
+      return courbe[k] * (1 - f) + courbe[Math.min(K - 1, k + 1)] * f;
+    };
+    const vitesse = n => Math.pow(2, Math.max(-ECART_MAX, Math.min(ECART_MAX, demiA(n) - B)) / 12);
+    const phi = new Float64Array(Lout + 1);
+    for (let n = 0; n < Lout; n++) phi[n + 1] = phi[n] + vitesse(n);
+    const Lz = Math.ceil(phi[Lout]) + 4, Lx = base.length, Hs = 2048 / 4, echelle = Lx / Lout;
+    let j = 0;
+    const centre = m => {
+      const tau = m * Hs;
+      if (tau <= 0) return tau * echelle / vitesse(0);
+      if (tau >= phi[Lout]) return Lx + (tau - phi[Lout]) * echelle / vitesse(Lout - 1);
+      while (j > 0 && phi[j] > tau) j--;
+      while (j < Lout - 1 && phi[j + 1] <= tau) j++;
+      const t = j + (tau - phi[j]) / Math.max(1e-9, phi[j + 1] - phi[j]);
+      return t * echelle;
+    };
+    const z = etirer(base, Lz, 2048, centre);
+    return changerVitesseVariable(z, phi, Lout);
+  }
+
+  return { transposer, transposerCourbe, changerVitesse, changerVitesseVariable, etirer, fft, planFFT };
+}
+const DSP = fabriquerDSP();
+
+/* Transposition des expériences. Vers l'aigu, le vocodeur adoucit les attaques ; on
+   garde donc les 30 premières millisecondes lues à la vitesse transposée (l'attaque
+   reste nette), puis on fond en 12 ms vers le son à durée constante. Vers le grave,
+   le vocodeur seul : l'attaque ralentie serait coupée en son milieu. */
+function transposerExperience(x, demi) {
+  if (Math.abs(demi) < 0.005) return Float32Array.from(x);
+  const y = DSP.transposer(x, demi);
+  if (demi > 0) {
+    const v = DSP.changerVitesse(x, Math.pow(2, demi / 12));
+    const a = Math.round(0.03 * 44100), f = Math.round(0.012 * 44100);
+    for (let i = 0; i < a + f && i < y.length; i++) {
+      const g = i < a ? 1 : 1 - (i - a) / f;
+      y[i] = g * (i < v.length ? v[i] : 0) + (1 - g) * y[i];
+    }
+  }
+  return y;
+}
+
+  (function () {
+    "use strict";
+    const SR = 44100;
+    const NOMS = { Piano: "Piano", Violoncelle: "Violoncelle", Flute: "Flûte", Voix: "Voix",
+                   Kalimba: "Kalimba", Kick: "Kick", Clave: "Clave", Shaker: "Shaker" };
+    const FRAPPES = [20, 70, 120];
+    const fichier = (inst, v) => `${inst} - ${v} (velocite).wav`;
+    const HAUTEURS = {"Clave - 120 (velocite).wav": 1167.87, "Clave - 20 (velocite).wav": 1136.12, "Clave - 70 (velocite).wav": 1159.9, "Flute - 120 (velocite).wav": 438.96, "Flute - 20 (velocite).wav": 440.9, "Flute - 70 (velocite).wav": 440.73, "Kalimba - 120 (velocite).wav": 220.78, "Kalimba - 20 (velocite).wav": 221.81, "Kalimba - 70 (velocite).wav": 221.86, "Kick - 120 (velocite).wav": 70.41, "Kick - 20 (velocite).wav": 70.41, "Kick - 70 (velocite).wav": 70.41, "Piano - 120 (velocite).wav": 221.64, "Piano - 20 (velocite).wav": 220.5, "Piano - 70 (velocite).wav": 220.74, "Shaker - 120 (velocite).wav": null, "Shaker - 20 (velocite).wav": null, "Shaker - 70 (velocite).wav": null, "Violoncelle - 120 (velocite).wav": 220.86, "Violoncelle - 20 (velocite).wav": 220.29, "Violoncelle - 70 (velocite).wav": 219.97, "Voix - 120 (velocite).wav": 218.77, "Voix - 20 (velocite).wav": 219.71, "Voix - 70 (velocite).wav": 219.81};
+
+    const etat = { instrument: "Piano", v: 70, u: 1 };
+    const $ = id => document.getElementById(id);
+    const reduit = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const fmt = (v, d = 0) => v.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
+
+    /* ---------------- Son ---------------- */
+    let ctx = null, bus = null, voix = null, avertir = null;
+    function ouvrirSon() {
+      try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
+      if (!ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        ctx = new AC();
+        bus = ctx.createGain(); bus.gain.value = 0.5; bus.connect(ctx.destination);
+        ctx.onstatechange = () => { if (ctx.state === "running" && $("etat").dataset.son) { $("etat").textContent = ""; delete $("etat").dataset.son; } };
+      }
+      if (ctx.state !== "running") {
+        try { const p = ctx.resume(); if (p && p.catch) p.catch(() => {}); } catch (e) {}
+        try { const s = ctx.createBufferSource(); s.buffer = ctx.createBuffer(1, 1, ctx.sampleRate); s.connect(ctx.destination); s.start(0); } catch (e) {}
+      }
+      clearTimeout(avertir);
+      avertir = setTimeout(() => {
+        if (ctx && ctx.state !== "running") {
+          $("etat").dataset.son = "bloque";
+          $("etat").textContent = "Le son reste fermé. Sur iPad : désactive le mode silencieux (la cloche du Centre de contrôle), monte le volume, puis touche à nouveau le pointé.";
+        }
+      }, 900);
+      return ctx;
+    }
+    const debloquer = () => {
+      ouvrirSon();
+      if (ctx && ctx.state === "running") ["touchend", "pointerup", "click", "keydown"].forEach(t => document.removeEventListener(t, debloquer, true));
+    };
+    ["touchend", "pointerup", "click", "keydown"].forEach(t => document.addEventListener(t, debloquer, true));
+
+    async function decoder(octets) {
+      const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      const c = new OAC(1, SR, SR);
+      const b = await new Promise((ok, ko) => { const p = c.decodeAudioData(octets, ok, ko); if (p && p.then) p.then(ok, ko); });
+      const n = b.length, x = new Float32Array(n);
+      for (let k = 0; k < b.numberOfChannels; k++) { const d = b.getChannelData(k); for (let i = 0; i < n; i++) x[i] += d[i] / b.numberOfChannels; }
+      return x;
+    }
+    const bruts = new Map();
+    function charger(nom) {
+      if (!bruts.has(nom)) bruts.set(nom, (async () => {
+        const emb = window.SONS_EMBARQUES && window.SONS_EMBARQUES[nom];
+        if (emb) { const bin = atob(emb), o = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) o[i] = bin.charCodeAt(i); return decoder(o.buffer); }
+        const r = await fetch("../sons/" + encodeURIComponent(nom));
+        if (!r.ok) throw new Error(nom + " : " + r.status);
+        return decoder(await r.arrayBuffer());
+      })());
+      return bruts.get(nom);
+    }
+    const chargerInstrument = inst => Promise.all(FRAPPES.map(v => charger(fichier(inst, v))));
+
+    /* ---------------- Le mélange des frappes ----------------
+       Début d'un son : premier échantillon au-dessus de 5 % de sa crête. Entre deux frappes,
+       chacune est accordée sur la hauteur intermédiaire (lecture un rien plus rapide ou plus
+       lente, sans vocodeur : l'écart ne dépasse pas quelques centièmes de demi-ton) et calée
+       sur un début intermédiaire, puis les deux sont additionnées selon leur poids, à crêtes
+       égales. Le niveau du mélange glisse en décibels entre ceux des deux frappes : l'écart
+       de niveau enregistré entre les frappes est gardé. */
+    function debut(x) { let pk = 0; for (const s of x) pk = Math.max(pk, Math.abs(s)); const s = pk * 0.05; for (let i = 0; i < x.length; i++) if (Math.abs(x[i]) > s) return i; return 0; }
+    function encadrer(v) {
+      if (v <= 20) return { a: 20, b: 20, w: 0, gain: Math.max(0, v) / 20 };
+      if (v >= 120) return { a: 120, b: 120, w: 0, gain: 1 };
+      const a = v <= 70 ? 20 : 70, b = v <= 70 ? 70 : 120;
+      return { a, b, w: (v - a) / (b - a), gain: 1 };
+    }
+    const melanges = new Map();
+    async function melange(inst, v) {
+      const cle = inst + "|" + v;
+      if (melanges.has(cle)) return melanges.get(cle);
+      const [x20, x70, x120] = await chargerInstrument(inst);
+      const X = { 20: x20, 70: x70, 120: x120 };
+      const { a, b, w, gain } = encadrer(v);
+      let y;
+      if (w <= 0 || a === b) { y = Float32Array.from(X[a], s => s * gain); }
+      else {
+        const fa = HAUTEURS[fichier(inst, a)], fb = HAUTEURS[fichier(inst, b)];
+        const cible = fa && fb ? Math.pow(fa, 1 - w) * Math.pow(fb, w) : null;
+        const accorder = (x, f) => cible && Math.abs(cible / f - 1) > 1e-4 ? DSP.changerVitesse(x, cible / f) : x;
+        const A = accorder(X[a], fa), B = accorder(X[b], fb);
+        // Les dessins se mêlent à crêtes égales (sinon la frappe forte couvrirait tout) ;
+        // le niveau, lui, glisse en décibels d'une frappe à l'autre.
+        const ca = crete(A) || 1, cb = crete(B) || 1, niveau = Math.exp(Math.log(ca) * (1 - w) + Math.log(cb) * w);
+        const da = debut(A), db = debut(B), d = Math.round(da * (1 - w) + db * w);
+        const n = Math.max(A.length - da, B.length - db) + d;
+        y = new Float32Array(n);
+        for (let i = 0; i < n; i++) {
+          const ia = i - d + da, ib = i - d + db;
+          y[i] = (1 - w) * (ia >= 0 && ia < A.length ? A[ia] / ca : 0) + w * (ib >= 0 && ib < B.length ? B[ib] / cb : 0);
+        }
+        const cy = crete(y) || 1;
+        for (let i = 0; i < n; i++) y[i] *= niveau / cy;
+      }
+      melanges.set(cle, y);
+      if (melanges.size > 120) melanges.delete(melanges.keys().next().value);
+      return y;
+    }
+    const crete = x => { let m = 0; for (const s of x) m = Math.max(m, Math.abs(s)); return m; };
+
+    /* ---------------- Le pointé (étude 008) ---------------- */
+    function rapportPicsCorps(x) {
+      const P = 120, n = x.length, demiF = Math.max(n / P, 0.03 * SR) / 2, env = new Float64Array(P);
+      let max = 0;
+      for (let k = 0; k < P; k++) {
+        const c = (k + 0.5) * n / P; let m = 0;
+        for (let i = Math.max(0, Math.floor(c - demiF)), f = Math.min(n, Math.ceil(c + demiF)); i < f; i++) { const v = x[i]; if (v > m) m = v; }
+        env[k] = m; if (m > max) max = m;
+      }
+      const r = Array.from(env, e => 0.5 + 0.5 * (max ? e / max : 0));
+      const corps = r.slice(P / 6, 5 * P / 6).sort((a, b) => a - b);
+      return Math.max(...r) / corps[corps.length >> 1];
+    }
+    const S = 540;
+    const DECALAGES = (() => { let g = 20261026; const d = new Float32Array(S); for (let k = 0; k < S; k++) { g = (g * 1103515245 + 12345) >>> 0; d[k] = g / 4294967296 - 0.5; } return d; })();
+    function profil(x) {
+      const n = x.length, haut = new Float32Array(S), bas = new Float32Array(S);
+      const demiF = Math.max(n / S, 0.0025 * SR) / 2;
+      let max = 0;
+      for (let k = 0; k < S; k++) {
+        const c = (k + 0.5 + DECALAGES[k]) * n / S; let h = 0, b = 0;
+        for (let i = Math.max(0, Math.floor(c - demiF)), f = Math.min(n, Math.ceil(c + demiF)); i < f; i++) { const v = x[i]; if (v > h) h = v; if (v < b) b = v; }
+        haut[k] = h; bas[k] = b; max = Math.max(max, h, -b);
+      }
+      for (let k = 0; k < S; k++) { haut[k] /= max || 1; bas[k] /= max || 1; }
+      return { haut, bas };
+    }
+
+    /* ---------------- Dessin ---------------- */
+    function preparer(canvas) {
+      const r = canvas.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+      const w = Math.max(1, Math.round(r.width * d)), h = Math.max(1, Math.round(r.height * d));
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+      const c = canvas.getContext("2d");
+      c.setTransform(d, 0, 0, d, 0, 0);
+      return { c, w: r.width, h: r.height };
+    }
+    const couleur = (nom, secours) => (getComputedStyle(document.querySelector(".experience")).getPropertyValue(nom) || secours).trim() || secours;
+
+    let courant = null;      // { y, profil, rapport, duree, niveauDb }
+
+    function dessinerOnde(tLecture) {
+      const { c, w, h } = preparer($("onde"));
+      c.clearRect(0, 0, w, h);
+      const blanc = "#ffffff", marge = w * 0.04, mi = h / 2, A = h * 0.4;
+      c.strokeStyle = blanc; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(marge * 0.5, mi); c.lineTo(w - marge * 0.5, mi); c.stroke();
+      if (!courant) return;
+      const x = courant.y, n = x.length, larg = w - 2 * marge, max = crete(x) || 1;
+      const cols = Math.max(2, Math.round(larg));
+      const hauts = new Float32Array(cols), bass = new Float32Array(cols);
+      for (let k = 0; k < cols; k++) {
+        const i0 = Math.floor(k * n / cols), i1 = Math.max(i0 + 1, Math.floor((k + 1) * n / cols));
+        let a = 0, b = 0; for (let i = i0; i < i1 && i < n; i++) { if (x[i] > a) a = x[i]; if (x[i] < b) b = x[i]; }
+        hauts[k] = a / max; bass[k] = b / max;
+      }
+      c.fillStyle = blanc; c.beginPath(); c.moveTo(marge, mi);
+      for (let k = 0; k < cols; k++) c.lineTo(marge + larg * k / (cols - 1), mi - A * hauts[k]);
+      for (let k = cols - 1; k >= 0; k--) c.lineTo(marge + larg * k / (cols - 1), mi - A * bass[k]);
+      c.closePath(); c.fill();
+      if (tLecture != null) {
+        const xl = marge + larg * Math.min(1, tLecture / courant.duree);
+        c.strokeStyle = couleur("--a-vif", "#8a5e12"); c.lineWidth = 2;
+        c.beginPath(); c.moveTo(xl, h * 0.06); c.lineTo(xl, h * 0.94); c.stroke();
+      }
+    }
+
+    const doux = t => t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
+    const ETAPES = [
+      [0.00, "La forme d'onde : le son dans son déroulement."],
+      [0.16, "On relève l'enveloppe supérieure du signal."],
+      [0.32, "Le temps devient un angle, l'amplitude un rayon : la fenêtre se déploie sur un demi-tour, depuis le sommet."],
+      [0.76, "La symétrie selon l'axe vertical referme la figure."],
+      [0.93, "Le pointé instrumental : le sommet est l'attaque, le corps la tenue, le bas la fin."]
+    ];
+    function etapeDe(u) { let t = ETAPES[0][1]; for (const [s, m] of ETAPES) if (u >= s) t = m; return t; }
+
+    function pointsPointe(cx, cy, R0, u, p) {
+      const Rb = R0 * 0.5, A = R0 * 0.5, L = Math.PI * Rb;
+      const cour = doux((u - 0.32) / 0.44), sym = doux((u - 0.76) / 0.17), releve = doux((u - 0.16) / 0.14);
+      const tx = -L / 2 * (1 - cour), ty = Rb * (1 - cour);
+      const droite = [], dessous = [];
+      for (let k = 0; k < S; k++) {
+        const s = L * k / (S - 1);
+        let bx, by, nx, ny;
+        if (cour < 1e-4) { bx = s; by = -Rb; nx = 0; ny = -1; }
+        else { const kap = cour / Rb, a = kap * s; bx = Math.sin(a) / kap; by = -Rb + (1 - Math.cos(a)) / kap; nx = Math.sin(a); ny = -Math.cos(a); }
+        const r = A * p.haut[k];
+        droite.push([cx + bx + nx * r + tx, cy + by + ny * r + ty]);
+        if (releve < 1) dessous.push([cx + bx + nx * A * p.bas[k] + tx, cy + by + ny * A * p.bas[k] + ty]);
+      }
+      return { droite, dessous, sym, releve, cour, tx, ty, Rb };
+    }
+    function remplirPointe(c, cx, droite) {
+      c.beginPath();
+      c.moveTo(droite[0][0], droite[0][1]);
+      for (let k = 1; k < droite.length; k++) c.lineTo(droite[k][0], droite[k][1]);
+      for (let k = droite.length - 1; k >= 0; k--) c.lineTo(2 * cx - droite[k][0], droite[k][1]);
+      c.closePath(); c.fill();
+    }
+    function dessinerPointe(u, tLecture) {
+      const { c, w, h } = preparer($("pointe"));
+      c.clearRect(0, 0, w, h);
+      if (!courant) return;
+      const encre = couleur("--a-noir", "#1d1a1a");
+      const cx = w / 2, cy = h / 2, R0 = Math.min(w, h) * 0.45;
+      const g = pointsPointe(cx, cy, R0, u, courant.profil);
+      const { droite, dessous, sym, releve } = g;
+      const remplir = doux((u - 0.9) / 0.1);
+      c.lineJoin = "round"; c.fillStyle = encre;
+      if (releve < 1 && dessous.length) {
+        c.globalAlpha = 1 - releve; c.beginPath();
+        c.moveTo(droite[0][0], droite[0][1]);
+        for (const q of droite) c.lineTo(q[0], q[1]);
+        for (let k = dessous.length - 1; k >= 0; k--) c.lineTo(dessous[k][0], dessous[k][1]);
+        c.closePath(); c.fill(); c.globalAlpha = 1;
+      }
+      const moitie = (sx, alpha) => {
+        c.globalAlpha = alpha; c.beginPath();
+        const R = g.Rb, L = Math.PI * R, cour = g.cour;
+        const base = s => { if (cour < 1e-4) return [s, -R]; const kap = cour / R, a = kap * s; return [Math.sin(a) / kap, -R + (1 - Math.cos(a)) / kap]; };
+        const px = v => cx + (v - cx) * sx;
+        c.moveTo(px(droite[0][0]), droite[0][1]);
+        for (let k = 1; k < S; k++) c.lineTo(px(droite[k][0]), droite[k][1]);
+        for (let k = S - 1; k >= 0; k -= 6) { const b = base(L * k / (S - 1)); c.lineTo(px(cx + b[0] + g.tx), cy + b[1] + g.ty); }
+        c.closePath(); c.fill();
+      };
+      if (remplir < 1) { moitie(1, releve < 1 ? releve : 1); if (sym > 0) moitie(1 - 2 * sym, 0.35 + 0.65 * sym); }
+      if (remplir > 0) { c.globalAlpha = remplir; remplirPointe(c, cx, droite); }
+      c.globalAlpha = 1;
+      if (tLecture != null && u >= 0.999) {
+        const a = Math.PI * Math.min(1, tLecture / courant.duree);
+        c.strokeStyle = couleur("--a-vif", "#8a5e12"); c.lineWidth = 2; c.beginPath();
+        c.moveTo(cx, cy); c.lineTo(cx + Math.sin(a) * R0 * 1.12, cy - Math.cos(a) * R0 * 1.12);
+        c.moveTo(cx, cy); c.lineTo(cx - Math.sin(a) * R0 * 1.12, cy - Math.cos(a) * R0 * 1.12);
+        c.stroke();
+      }
+    }
+    /* Un pointé fini, en petit (vignettes, repère de l'axe). */
+    function petitPointe(canvas, p, echelle = 0.44) {
+      const { c, w, h } = preparer(canvas);
+      c.clearRect(0, 0, w, h);
+      if (!p) return;
+      c.fillStyle = couleur("--a-noir", "#1d1a1a");
+      const cx = w / 2, cy = h / 2, R0 = Math.min(w, h) * echelle, pas = canvas.clientWidth < 60 ? 3 : 1;
+      c.beginPath();
+      for (let k = 0; k < S; k += pas) { const a = Math.PI * k / (S - 1), r = R0 * (0.5 + 0.5 * p.haut[k]); c.lineTo(cx + r * Math.sin(a), cy - r * Math.cos(a)); }
+      for (let k = S - 1; k >= 0; k -= pas) { const a = Math.PI * k / (S - 1), r = R0 * (0.5 + 0.5 * p.haut[k]); c.lineTo(cx - r * Math.sin(a), cy - r * Math.cos(a)); }
+      c.closePath(); c.fill();
+    }
+
+    /* ---------------- L'axe de la vélocité ---------------- */
+    const V_MIN = 1, V_MAX = 127;
+    const ordonnee = v => 1 - (v - V_MIN) / (V_MAX - V_MIN);
+    const velociteDe = y => Math.round(V_MIN + (1 - y) * (V_MAX - V_MIN));
+    function graduer() {
+      const axe = $("axe");
+      axe.querySelectorAll(".graduation, .enregistree").forEach(e => e.remove());
+      for (const v of [127, 120, 100, 70, 40, 20, 1]) {
+        const e = document.createElement("span");
+        e.className = "graduation" + (FRAPPES.includes(v) ? " forte" : "");
+        e.textContent = String(v);
+        e.style.top = (ordonnee(v) * 100) + "%";
+        axe.appendChild(e);
+      }
+      for (const v of FRAPPES) {
+        const m = document.createElement("span");
+        m.className = "enregistree"; m.title = "Frappe enregistrée " + v;
+        m.style.top = (ordonnee(v) * 100) + "%";
+        axe.appendChild(m);
+      }
+    }
+    function dessinerRepere() {
+      const cv = $("repere");
+      cv.style.top = (ordonnee(etat.v) * $("axe").clientHeight) + "px";
+      petitPointe(cv, courant && courant.profil, 0.48);
+    }
+
+    /* ---------------- Relevé ---------------- */
+    function majReleve() {
+      const { a, b, w } = encadrer(etat.v);
+      let source;
+      if (FRAPPES.includes(etat.v)) source = `frappe enregistrée ${etat.v}`;
+      else if (etat.v < 20) source = "la frappe 20, jouée plus doucement";
+      else if (etat.v > 120) source = "la frappe 120";
+      else source = `entre les frappes ${a} et ${b} · mêlées à ${Math.round((1 - w) * 100)} / ${Math.round(w * 100)} %`;
+      let niveau = "", rapport = "";
+      if (courant) {
+        niveau = courant.niveauDb > -0.05 ? "niveau de la frappe 120" : `niveau ${fmt(courant.niveauDb, 1).replace("-", "−")} dB sous la frappe 120`;
+        const q = courant.rapport;
+        const famille = q < 1.25 ? "sous 1,25 : soutenu" : q > 1.39 ? "au-delà de 1,39 : percussif" : "entre 1,25 et 1,39 : entre les deux familles";
+        rapport = `Pics / corps ${fmt(q, 2)} — ${famille}`;
+      }
+      const ref = HAUTEURS[fichier(etat.instrument, 70)];
+      $("releve").innerHTML =
+        `<span class="nom">${NOMS[etat.instrument]} · vélocité ${etat.v}</span>` +
+        `<span class="note">${source}</span>` +
+        `<span class="ecart">${niveau}${ref ? ` · note enregistrée, ${fmt(ref, ref < 100 ? 1 : 0)} Hz` : " · sans hauteur mesurable"}</span>` +
+        `<span class="rapport">${rapport}</span>`;
+      const axe = $("axe");
+      axe.setAttribute("aria-valuenow", String(etat.v));
+      axe.setAttribute("aria-valuetext", `vélocité ${etat.v}`);
+      document.querySelectorAll(".reference").forEach(r => r.setAttribute("aria-pressed", String(Number(r.dataset.velocite) === etat.v)));
+    }
+
+    /* ---------------- Animation et lecture ---------------- */
+    let anim = null, lecture = null;
+    function dessiner() {
+      const t = lecture && ctx ? ctx.currentTime - lecture.depart : null;
+      const tl = t != null && t >= 0 && t <= lecture.duree ? t : null;
+      dessinerOnde(tl); dessinerPointe(etat.u, tl);
+      if (lecture && t > lecture.duree + 0.05) lecture = null;
+    }
+    function boucle() {
+      if (anim) {
+        const v = Math.min(1, (performance.now() - anim.debut) / anim.duree);
+        etat.u = v;
+        $("enroulement").value = Math.round(etat.u * 1000);
+        $("etape").textContent = etapeDe(etat.u);
+        if (v >= 1) { const fin = anim.fin; anim = null; if (fin) fin(); }
+      }
+      dessiner();
+      if (anim || lecture) requestAnimationFrame(boucle);
+    }
+    function figer() { anim = null; etat.u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); }
+    function enrouler(fin) {
+      if (reduit) { figer(); dessiner(); if (fin) fin(); return; }
+      anim = { debut: performance.now(), duree: 2600, fin };
+      requestAnimationFrame(boucle);
+    }
+    function jouer() {
+      if (!courant) return;
+      const c = ouvrirSon();
+      if (voix) { try { const v = voix; v.g.gain.setTargetAtTime(0, c.currentTime, 0.008); v.s.stop(c.currentTime + 0.06); } catch (e) {} }
+      const b = c.createBuffer(1, courant.y.length, SR);
+      b.getChannelData(0).set(courant.y);
+      const s = c.createBufferSource(), g = c.createGain();
+      s.buffer = b; s.connect(g); g.connect(bus);
+      const t0 = c.currentTime + 0.02;
+      s.start(t0);
+      voix = { s, g };
+      lecture = { depart: t0, duree: courant.duree };
+      requestAnimationFrame(boucle);
+    }
+
+    /* ---------------- Calcul ---------------- */
+    let enCours = false, enAttente = null;
+    function demander(mode) {
+      enAttente = { mode: enAttente && enAttente.mode === "enrouler" ? "enrouler" : mode };
+      if (!enCours) suivant();
+    }
+    async function suivant() {
+      if (!enAttente) return;
+      const { mode } = enAttente; enAttente = null; enCours = true;
+      const inst = etat.instrument, v = etat.v;
+      $("etat").textContent = FRAPPES.every(f => bruts.has(fichier(inst, f))) ? "" : "Chargement des sons…";
+      try {
+        const [y, y120] = await Promise.all([melange(inst, v), charger(fichier(inst, 120))]);
+        courant = { y, profil: profil(y), rapport: rapportPicsCorps(y), duree: y.length / SR, niveauDb: 20 * Math.log10((crete(y) || 1e-6) / (crete(y120) || 1)) };
+        if (!$("etat").dataset.son) $("etat").textContent = "";
+        majReleve(); dessinerRepere();
+        if (mode === "enrouler") enrouler(() => { if (ctx) jouer(); });
+        else { dessiner(); if (mode === "jouer" && ctx) jouer(); }
+      } catch (e) {
+        $("etat").textContent = "Le son n'a pas pu être chargé (" + e.message + ").";
+      }
+      enCours = false;
+      if (enAttente) suivant();
+    }
+    async function vignettes() {
+      const inst = etat.instrument;
+      const sons = await chargerInstrument(inst);
+      if (inst !== etat.instrument) return;
+      document.querySelectorAll(".reference").forEach((r, i) => petitPointe(r.querySelector("canvas"), profil(sons[i])));
+    }
+
+    /* ---------------- Gestes ---------------- */
+    function choisirInstrument(nom) {
+      etat.instrument = nom;
+      document.querySelectorAll("[data-instrument]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.instrument === nom)));
+      majReleve();
+      vignettes().catch(() => {});
+      demander("enrouler");
+    }
+    function changerVelocite(v, mode) {
+      etat.v = Math.max(V_MIN, Math.min(V_MAX, Math.round(v)));
+      majReleve(); dessinerRepere();
+      demander(mode);
+    }
+    document.querySelectorAll("[data-instrument]").forEach(b => b.addEventListener("click", () => { ouvrirSon(); choisirInstrument(b.dataset.instrument); }));
+    document.querySelectorAll(".reference").forEach(r => r.addEventListener("click", () => { ouvrirSon(); figer(); changerVelocite(Number(r.dataset.velocite), "jouer"); }));
+
+    // L'axe : glisser le repère.
+    const axe = $("axe");
+    let glisse = false, dernier = 0;
+    function placer(e) {
+      const r = axe.getBoundingClientRect();
+      const v = velociteDe(Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)));
+      if (v === etat.v) return;
+      etat.v = v; majReleve(); dessinerRepere();
+      const t = performance.now();
+      if (t - dernier > 120) { dernier = t; demander("jouer"); }
+    }
+    axe.addEventListener("pointerdown", e => { ouvrirSon(); glisse = true; figer(); try { axe.setPointerCapture(e.pointerId); } catch (err) {} placer(e); e.preventDefault(); });
+    axe.addEventListener("pointermove", e => { if (glisse) placer(e); });
+    const lacher = () => { if (!glisse) return; glisse = false; demander("jouer"); };
+    axe.addEventListener("pointerup", lacher);
+    axe.addEventListener("pointercancel", lacher);
+    axe.addEventListener("keydown", e => {
+      const pas = { ArrowUp: 1, ArrowDown: -1, PageUp: 10, PageDown: -10 }[e.key];
+      let v = etat.v;
+      if (pas) v += pas; else if (e.key === "Home") v = V_MAX; else if (e.key === "End") v = V_MIN; else return;
+      e.preventDefault(); ouvrirSon(); figer(); changerVelocite(v, "jouer");
+    });
+
+    /* Frapper le pointé. Au stylet, la pression la plus forte des 150 premières millisecondes
+       donne la vélocité, puis la note est jouée ; au doigt ou à la souris, la note est jouée à
+       la vélocité de l'axe. */
+    const FENETRE = 150;
+    const casePointe = $("case-pointe");
+    let frappe = null;
+    function conclure() {
+      if (!frappe || frappe.fait) return;
+      frappe.fait = true; clearTimeout(frappe.minuteur);
+      if (frappe.stylet && frappe.max > 0) {
+        const v = Math.max(V_MIN, Math.min(V_MAX, Math.round(frappe.max * 127)));
+        $("stylet").textContent = `Stylet · pression ${fmt(frappe.max, 2)} → vélocité ${v}`;
+        changerVelocite(v, "jouer");
+      } else jouer();
+    }
+    casePointe.addEventListener("pointerdown", e => {
+      ouvrirSon(); figer();
+      try { casePointe.setPointerCapture(e.pointerId); } catch (err) {}
+      frappe = { stylet: e.pointerType === "pen", max: e.pressure || 0, fait: false };
+      frappe.minuteur = setTimeout(conclure, FENETRE);
+      if (!frappe.stylet) conclure();
+    });
+    casePointe.addEventListener("pointermove", e => { if (frappe && !frappe.fait && frappe.stylet) frappe.max = Math.max(frappe.max, e.pressure || 0); });
+    casePointe.addEventListener("pointerup", conclure);
+    casePointe.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ouvrirSon(); figer(); jouer(); } });
+
+    $("enroulement").addEventListener("input", e => { anim = null; etat.u = Number(e.target.value) / 1000; $("etape").textContent = etapeDe(etat.u); dessiner(); });
+    $("rejouer").addEventListener("click", () => { ouvrirSon(); enrouler(() => jouer()); });
+    $("ecouter").addEventListener("click", () => { ouvrirSon(); figer(); jouer(); });
+
+    function ajuster() {
+      axe.style.setProperty("--cote", casePointe.getBoundingClientRect().height + "px");
+      graduer(); dessinerRepere(); dessiner();
+      vignettes().catch(() => {});
+    }
+    if (window.ResizeObserver) new ResizeObserver(ajuster).observe(casePointe);
+    window.addEventListener("resize", ajuster);
+    window.addEventListener("pagehide", () => { try { if (voix) voix.s.stop(); } catch (e) {} });
+
+    // Départ : le piano, frappe moyenne. L'enroulement se joue en silence.
+    ajuster();
+    choisirInstrument("Piano");
+  })();
+  </script>
+
+</body>
+</html>

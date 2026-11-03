@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience : du son au pointé</title>
+  <link rel="stylesheet" href="../../style.css?v=15">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+  <style>
+    /* ==========================================================================
+       EXPÉRIENCE : DU SON AU POINTÉ — styles propres à cette page.
+       Tout ce qui suit ne touche que cette page ; la feuille du site n'est pas
+       modifiée. Les couleurs reprennent les variables de la charte (fond clair
+       des études 001 à 011), avec des valeurs de secours.
+       ========================================================================== */
+    .experience {
+      --a-fond: var(--fond, #f7f4ee);
+      --a-encre: var(--encre, #16130f);
+      --a-doux: var(--encre-doux, #55504a);
+      --a-tenu: var(--encre-tenu, #8a847c);
+      --a-filet: var(--filet, #ded8cc);
+      --a-vif: var(--vif, #8a5e12);
+      --a-case: #ffffff;
+      --a-noir: #1d1a1a;
+      margin-top: 1.6rem;
+    }
+    /* La feuille du site met les paragraphes des sections en ligne (sommaire) : on les rend à la page. */
+    .experience p { display: block; margin: 0 0 1rem; }
+    .experience .intro { max-width: 40em; }
+
+    .experience .reglages { display: grid; gap: .9rem; margin: 1.4rem 0 1.2rem; }
+    .experience .rangee { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .5rem; }
+    .experience .etiquette {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .68rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--a-tenu);
+      min-width: 7.2em;
+    }
+    .experience .choix {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .9rem; letter-spacing: .01em;
+      background: transparent; color: var(--a-encre);
+      border: 1px solid color-mix(in srgb, var(--a-encre) 28%, transparent);
+      border-radius: 999px; padding: .38rem .85rem; cursor: pointer;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .experience .choix:hover { border-color: var(--a-encre); }
+    .experience .choix[aria-pressed="true"] { background: var(--a-encre); color: var(--a-fond); border-color: var(--a-encre); }
+    .experience .choix:focus-visible, .experience .bouton:focus-visible, .experience .axe:focus-visible,
+    .experience .case-pointe:focus-visible { outline: 2px solid var(--a-vif); outline-offset: 3px; }
+
+    /* La case de la forme d'onde : noire, comme sur les planches de l'étude 008. */
+    .experience .case-onde {
+      position: relative; width: 100%; aspect-ratio: 4 / 1; background: var(--a-noir);
+      margin: 0 0 .9rem;
+    }
+    .experience canvas { display: block; width: 100%; height: 100%; }
+    .experience .legende {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .68rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--a-tenu);
+      margin: .35rem 0 0;
+    }
+
+    .experience .scene { display: grid; grid-template-columns: 64px minmax(0, 440px) minmax(12rem, 1fr); gap: 16px 22px; align-items: start; }
+    .experience .colonne-axe { display: flex; flex-direction: column; }
+    .experience .axe {
+      position: relative; aspect-ratio: auto; height: var(--cote, 380px);
+      border-left: 1px solid var(--a-encre); margin-left: 34px; cursor: ns-resize;
+      touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+    }
+    .experience .axe .graduation {
+      position: absolute; left: -34px; width: 30px; text-align: right; transform: translateY(-50%);
+      font-family: var(--titre, "Jost", sans-serif); font-size: .62rem; font-variant-numeric: tabular-nums;
+      color: var(--a-tenu); pointer-events: none;
+    }
+    .experience .axe .graduation::after {
+      content: ""; position: absolute; right: -8px; top: 50%; width: 6px; border-top: 1px solid var(--a-tenu);
+    }
+    .experience .axe .enregistree {
+      position: absolute; left: -4px; width: 26px; border-top: 1px dashed var(--a-vif); pointer-events: none;
+    }
+    .experience .axe canvas.repere { position: absolute; left: 0; width: 30px; height: 30px; transform: translate(-2px, -50%); pointer-events: none; }
+
+    .experience .case-pointe {
+      position: relative; width: 100%; aspect-ratio: 1; background: var(--a-case);
+      border: 1.5px solid var(--a-encre); box-sizing: border-box; cursor: pointer;
+      touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+    }
+    /* Hors tessiture : la part de l'axe que l'instrument ne peut pas jouer. */
+    .experience .axe .hors {
+      position: absolute; left: -4px; width: 26px; pointer-events: none;
+      background: repeating-linear-gradient(45deg,
+        transparent 0 4px, color-mix(in srgb, var(--a-tenu) 40%, transparent) 4px 5px);
+    }
+    /* L'axe latéral : la place stéréophonique (étude 002). */
+    .experience .place-axe { position: relative; width: 100%; height: 26px; margin-top: 4px; }
+
+    .experience .cote { display: flex; flex-direction: column; gap: 1rem; }
+    .experience .releve { margin: 0; line-height: 1.5; }
+    .experience .releve .nom { font-family: var(--texte, serif); font-size: 1.15rem; display: block; }
+    .experience .releve .note {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .95rem; font-variant-numeric: tabular-nums;
+      color: var(--a-vif); letter-spacing: .02em; display: block; margin-top: .15rem;
+    }
+    .experience .releve .ecart, .experience .releve .rapport {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .78rem; font-variant-numeric: tabular-nums;
+      color: var(--a-doux); display: block; margin-top: .25rem; letter-spacing: .02em;
+    }
+    .experience .etape { font-style: italic; color: var(--a-doux); min-height: 4.8em; margin: 0; font-size: .98rem; }
+    .experience .curseur { display: flex; flex-direction: column; gap: .35rem; }
+    .experience input[type="range"] { width: 100%; accent-color: var(--a-encre); }
+    .experience .boutons { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .experience .bouton {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .85rem;
+      background: transparent; color: var(--a-encre);
+      border: 1px solid color-mix(in srgb, var(--a-encre) 35%, transparent);
+      border-radius: 8px; padding: .45rem .8rem; cursor: pointer;
+    }
+    .experience .bouton:hover { border-color: var(--a-encre); }
+    .experience .stylet { font-size: .8rem; color: var(--a-doux); margin: 0; min-height: 1.2em; }
+    .experience .etat { font-size: .82rem; color: var(--a-tenu); margin: .6rem 0 0; min-height: 1.3em; }
+
+    .experience details.precisions { margin-top: 2rem; max-width: 44em; }
+    .experience details.precisions summary {
+      cursor: pointer; font-family: var(--titre, "Jost", sans-serif); font-size: .74rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--a-doux);
+    }
+    .experience details.precisions ul { padding-left: 1.1em; margin: .8rem 0 0; }
+    .experience details.precisions li { margin: .45rem 0; }
+
+    @media (max-width: 760px) {
+      .experience .scene { grid-template-columns: 52px minmax(0, 1fr); }
+      .experience .cote { grid-column: 1 / -1; }
+      .experience .axe { margin-left: 26px; }
+      .experience .axe .graduation { left: -28px; width: 24px; font-size: .56rem; }
+      .experience .etiquette { min-width: 100%; }
+    }
+  </style>
+</head>
+
+<body class="page-etude etude-008 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience : du son au pointé</h1>
+    <div class="cat">Entre l'étude 008 et l'étude 009 · à manipuler</div>
+
+    <section class="experience" aria-label="Expérience du pointé instrumental">
+      <p class="intro">
+        Choisis un instrument, monte ou descends sa note le long de l'axe des hauteurs,
+        frappe plus ou moins fort. À chaque geste, le son est recalculé et son pointé
+        en est extrait comme à l'étude 008 : l'enveloppe du son s'enroule depuis le
+        sommet sur un demi-tour, puis la symétrie referme la figure.
+        Déplace-le aussi de gauche à droite dans son cadre : la position latérale
+        donne sa place stéréophonique, comme à l'étude 002. Et si tu veux t'en tenir
+        aux notes que l'instrument peut réellement jouer, garde le mode tessiture.
+      </p>
+
+      <div class="reglages">
+        <div class="rangee" role="group" aria-label="Instruments mélodiques">
+          <span class="etiquette">Mélodiques</span>
+          <button class="choix" data-instrument="Piano">Piano</button>
+          <button class="choix" data-instrument="Violoncelle">Violoncelle</button>
+          <button class="choix" data-instrument="Flute">Flûte</button>
+          <button class="choix" data-instrument="Voix">Voix</button>
+        </div>
+        <div class="rangee" role="group" aria-label="Instruments percussifs">
+          <span class="etiquette">Percussifs</span>
+          <button class="choix" data-instrument="Kalimba">Kalimba</button>
+          <button class="choix" data-instrument="Kick">Kick</button>
+          <button class="choix" data-instrument="Clave">Clave</button>
+          <button class="choix" data-instrument="Shaker">Shaker</button>
+        </div>
+        <div class="rangee" role="group" aria-label="Frappe">
+          <span class="etiquette">Frappe</span>
+          <button class="choix" data-frappe="20">20 · faible</button>
+          <button class="choix" data-frappe="70">70 · moyenne</button>
+          <button class="choix" data-frappe="120">120 · forte</button>
+        </div>
+        <div class="rangee" role="group" aria-label="Mode tessiture">
+          <span class="etiquette">Tessiture</span>
+          <button class="choix" id="tessiture" aria-pressed="false">Rester dans la tessiture</button>
+        </div>
+      </div>
+
+      <div class="case-onde"><canvas id="onde" aria-label="Forme d'onde du son"></canvas></div>
+
+      <div class="scene">
+        <div class="colonne-axe">
+          <div class="axe" id="axe" tabindex="0" role="slider" aria-orientation="vertical"
+               aria-label="Hauteur de la note" aria-valuemin="21.8" aria-valuemax="12500">
+            <canvas class="repere" id="repere" aria-hidden="true"></canvas>
+          </div>
+        </div>
+
+        <div>
+          <div class="case-pointe" id="case-pointe" tabindex="0" role="button" aria-label="Pointé instrumental. Cliquer pour écouter.">
+            <canvas id="pointe"></canvas>
+          </div>
+          <div class="place-axe"><canvas id="place" aria-hidden="true"></canvas></div>
+          <p class="legende">Pointé instrumental · glisser à gauche ou à droite pour le placer, toucher pour écouter</p>
+        </div>
+
+        <div class="cote">
+          <p class="releve" id="releve" aria-live="polite"></p>
+          <p class="etape" id="etape"></p>
+          <div class="curseur">
+            <label class="etiquette" for="enroulement">Du son au pointé</label>
+            <input type="range" id="enroulement" min="0" max="1000" value="1000" />
+          </div>
+          <div class="boutons">
+            <button class="bouton" id="rejouer">↻ Revoir l'enroulement</button>
+            <button class="bouton" id="ecouter">▶ Écouter</button>
+          </div>
+          <p class="stylet" id="stylet"></p>
+        </div>
+      </div>
+      <p class="etat" id="etat" aria-live="polite"></p>
+
+      <details class="precisions">
+        <summary>Ce que montre l'expérience, et ce qu'il ne montre pas</summary>
+        <ul>
+          <li>Les sons sont les enregistrements de l'étude 009 : une seule note par instrument et par frappe.
+            La ligne pointillée de l'axe marque sa hauteur.</li>
+          <li>Pour changer de note, l'enregistrement est transposé sans changer de durée, comme le veut l'étude 003.
+            Plus on s'en éloigne, plus le son quitte l'instrument réel, et son pointé avec lui :
+            un vrai do aigu de piano ne tient pas comme un la grave transposé.</li>
+          <li>Le pointé est calculé ici, à l'écoute, selon le procédé décrit à l'étude 008. Les pointés
+            imprimés dans le livre ont été finalisés à la main : les silhouettes sont de la même famille,
+            pas identiques.</li>
+          <li>Le rapport entre le rayon des pics et celui du corps sépare les familles : sous 1,25 pour les
+            instruments soutenus, au-delà de 1,39 pour les percussifs (étude 008).</li>
+          <li>Au stylet, la pression du premier contact choisit la frappe, comme l'étude 009 l'envisage
+            pour SIGN.</li>
+          <li>La position latérale dans le cadre donne la place stéréophonique (étude 002). Au casque
+            ou sur deux enceintes, le pointé s'entend là où on le voit.</li>
+          <li>Le mode tessiture borne l'axe à la plage où l'instrument existe vraiment. Les bornes
+            retenues sont des valeurs d'usage, pas des mesures ; pour une percussion sans hauteur
+            définie, il n'y a pas de tessiture et l'on s'en tient à une octave de part et d'autre
+            de l'enregistrement.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/008/">← Étude 008</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/009/">Étude 009 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+
+  
+  <script>
+  /* ==========================================================================
+     EXPÉRIENCE : DU SON AU POINTÉ
+     Le son choisi est transposé à la hauteur demandée (étude 003 : 21,8 Hz en
+     bas de l'axe, 12 500 Hz en haut), puis son pointé est extrait selon le
+     procédé de l'étude 008 : enveloppe supérieure, le temps devient un angle
+     sur un demi-tour depuis le sommet, l'amplitude un rayon, symétrie verticale.
+     Rien n'est préfabriqué : chaque figure est calculée sur le son qui sonne.
+     ========================================================================== */
+  /* ==========================================================================
+   DSP — transposition à durée constante, en JavaScript pur.
+   Sert quand Signalsmith ne peut pas tourner (fichier ouvert en local, aperçu
+   en ligne qui refuse WebAssembly). Aucune dépendance, déterministe.
+   Méthode : changement de vitesse à bande limitée (la hauteur bouge, la durée
+   aussi), puis vocodeur de phase qui rend la durée d'origine. Fréquence
+   instantanée mesurée sur deux trames rapprochées, phases verrouillées sur
+   les pics du spectre (Laroche et Dolson).
+   ========================================================================== */
+function fabriquerDSP() {
+  const DEUX_PI = 2 * Math.PI;
+  const princarg = a => a - DEUX_PI * Math.round(a / DEUX_PI);
+
+  const plans = new Map();
+  function planFFT(N) {
+    if (plans.has(N)) return plans.get(N);
+    const niveaux = Math.round(Math.log2(N)), rev = new Uint32Array(N);
+    for (let i = 0; i < N; i++) {
+      let r = 0;
+      for (let b = 0; b < niveaux; b++) r |= ((i >> b) & 1) << (niveaux - 1 - b);
+      rev[i] = r;
+    }
+    const cos = new Float64Array(N / 2), sin = new Float64Array(N / 2);
+    for (let i = 0; i < N / 2; i++) { cos[i] = Math.cos(DEUX_PI * i / N); sin[i] = Math.sin(DEUX_PI * i / N); }
+    const p = { N, rev, cos, sin };
+    plans.set(N, p);
+    return p;
+  }
+  /** FFT complexe en place, radix 2. */
+  function fft(P, re, im, inverse) {
+    const { N, rev, cos, sin } = P;
+    for (let i = 0; i < N; i++) {
+      const j = rev[i];
+      if (j > i) { let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; }
+    }
+    for (let taille = 2; taille <= N; taille <<= 1) {
+      const moitie = taille >> 1, pas = N / taille;
+      for (let i = 0; i < N; i += taille) {
+        for (let j = 0, k = 0; j < moitie; j++, k += pas) {
+          const wr = cos[k], wi = inverse ? sin[k] : -sin[k];
+          const a = i + j, b = a + moitie;
+          const tr = re[b] * wr - im[b] * wi, ti = re[b] * wi + im[b] * wr;
+          re[b] = re[a] - tr; im[b] = im[a] - ti;
+          re[a] += tr; im[a] += ti;
+        }
+      }
+    }
+    if (inverse) for (let i = 0; i < N; i++) { re[i] /= N; im[i] /= N; }
+  }
+
+  /**
+   * Lecture à la vitesse p (p = 2 : une octave plus haut, deux fois plus court).
+   * Sinus cardinal fenêtré (Blackman, 12 passages par zéro) ; quand on accélère,
+   * la coupure descend à 1/p pour que rien ne se replie sous Nyquist.
+   */
+  const TABLE = 4096, ZEROS = 12;
+  const noyau = (() => {
+    const t = new Float64Array(ZEROS * TABLE + 2);
+    for (let i = 0; i < t.length; i++) {
+      const x = i / TABLE, u = x / ZEROS;
+      const fen = u >= 1 ? 0 : 0.42 + 0.5 * Math.cos(Math.PI * u) + 0.08 * Math.cos(DEUX_PI * u);
+      t[i] = (x === 0 ? 1 : Math.sin(Math.PI * x) / (Math.PI * x)) * fen;
+    }
+    return t;
+  })();
+  function changerVitesse(x, p) {
+    const L = x.length, Lo = Math.max(1, Math.floor(L / p));
+    const fc = Math.min(1, 1 / p), W = ZEROS / fc;
+    const y = new Float32Array(Lo);
+    for (let n = 0; n < Lo; n++) {
+      const t = n * p;
+      const k0 = Math.max(0, Math.ceil(t - W)), k1 = Math.min(L - 1, Math.floor(t + W));
+      let s = 0;
+      for (let k = k0; k <= k1; k++) {
+        const pos = Math.abs(t - k) * fc * TABLE, i = pos | 0, f = pos - i;
+        s += x[k] * (noyau[i] + f * (noyau[i + 1] - noyau[i]));
+      }
+      y[n] = s * fc;
+    }
+    return y;
+  }
+
+  /**
+   * Vocodeur de phase : ramène s à la longueur Lout sans toucher à la hauteur.
+   * centre (facultatif) : m → position de lecture de la trame m dans s, pour un étirement
+   * qui varie dans le temps ; par défaut, la lecture avance d'un pas constant.
+   */
+  function etirer(s, Lout, N = 2048, centre = null) {
+    const Ls = s.length, alpha = Lout / Ls;
+    const Hs = N / 4, Ha = Hs / alpha, d = N / 8, B = N / 2 + 1;
+    const P = planFFT(N);
+    const fen = new Float64Array(N);
+    for (let i = 0; i < N; i++) fen[i] = 0.5 - 0.5 * Math.cos(DEUX_PI * i / N);
+    const sortie = new Float64Array(Lout + N), norme = new Float64Array(Lout + N);
+    const re = new Float64Array(N), im = new Float64Array(N), re0 = new Float64Array(N), im0 = new Float64Array(N);
+    const mag = new Float64Array(B), phA = new Float64Array(B), omega = new Float64Array(B);
+    let phS = new Float64Array(B), nouv = new Float64Array(B);
+    const pics = new Int32Array(B);
+    let premier = true;
+    const remplir = (centre, r, i0) => {
+      const debut = centre - N / 2;
+      for (let i = 0; i < N; i++) {
+        const k = debut + i;
+        r[i] = k >= 0 && k < Ls ? s[k] * fen[i] : 0;
+        i0[i] = 0;
+      }
+    };
+    const mDebut = -3, mFin = Math.ceil(Lout / Hs) + 3;
+    for (let m = mDebut; m <= mFin; m++) {
+      const ca = Math.round(centre ? centre(m) : m * Ha), cs = m * Hs;
+      remplir(ca, re, im); remplir(ca - d, re0, im0);
+      fft(P, re, im, false); fft(P, re0, im0, false);
+      for (let k = 0; k < B; k++) {
+        mag[k] = Math.hypot(re[k], im[k]);
+        phA[k] = Math.atan2(im[k], re[k]);
+        const wk = DEUX_PI * k / N;
+        omega[k] = wk + princarg(phA[k] - Math.atan2(im0[k], re0[k]) - wk * d) / d;
+      }
+      if (premier) { phS.set(phA); premier = false; }
+      else {
+        let n = 0;
+        for (let k = 2; k < B - 2; k++)
+          if (mag[k] > mag[k - 1] && mag[k] >= mag[k + 1] && mag[k] > mag[k - 2] && mag[k] >= mag[k + 2]) pics[n++] = k;
+        if (n === 0) { for (let k = 0; k < B; k++) nouv[k] = phS[k] + omega[k] * Hs; }
+        else {
+          for (let q = 0; q < n; q++) { const k = pics[q]; nouv[k] = phS[k] + omega[k] * Hs; }
+          // Chaque case suit le pic le plus proche : phases verrouillées.
+          let q = 0;
+          for (let k = 0; k < B; k++) {
+            while (q < n - 1 && Math.abs(pics[q + 1] - k) <= Math.abs(pics[q] - k)) q++;
+            const j = pics[q];
+            if (k !== j) nouv[k] = nouv[j] + (phA[k] - phA[j]);
+          }
+        }
+        const t = phS; phS = nouv; nouv = t;
+      }
+      for (let k = 0; k < B; k++) { re[k] = mag[k] * Math.cos(phS[k]); im[k] = mag[k] * Math.sin(phS[k]); }
+      for (let k = 1; k < N / 2; k++) { re[N - k] = re[k]; im[N - k] = -im[k]; }
+      fft(P, re, im, true);
+      const debut = cs - N / 2;
+      for (let i = 0; i < N; i++) {
+        const k = debut + i;
+        if (k < 0 || k >= sortie.length) continue;
+        sortie[k] += re[i] * fen[i];
+        norme[k] += fen[i] * fen[i];
+      }
+    }
+    const y = new Float32Array(Lout);
+    for (let i = 0; i < Lout; i++) y[i] = norme[i] > 1e-6 ? sortie[i] / norme[i] : 0;
+    return y;
+  }
+
+  /**
+   * Transpose x de demi demi-tons et lui donne la longueur voulue (par défaut la sienne) :
+   * hauteur et durée sont réglées séparément.
+   */
+  function transposer(x, demi, longueur = x.length) {
+    if (Math.abs(demi) < 0.005 && longueur === x.length) return Float32Array.from(x);
+    const p = Math.pow(2, demi / 12);
+    return etirer(Math.abs(demi) < 0.005 ? x : changerVitesse(x, p), longueur);
+  }
+
+  /**
+   * Lecture de z à vitesse variable : la sortie n lit z en phi[n] (phi croissant, phi[n + 1] - phi[n]
+   * est la vitesse locale). Même noyau que changerVitesse ; la coupure suit la vitesse locale.
+   */
+  function changerVitesseVariable(z, phi, Lout) {
+    const L = z.length, y = new Float32Array(Lout);
+    for (let n = 0; n < Lout; n++) {
+      const t = phi[n], p = Math.max(1e-6, phi[n + 1] - phi[n]);
+      const fc = Math.min(1, 1 / p), W = ZEROS / fc;
+      const k0 = Math.max(0, Math.ceil(t - W)), k1 = Math.min(L - 1, Math.floor(t + W));
+      let s = 0;
+      for (let k = k0; k <= k1; k++) {
+        const pos = Math.abs(t - k) * fc * TABLE, i = pos | 0, f = pos - i;
+        if (i + 1 >= noyau.length) continue;
+        s += z[k] * (noyau[i] + f * (noyau[i + 1] - noyau[i]));
+      }
+      y[n] = s * fc;
+    }
+    return y;
+  }
+
+  /**
+   * Transposition qui suit une courbe (étude 05 : la hauteur suit le trait).
+   * courbe : demi-tons par rapport à x, relevés à intervalles réguliers du début à la fin de
+   * la sortie ; Lout : longueur de la sortie. Le contenu de x avance régulièrement sur toute
+   * la durée (la longueur du trait donne la durée), la hauteur suit la courbe.
+   * Méthode : on transpose d'abord tout x de la médiane de la courbe (vocodeur, durée gardée),
+   * puis on l'étire à pas variable et on le relit à vitesse variable : la vitesse de relecture
+   * porte l'écart à la médiane, l'étirement compense pour que le contenu reste régulier.
+   */
+  const ECART_MAX = 36;   // demi-tons de part et d'autre de la médiane
+  function transposerCourbe(x, courbe, Lout) {
+    const K = courbe.length;
+    const tri = Array.from(courbe).sort((a, b) => a - b), B = tri[K >> 1];
+    const base = Math.abs(B) < 0.005 ? x : transposer(x, B, x.length);
+    const demiA = n => {
+      const i = Math.min(K - 1, Math.max(0, n / Math.max(1, Lout - 1) * (K - 1))), k = Math.floor(i), f = i - k;
+      return courbe[k] * (1 - f) + courbe[Math.min(K - 1, k + 1)] * f;
+    };
+    const vitesse = n => Math.pow(2, Math.max(-ECART_MAX, Math.min(ECART_MAX, demiA(n) - B)) / 12);
+    const phi = new Float64Array(Lout + 1);
+    for (let n = 0; n < Lout; n++) phi[n + 1] = phi[n] + vitesse(n);
+    const Lz = Math.ceil(phi[Lout]) + 4, Lx = base.length, Hs = 2048 / 4, echelle = Lx / Lout;
+    let j = 0;
+    const centre = m => {
+      const tau = m * Hs;
+      if (tau <= 0) return tau * echelle / vitesse(0);
+      if (tau >= phi[Lout]) return Lx + (tau - phi[Lout]) * echelle / vitesse(Lout - 1);
+      while (j > 0 && phi[j] > tau) j--;
+      while (j < Lout - 1 && phi[j + 1] <= tau) j++;
+      const t = j + (tau - phi[j]) / Math.max(1e-9, phi[j + 1] - phi[j]);
+      return t * echelle;
+    };
+    const z = etirer(base, Lz, 2048, centre);
+    return changerVitesseVariable(z, phi, Lout);
+  }
+
+  return { transposer, transposerCourbe, changerVitesse, changerVitesseVariable, etirer, fft, planFFT };
+}
+const DSP = fabriquerDSP();
+
+/* Transposition des expériences. Vers l'aigu, le vocodeur adoucit les attaques ; on
+   garde donc les 30 premières millisecondes lues à la vitesse transposée (l'attaque
+   reste nette), puis on fond en 12 ms vers le son à durée constante. Vers le grave,
+   le vocodeur seul : l'attaque ralentie serait coupée en son milieu. */
+function transposerExperience(x, demi) {
+  if (Math.abs(demi) < 0.005) return Float32Array.from(x);
+  const y = DSP.transposer(x, demi);
+  if (demi > 0) {
+    const v = DSP.changerVitesse(x, Math.pow(2, demi / 12));
+    const a = Math.round(0.03 * 44100), f = Math.round(0.012 * 44100);
+    for (let i = 0; i < a + f && i < y.length; i++) {
+      const g = i < a ? 1 : 1 - (i - a) / f;
+      y[i] = g * (i < v.length ? v[i] : 0) + (1 - g) * y[i];
+    }
+  }
+  return y;
+}
+
+  (function () {
+    "use strict";
+    const SR = 44100;
+    const F_BAS = 21.8, F_HAUT = 12500;                       // étude 003
+    const frequence = y => F_BAS * Math.pow(F_HAUT / F_BAS, 1 - y);
+    const ordonnee = f => 1 - Math.log(f / F_BAS) / Math.log(F_HAUT / F_BAS);
+
+    /* Les instruments de l'étude 009, regroupés par famille de jeu comme dans l'étude. */
+    const NOMS = { Piano: "Piano", Violoncelle: "Violoncelle", Flute: "Flûte", Voix: "Voix",
+                   Kalimba: "Kalimba", Kick: "Kick", Clave: "Clave", Shaker: "Shaker" };
+    const FRAPPES = [20, 70, 120];
+    const fichier = (inst, v) => `${inst} - ${v} (velocite).wav`;
+    /* Hauteur mesurée de chaque enregistrement (détection par autocorrélation normalisée).
+       null : pas de hauteur mesurable ; la référence est alors posée à 440 Hz. */
+    const HAUTEURS = {"Clave - 120 (velocite).wav": 1167.87, "Clave - 20 (velocite).wav": 1136.12, "Clave - 70 (velocite).wav": 1159.9, "Flute - 120 (velocite).wav": 438.96, "Flute - 20 (velocite).wav": 440.9, "Flute - 70 (velocite).wav": 440.73, "Kalimba - 120 (velocite).wav": 220.78, "Kalimba - 20 (velocite).wav": 221.81, "Kalimba - 70 (velocite).wav": 221.86, "Kick - 120 (velocite).wav": 70.41, "Kick - 20 (velocite).wav": 70.41, "Kick - 70 (velocite).wav": 70.41, "Piano - 120 (velocite).wav": 221.64, "Piano - 20 (velocite).wav": 220.5, "Piano - 70 (velocite).wav": 220.74, "Shaker - 120 (velocite).wav": null, "Shaker - 20 (velocite).wav": null, "Shaker - 70 (velocite).wav": null, "Violoncelle - 120 (velocite).wav": 220.86, "Violoncelle - 20 (velocite).wav": 220.29, "Violoncelle - 70 (velocite).wav": 219.97, "Voix - 120 (velocite).wav": 218.77, "Voix - 20 (velocite).wav": 219.71, "Voix - 70 (velocite).wav": 219.81};
+
+    /* ---------------- Tessitures ----------------
+       La plage de hauteurs dans laquelle l'instrument existe vraiment. Hors d'elle,
+       la transposition fabrique un son qu'aucun instrumentiste ne pourrait jouer : le
+       mode tessiture l'interdit et montre la zone permise, hachurée au-dehors.
+       [À AJUSTER] Ces bornes sont des valeurs d'usage, pas des mesures ; celle de la
+       flûte japonaise est la plus incertaine. Elles se changent ici, et nulle part ailleurs.
+       Les percussions sans hauteur définie n'ont pas de tessiture : on borne alors la
+       transposition à une octave de part et d'autre de l'enregistrement. */
+    const TESSITURES = {
+      Piano:       [27.5,  4186.0],   // la−1 – do7, le clavier de 88 touches
+      Violoncelle: [65.4,  1046.5],   // do1 – do5
+      Flute:       [293.7, 1174.7],   // ré3 – ré5 [à vérifier]
+      Voix:        [82.4,  1046.5],   // mi1 – do5, toutes tessitures confondues
+      Kalimba:     [220.0, 1760.0],   // la2 – la5 [à vérifier]
+      Kick: null, Clave: null, Shaker: null
+    };
+    const OCTAVES_PERCU = 1;
+    function tessiture(inst, frappe) {
+      const t = TESSITURES[inst];
+      if (t) return t;
+      const ref = HAUTEURS[fichier(inst, frappe)] || 440;
+      return [ref / Math.pow(2, OCTAVES_PERCU), ref * Math.pow(2, OCTAVES_PERCU)];
+    }
+    /* Toute hauteur passe par ici : l'axe entier, ou la seule tessiture. */
+    function borner(f) {
+      if (!etat.tessiture) return Math.min(F_HAUT, Math.max(F_BAS, f));
+      const t = tessiture(etat.instrument, etat.frappe);
+      return Math.min(t[1], Math.max(t[0], f));
+    }
+
+    /* ---------------- État ---------------- */
+    const etat = { instrument: "Piano", frappe: 70, f: 220.74, u: 1, place: 0, tessiture: false };
+    const $ = id => document.getElementById(id);
+    const reduit = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* ---------------- Son ---------------- */
+    let ctx = null, bus = null, voix = null;
+    /* Sur iPad et iPhone, le son ne s'ouvre que pendant un geste (le relâché d'un toucher,
+       un clic), et le mode silencieux coupe les pages web sauf si elles se déclarent
+       « lecture ». On ouvre donc le son à chaque geste, on joue un silence d'un
+       échantillon pour le débloquer, et l'on prévient si le navigateur le garde fermé. */
+    let avertir = null;
+    function ouvrirSon() {
+      try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
+      if (!ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        ctx = new AC();
+        bus = ctx.createGain(); bus.gain.value = 0.5; bus.connect(ctx.destination);
+        ctx.onstatechange = () => { if (ctx.state === "running" && $("etat").dataset.son) { $("etat").textContent = ""; delete $("etat").dataset.son; } };
+      }
+      if (ctx.state !== "running") {
+        try { const p = ctx.resume(); if (p && p.catch) p.catch(() => {}); } catch (e) {}
+        try {
+          const s = ctx.createBufferSource();
+          s.buffer = ctx.createBuffer(1, 1, ctx.sampleRate); s.connect(ctx.destination); s.start(0);
+        } catch (e) {}
+      }
+      clearTimeout(avertir);
+      avertir = setTimeout(() => {
+        if (ctx && ctx.state !== "running") {
+          $("etat").dataset.son = "bloque";
+          $("etat").textContent = "Le son reste fermé. Sur iPad : désactive le mode silencieux (la cloche du Centre de contrôle), monte le volume, puis touche à nouveau le pointé.";
+        }
+      }, 900);
+      return ctx;
+    }
+    // Le premier geste, où qu'il soit sur la page, ouvre le son.
+    const debloquer = () => {
+      ouvrirSon();
+      if (ctx && ctx.state === "running") ["touchend", "pointerup", "click", "keydown"].forEach(t => document.removeEventListener(t, debloquer, true));
+    };
+    ["touchend", "pointerup", "click", "keydown"].forEach(t => document.addEventListener(t, debloquer, true));
+    async function decoder(octets) {
+      const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      const c = new OAC(1, SR, SR);
+      const b = await new Promise((ok, ko) => {
+        const p = c.decodeAudioData(octets, ok, ko);
+        if (p && p.then) p.then(ok, ko);
+      });
+      const n = b.length, x = new Float32Array(n);
+      for (let k = 0; k < b.numberOfChannels; k++) { const d = b.getChannelData(k); for (let i = 0; i < n; i++) x[i] += d[i] / b.numberOfChannels; }
+      return { x, sr: b.sampleRate };
+    }
+    const bruts = new Map();                                   // fichier → promesse {x, sr}
+    function charger(nom) {
+      if (!bruts.has(nom)) bruts.set(nom, (async () => {
+        const emb = window.SONS_EMBARQUES && window.SONS_EMBARQUES[nom];
+        if (emb) {
+          const bin = atob(emb), o = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) o[i] = bin.charCodeAt(i);
+          return decoder(o.buffer);
+        }
+        const r = await fetch("../sons/" + encodeURIComponent(nom));
+        if (!r.ok) throw new Error(nom + " : " + r.status);
+        return decoder(await r.arrayBuffer());
+      })());
+      return bruts.get(nom);
+    }
+
+    /* La transposition tourne dans un fil à part pour ne pas figer la page ;
+       si le navigateur le refuse, elle tourne ici même. */
+    let fil = null, filEnPanne = false, numero = 0;
+    const attentes = new Map();
+    function lancerFil() {
+      if (fil || filEnPanne) return;
+      try {
+        const code = `const DSP = (${fabriquerDSP.toString()})();\n${transposerExperience.toString()}\n` +
+          `onmessage = e => { const y = transposerExperience(e.data.x, e.data.demi); postMessage({ id: e.data.id, y }, [y.buffer]); };`;
+        fil = new Worker(URL.createObjectURL(new Blob([code], { type: "text/javascript" })));
+        fil.onmessage = e => { const a = attentes.get(e.data.id); if (a) { attentes.delete(e.data.id); a.ok(e.data.y); } };
+        // Fil refusé (politique de sécurité de la page) : ce qui attendait est calculé ici.
+        fil.onerror = () => {
+          filEnPanne = true; fil = null;
+          for (const [id, a] of attentes) { attentes.delete(id); a.ok(transposerExperience(a.x, a.demi)); }
+        };
+      } catch (e) { filEnPanne = true; fil = null; }
+    }
+    function transposer(x, demi) {
+      if (Math.abs(demi) < 0.005) return Promise.resolve(Float32Array.from(x));
+      lancerFil();
+      if (!fil) return Promise.resolve(transposerExperience(x, demi));
+      const id = ++numero;
+      const ici = () => transposerExperience(x, demi);
+      return new Promise(ok => {
+        attentes.set(id, { ok, x, demi });
+        fil.postMessage({ id, x: Float32Array.from(x), demi });
+        setTimeout(() => { if (attentes.has(id)) { attentes.delete(id); filEnPanne = true; ok(ici()); } }, 6000);
+      });
+    }
+    const rendus = new Map();                                  // clé → promesse Float32Array
+    function rendu(inst, frappe, f) {
+      const nom = fichier(inst, frappe), ref = HAUTEURS[nom] || 440;
+      const demi = Math.round(12 * Math.log2(f / ref) * 20) / 20;   // au vingtième de demi-ton
+      const cle = nom + "|" + demi;
+      if (!rendus.has(cle)) {
+        rendus.set(cle, charger(nom).then(b => transposer(b.x, demi)));
+        if (rendus.size > 60) rendus.delete(rendus.keys().next().value);
+      }
+      return rendus.get(cle).then(y => ({ y, demi, ref, nom }));
+    }
+
+    /* ---------------- Le pointé (étude 008) ---------------- */
+    /* Rapport pics / corps, sur la figure de l'étude 008 telle que le prototype SIGN la
+       calcule : 120 pas sur le demi-tour, enveloppe sur une fenêtre d'au moins 30 ms,
+       rayon de base à la moitié du rayon. */
+    function rapportPicsCorps(x) {
+      const P = 120, n = x.length, demiF = Math.max(n / P, 0.03 * SR) / 2, env = new Float64Array(P);
+      let max = 0;
+      for (let k = 0; k < P; k++) {
+        const c = (k + 0.5) * n / P; let m = 0;
+        for (let i = Math.max(0, Math.floor(c - demiF)), f = Math.min(n, Math.ceil(c + demiF)); i < f; i++) { const v = x[i]; if (v > m) m = v; }
+        env[k] = m; if (m > max) max = m;
+      }
+      const r = Array.from(env, e => 0.5 + 0.5 * (max ? e / max : 0));
+      const corps = r.slice(P / 6, 5 * P / 6).sort((a, b) => a - b);
+      return Math.max(...r) / corps[corps.length >> 1];
+    }
+    /* Le dessin : l'enveloppe relevée finement (S pas sur le demi-tour), comme une forme
+       d'onde tracée à la résolution d'une planche. Le haut garde le maximum de chaque pas,
+       le bas le minimum : c'est la forme d'onde avant qu'on n'en garde que le dessus.
+       Les pas sont légèrement décalés au hasard (tirage fixe) : sur un son très régulier,
+       une grille parfaite battrait avec la période et dessinerait des pétales qui ne
+       sont pas dans le son. */
+    const S = 540;
+    const DECALAGES = (() => { let g = 20261026; const d = new Float32Array(S); for (let k = 0; k < S; k++) { g = (g * 1103515245 + 12345) >>> 0; d[k] = g / 4294967296 - 0.5; } return d; })();
+    function profil(x) {
+      const n = x.length, haut = new Float32Array(S), bas = new Float32Array(S);
+      const demiF = Math.max(n / S, 0.0025 * SR) / 2;
+      let max = 0;
+      for (let k = 0; k < S; k++) {
+        const c = (k + 0.5 + DECALAGES[k]) * n / S; let h = 0, b = 0;
+        for (let i = Math.max(0, Math.floor(c - demiF)), f = Math.min(n, Math.ceil(c + demiF)); i < f; i++) { const v = x[i]; if (v > h) h = v; if (v < b) b = v; }
+        haut[k] = h; bas[k] = b; max = Math.max(max, h, -b);
+      }
+      for (let k = 0; k < S; k++) { haut[k] /= max || 1; bas[k] /= max || 1; }
+      return { haut, bas };
+    }
+
+    /* ---------------- Dessin ---------------- */
+    function preparer(canvas) {
+      const r = canvas.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+      const w = Math.max(1, Math.round(r.width * d)), h = Math.max(1, Math.round(r.height * d));
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+      const c = canvas.getContext("2d");
+      c.setTransform(d, 0, 0, d, 0, 0);
+      return { c, w: r.width, h: r.height };
+    }
+    const couleur = (nom, secours) => (getComputedStyle(document.querySelector(".experience")).getPropertyValue(nom) || secours).trim() || secours;
+
+    let courant = null;                    // { y, profil, rapport, duree, demi, ref, nom }
+
+    function dessinerOnde(tLecture) {
+      const { c, w, h } = preparer($("onde"));
+      c.clearRect(0, 0, w, h);
+      const blanc = "#ffffff", marge = w * 0.04, mi = h / 2, A = h * 0.4;
+      c.strokeStyle = blanc; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(marge * 0.5, mi); c.lineTo(w - marge * 0.5, mi); c.stroke();
+      if (!courant) return;
+      const x = courant.y, n = x.length, larg = w - 2 * marge;
+      // Une colonne par pixel : minimum et maximum du signal, remplis en blanc.
+      let max = 0; for (let i = 0; i < n; i++) max = Math.max(max, Math.abs(x[i]));
+      const cols = Math.max(2, Math.round(larg));
+      c.fillStyle = blanc; c.beginPath();
+      const hauts = new Float32Array(cols), bass = new Float32Array(cols);
+      for (let k = 0; k < cols; k++) {
+        const i0 = Math.floor(k * n / cols), i1 = Math.max(i0 + 1, Math.floor((k + 1) * n / cols));
+        let a = 0, b = 0; for (let i = i0; i < i1 && i < n; i++) { if (x[i] > a) a = x[i]; if (x[i] < b) b = x[i]; }
+        hauts[k] = a / (max || 1); bass[k] = b / (max || 1);
+      }
+      c.moveTo(marge, mi);
+      for (let k = 0; k < cols; k++) c.lineTo(marge + larg * k / (cols - 1), mi - A * hauts[k]);
+      for (let k = cols - 1; k >= 0; k--) c.lineTo(marge + larg * k / (cols - 1), mi - A * bass[k]);
+      c.closePath(); c.fill();
+      if (tLecture != null) {
+        const xl = marge + larg * Math.min(1, tLecture / courant.duree);
+        c.strokeStyle = couleur("--a-vif", "#8a5e12"); c.lineWidth = 2;
+        c.beginPath(); c.moveTo(xl, h * 0.06); c.lineTo(xl, h * 0.94); c.stroke();
+      }
+    }
+
+    const doux = t => t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
+    /* u ∈ [0, 1] : 0 la forme d'onde, 1 le pointé. Étapes : relevé de l'enveloppe,
+       enroulement sur le demi-tour, symétrie, remplissage. */
+    const ETAPES = [
+      [0.00, "La forme d'onde : le son dans son déroulement."],
+      [0.16, "On relève l'enveloppe supérieure du signal."],
+      [0.32, "Le temps devient un angle, l'amplitude un rayon : la fenêtre se déploie sur un demi-tour, depuis le sommet."],
+      [0.76, "La symétrie selon l'axe vertical referme la figure."],
+      [0.93, "Le pointé instrumental : le sommet est l'attaque, le corps la tenue, le bas la fin."]
+    ];
+    function etapeDe(u) { let t = ETAPES[0][1]; for (const [s, m] of ETAPES) if (u >= s) t = m; return t; }
+
+    function pointsPointe(cx, cy, R0, u, p) {
+      const Rb = R0 * 0.5, A = R0 * 0.5, L = Math.PI * Rb;
+      const cour = doux((u - 0.32) / 0.44);                    // enroulement
+      const sym = doux((u - 0.76) / 0.17);                     // symétrie
+      const releve = doux((u - 0.16) / 0.14);                  // le bas s'efface
+      const tx = -L / 2 * (1 - cour), ty = Rb * (1 - cour);
+      const droite = [], dessous = [];
+      for (let k = 0; k < S; k++) {
+        const s = L * k / (S - 1);
+        let bx, by, nx, ny;
+        if (cour < 1e-4) { bx = s; by = -Rb; nx = 0; ny = -1; }
+        else {
+          const kap = cour / Rb, a = kap * s;
+          bx = Math.sin(a) / kap; by = -Rb + (1 - Math.cos(a)) / kap; nx = Math.sin(a); ny = -Math.cos(a);
+        }
+        const r = A * p.haut[k];
+        droite.push([cx + bx + nx * r + tx, cy + by + ny * r + ty]);
+        if (releve < 1) dessous.push([cx + bx - nx * A * -p.bas[k] + tx, cy + by - ny * A * -p.bas[k] + ty]);
+      }
+      return { droite, dessous, sym, releve, base: { tx, ty } };
+    }
+
+    function dessinerPointe(u, tLecture) {
+      const { c, w, h } = preparer($("pointe"));
+      c.clearRect(0, 0, w, h);
+      if (!courant) return;
+      const encre = couleur("--a-noir", "#1d1a1a");
+      /* La figure est un peu plus petite que sur les autres pages : il faut de la place
+         à gauche et à droite pour que le déplacement se voie. La place stéréophonique
+         déplace la figure dans son cadre, sans jamais l'en sortir. */
+      const R0 = Math.min(w, h) * 0.37;
+      const cx = w / 2 + etat.place * Math.max(0, w / 2 - R0 - 6), cy = h / 2;
+      const g = pointsPointe(cx, cy, R0, u, courant.profil);
+      const { droite, dessous, sym, releve } = g;
+      const remplir = doux((u - 0.9) / 0.1);
+      c.lineJoin = "round";
+      // La forme d'onde, tant que le bas n'est pas effacé.
+      if (releve < 1 && dessous.length) {
+        c.globalAlpha = 1 - releve;
+        c.fillStyle = encre; c.beginPath();
+        c.moveTo(droite[0][0], droite[0][1]);
+        for (const q of droite) c.lineTo(q[0], q[1]);
+        for (let k = dessous.length - 1; k >= 0; k--) c.lineTo(dessous[k][0], dessous[k][1]);
+        c.closePath(); c.fill();
+        c.globalAlpha = 1;
+      }
+      // La moitié droite : l'enveloppe, posée sur sa ligne de temps.
+      c.fillStyle = encre; c.strokeStyle = encre;
+      const moitie = (sx, alpha) => {
+        c.globalAlpha = alpha;
+        c.beginPath();
+        // la ligne de base (le cercle de base une fois enroulée) ferme la bande par le dessous
+        const R = R0 * 0.5, L = Math.PI * R, cour = doux((u - 0.32) / 0.44);
+        const base = s => {
+          if (cour < 1e-4) return [s, -R];
+          const kap = cour / R, a = kap * s;
+          return [Math.sin(a) / kap, -R + (1 - Math.cos(a)) / kap];
+        };
+        const tx = g.base.tx, ty = g.base.ty;
+        const px = v => cx + (v - cx) * sx;
+        c.moveTo(px(droite[0][0]), droite[0][1]);
+        for (let k = 1; k < S; k++) c.lineTo(px(droite[k][0]), droite[k][1]);
+        for (let k = S - 1; k >= 0; k -= 6) { const b = base(L * k / (S - 1)); c.lineTo(px(cx + b[0] + tx), cy + b[1] + ty); }
+        c.closePath(); c.fill();
+      };
+      if (remplir < 1) {
+        moitie(1, releve < 1 ? releve : 1);
+        if (sym > 0) moitie(1 - 2 * sym, 0.35 + 0.65 * sym);
+      }
+      if (remplir > 0) {
+        // Le pointé fermé : moitié droite, puis son miroir, et l'intérieur rempli.
+        c.globalAlpha = remplir;
+        c.beginPath();
+        c.moveTo(droite[0][0], droite[0][1]);
+        for (let k = 1; k < S; k++) c.lineTo(droite[k][0], droite[k][1]);
+        for (let k = S - 1; k >= 0; k--) c.lineTo(2 * cx - droite[k][0], droite[k][1]);
+        c.closePath(); c.fill();
+      }
+      c.globalAlpha = 1;
+      // Pendant l'écoute : deux aiguilles parcourent la figure du sommet vers le bas.
+      if (tLecture != null && u >= 0.999) {
+        const a = Math.PI * Math.min(1, tLecture / courant.duree);
+        c.strokeStyle = couleur("--a-vif", "#8a5e12"); c.lineWidth = 2;
+        c.beginPath();
+        c.moveTo(cx, cy); c.lineTo(cx + Math.sin(a) * R0 * 1.12, cy - Math.cos(a) * R0 * 1.12);
+        c.moveTo(cx, cy); c.lineTo(cx - Math.sin(a) * R0 * 1.12, cy - Math.cos(a) * R0 * 1.12);
+        c.stroke();
+      }
+    }
+
+    /* L'axe latéral : un trait, trois repères, et la marque de la place choisie. */
+    function dessinerPlace() {
+      const { c, w, h } = preparer($("place"));
+      c.clearRect(0, 0, w, h);
+      const tenu = couleur("--a-tenu", "#8a847c"), vif = couleur("--a-vif", "#8a5e12");
+      const y = h * 0.5, m = 2;
+      c.strokeStyle = tenu; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(m, y); c.lineTo(w - m, y); c.stroke();
+      for (const p of [-1, 0, 1]) {
+        const x = m + (w - 2 * m) * (p + 1) / 2;
+        c.beginPath(); c.moveTo(x, y - 4); c.lineTo(x, y + 4); c.stroke();
+      }
+      const x = m + (w - 2 * m) * (etat.place + 1) / 2;
+      c.fillStyle = vif;
+      c.beginPath(); c.moveTo(x, y - 7); c.lineTo(x + 5, y); c.lineTo(x, y + 7); c.lineTo(x - 5, y); c.closePath(); c.fill();
+    }
+
+    /* Le repère de l'axe : le pointé en petit, à sa hauteur. */
+    function dessinerRepere() {
+      const cv = $("repere"), axe = $("axe");
+      const H = axe.clientHeight, y = ordonnee(etat.f);
+      cv.style.top = (y * H) + "px";
+      const { c, w, h } = preparer(cv);
+      c.clearRect(0, 0, w, h);
+      if (!courant) return;
+      c.fillStyle = couleur("--a-noir", "#1d1a1a");
+      const cx = w / 2, cy = h / 2, R0 = Math.min(w, h) * 0.48, p = courant.profil;
+      c.beginPath();
+      for (let k = 0; k < S; k += 3) { const a = Math.PI * k / (S - 1), r = R0 * (0.5 + 0.5 * p.haut[k]); c.lineTo(cx + r * Math.sin(a), cy - r * Math.cos(a)); }
+      for (let k = S - 1; k >= 0; k -= 3) { const a = Math.PI * k / (S - 1), r = R0 * (0.5 + 0.5 * p.haut[k]); c.lineTo(cx - r * Math.sin(a), cy - r * Math.cos(a)); }
+      c.closePath(); c.fill();
+    }
+
+    function graduer() {
+      const axe = $("axe");
+      axe.querySelectorAll(".graduation, .enregistree, .hors").forEach(e => e.remove());
+      for (const f of [12500, 5000, 2000, 1000, 500, 200, 100, 50, 21.8]) {
+        const e = document.createElement("span");
+        e.className = "graduation";
+        e.textContent = f >= 1000 ? (f / 1000).toLocaleString("fr-FR") + "k" : String(f).replace(".", ",");
+        e.style.top = (ordonnee(f) * 100) + "%";
+        axe.appendChild(e);
+      }
+      const ref = HAUTEURS[fichier(etat.instrument, etat.frappe)];
+      if (ref) {
+        const m = document.createElement("span");
+        m.className = "enregistree"; m.title = "Note enregistrée";
+        m.style.top = (ordonnee(ref) * 100) + "%";
+        axe.appendChild(m);
+      }
+      if (etat.tessiture) {
+        const t = tessiture(etat.instrument, etat.frappe);
+        const haut = ordonnee(t[1]) * 100, bas = ordonnee(t[0]) * 100;
+        if (haut > 0.5) {
+          const e = document.createElement("span");
+          e.className = "hors"; e.style.top = "0"; e.style.height = haut + "%";
+          e.title = "Au-dessus de la tessiture";
+          axe.appendChild(e);
+        }
+        if (bas < 99.5) {
+          const e = document.createElement("span");
+          e.className = "hors"; e.style.top = bas + "%"; e.style.height = (100 - bas) + "%";
+          e.title = "Au-dessous de la tessiture";
+          axe.appendChild(e);
+        }
+      }
+    }
+
+    /* ---------------- Noms de notes, convention du livre (la3 = 440 Hz) ---------------- */
+    const NOTES = ["do", "do♯", "ré", "mi♭", "mi", "fa", "fa♯", "sol", "sol♯", "la", "si♭", "si"];
+    function nomNote(f) {
+      const r = Math.round(69 + 12 * Math.log2(f / 440));
+      return NOTES[((r % 12) + 12) % 12] + (Math.floor(r / 12) - 2);
+    }
+    const fmt = (v, d = 0) => v.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
+
+    function majReleve() {
+      const nom = fichier(etat.instrument, etat.frappe), ref = HAUTEURS[nom];
+      const demi = 12 * Math.log2(etat.f / (ref || 440));
+      let ecart;
+      if (!ref) ecart = "Sans hauteur mesurable : la référence est posée à 440 Hz";
+      else if (Math.abs(demi) < 0.05) ecart = "La note enregistrée";
+      else ecart = `${demi > 0 ? "+" : "−"}${fmt(Math.abs(demi), 1)} demi-ton${Math.abs(demi) >= 2 ? "s" : ""} depuis la note enregistrée`;
+      let rapport = "";
+      if (courant) {
+        const q = courant.rapport;
+        const famille = q < 1.25 ? "sous 1,25 : soutenu" : q > 1.39 ? "au-delà de 1,39 : percussif" : "entre 1,25 et 1,39 : entre les deux familles";
+        rapport = `Pics / corps ${fmt(q, 2)} — ${famille}`;
+      }
+      const p = etat.place;
+      const place = Math.abs(p) < 0.04
+        ? "Au centre"
+        : `${p < 0 ? "À gauche" : "À droite"} · ${fmt(Math.abs(p) * 100, 0)} %`;
+      let plage = "";
+      if (etat.tessiture) {
+        const t = tessiture(etat.instrument, etat.frappe);
+        plage = `Tessiture ${nomNote(t[0])} – ${nomNote(t[1])}` +
+                (TESSITURES[etat.instrument] ? "" : " (une octave autour de l'enregistrement)");
+      }
+      $("releve").innerHTML =
+        `<span class="nom">${NOMS[etat.instrument]} · frappe ${etat.frappe}</span>` +
+        `<span class="note">${nomNote(etat.f)} · ${fmt(etat.f, etat.f < 100 ? 1 : 0)} Hz</span>` +
+        `<span class="ecart">${ecart}</span>` +
+        `<span class="rapport">${rapport}</span>` +
+        `<span class="rapport">${place}</span>` +
+        (plage ? `<span class="rapport">${plage}</span>` : "");
+      const axe = $("axe");
+      axe.setAttribute("aria-valuenow", etat.f.toFixed(1));
+      axe.setAttribute("aria-valuetext", `${nomNote(etat.f)}, ${Math.round(etat.f)} hertz`);
+    }
+
+    /* ---------------- Animation et lecture ---------------- */
+    let anim = null, lecture = null;
+    function dessiner() {
+      const t = lecture && ctx ? ctx.currentTime - lecture.depart : null;
+      dessinerOnde(t != null && t <= lecture.duree ? t : null);
+      dessinerPointe(etat.u, t != null && t <= lecture.duree ? t : null);
+      if (lecture && t > lecture.duree + 0.05) lecture = null;
+    }
+    function boucle() {
+      if (anim) {
+        const v = Math.min(1, (performance.now() - anim.debut) / anim.duree);
+        etat.u = anim.de + (1 - anim.de) * v;
+        $("enroulement").value = Math.round(etat.u * 1000);
+        $("etape").textContent = etapeDe(etat.u);
+        if (v >= 1) { const fin = anim.fin; anim = null; if (fin) fin(); }
+      }
+      dessiner();
+      if (anim || lecture) requestAnimationFrame(boucle);
+    }
+    function enrouler(fin) {
+      if (reduit) { etat.u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); dessiner(); if (fin) fin(); return; }
+      anim = { debut: performance.now(), duree: 2600, de: 0, fin };
+      requestAnimationFrame(boucle);
+    }
+    function jouer() {
+      if (!courant) return;
+      const c = ouvrirSon();
+      if (voix) { try { const v = voix; v.g.gain.setTargetAtTime(0, c.currentTime, 0.008); v.s.stop(c.currentTime + 0.06); } catch (e) {} }
+      const b = c.createBuffer(1, courant.y.length, SR);
+      b.copyToChannel ? b.copyToChannel(courant.y, 0) : b.getChannelData(0).set(courant.y);
+      const s = c.createBufferSource(), g = c.createGain();
+      s.buffer = b; s.connect(g);
+      /* Étude 002 : la position latérale dans le cadre donne la place stéréophonique. */
+      if (c.createStereoPanner) { const p = c.createStereoPanner(); p.pan.value = etat.place; g.connect(p); p.connect(bus); }
+      else g.connect(bus);
+      const t0 = c.currentTime + 0.02;
+      s.start(t0);
+      voix = { s, g };
+      lecture = { depart: t0, duree: courant.duree };
+      requestAnimationFrame(boucle);
+    }
+
+    /* ---------------- Calcul ---------------- */
+    let enCours = false, enAttente = null;
+    function demander(mode) {
+      // mode : "enrouler" (nouvel instrument, nouvelle frappe), "direct" (glisser), "silence" (chargement)
+      enAttente = { mode: enAttente && enAttente.mode === "enrouler" ? "enrouler" : mode };
+      if (!enCours) suivant();
+    }
+    async function suivant() {
+      if (!enAttente) return;
+      const { mode } = enAttente; enAttente = null; enCours = true;
+      const inst = etat.instrument, frappe = etat.frappe, f = etat.f;
+      $("etat").textContent = bruts.has(fichier(inst, frappe)) ? "" : "Chargement du son…";
+      try {
+        const r = await rendu(inst, frappe, f);
+        // un réglage plus récent l'emporte : on ne dessine que s'il n'a pas changé entre-temps
+        courant = { y: r.y, profil: profil(r.y), rapport: rapportPicsCorps(r.y), duree: r.y.length / SR, demi: r.demi, ref: r.ref, nom: r.nom };
+        $("etat").textContent = "";
+        majReleve(); dessinerRepere();
+        if (mode === "enrouler") enrouler(() => { if (ctx) jouer(); });
+        else { dessiner(); if (mode === "direct" && ctx) jouer(); }
+      } catch (e) {
+        $("etat").textContent = "Le son n'a pas pu être chargé (" + e.message + ").";
+      }
+      enCours = false;
+      if (enAttente) suivant();
+    }
+
+    /* ---------------- Gestes ---------------- */
+    function choisirInstrument(nom) {
+      etat.instrument = nom;
+      etat.f = borner(etat.f);              // la tessiture du nouvel instrument s'applique
+      // On garde la hauteur choisie ; au premier choix, la note enregistrée.
+      document.querySelectorAll("[data-instrument]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.instrument === nom)));
+      graduer(); majReleve();
+      FRAPPES.forEach(v => charger(fichier(nom, v)));      // les trois couches, d'avance
+      demander("enrouler");
+    }
+    function choisirFrappe(v) {
+      etat.frappe = v;
+      document.querySelectorAll("[data-frappe]").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.frappe) === v)));
+      graduer(); majReleve();
+      demander("enrouler");
+    }
+    document.querySelectorAll("[data-instrument]").forEach(b => b.addEventListener("click", () => {
+      ouvrirSon();
+      // Si l'on était sur la note enregistrée, on passe à celle du nouvel instrument ;
+      // sinon on garde la hauteur choisie. Sans hauteur mesurable, la référence est 440 Hz.
+      const refDe = inst => HAUTEURS[fichier(inst, etat.frappe)] || 440;
+      if (b.dataset.instrument !== etat.instrument && Math.abs(12 * Math.log2(etat.f / refDe(etat.instrument))) < 0.05) etat.f = refDe(b.dataset.instrument);
+      choisirInstrument(b.dataset.instrument);
+    }));
+    document.querySelectorAll("[data-frappe]").forEach(b => b.addEventListener("click", () => { ouvrirSon(); choisirFrappe(Number(b.dataset.frappe)); }));
+    $("tessiture").addEventListener("click", () => {
+      etat.tessiture = !etat.tessiture;
+      $("tessiture").setAttribute("aria-pressed", String(etat.tessiture));
+      const avant = etat.f;
+      etat.f = borner(etat.f);
+      graduer(); majReleve(); dessinerRepere();
+      if (etat.f !== avant) { ouvrirSon(); demander("direct"); }
+    });
+
+    /* Frappe au stylet : la pression la plus forte des 150 premières ms choisit la couche. */
+    const FENETRE_FRAPPE = 150;
+    let pression = null;
+    function suivrePression(e) {
+      if (e.pointerType !== "pen" || !(e.pressure > 0)) return;
+      if (!pression) pression = { debut: performance.now(), max: 0, fait: false };
+      if (performance.now() - pression.debut <= FENETRE_FRAPPE) pression.max = Math.max(pression.max, e.pressure);
+      else if (!pression.fait) {
+        pression.fait = true;
+        const v = Math.round(pression.max * 127);
+        const c = FRAPPES.reduce((a, b) => Math.abs(b - v) < Math.abs(a - v) ? b : a);
+        $("stylet").textContent = `Stylet · pression ${fmt(pression.max, 2)} → frappe ${c}`;
+        if (c !== etat.frappe) choisirFrappe(c);
+      }
+    }
+
+    // L'axe des hauteurs : glisser le repère.
+    const axe = $("axe");
+    let glisse = false, dernier = 0;
+    function placer(e) {
+      const r = axe.getBoundingClientRect();
+      const y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+      etat.f = borner(frequence(y));
+      majReleve(); dessinerRepere();
+      const t = performance.now();
+      if (t - dernier > 120) { dernier = t; demander("direct"); }
+    }
+    axe.addEventListener("pointerdown", e => {
+      ouvrirSon(); glisse = true; pression = null; anim = null; etat.u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1);
+      try { axe.setPointerCapture(e.pointerId); } catch (err) {}
+      suivrePression(e); placer(e); e.preventDefault();
+    });
+    axe.addEventListener("pointermove", e => { if (!glisse) return; suivrePression(e); placer(e); });
+    const lacher = () => { if (!glisse) return; glisse = false; demander("direct"); };
+    axe.addEventListener("pointerup", lacher);
+    axe.addEventListener("pointercancel", lacher);
+    axe.addEventListener("keydown", e => {
+      const ref = HAUTEURS[fichier(etat.instrument, etat.frappe)] || 440;
+      let m = 12 * Math.log2(etat.f / ref);
+      const pas = { ArrowUp: 1, ArrowDown: -1, PageUp: 12, PageDown: -12 }[e.key];
+      if (pas) m = Math.round(m) + pas;
+      else if (e.key === "Home") m = 12 * Math.log2(F_HAUT / ref);
+      else if (e.key === "End") m = 12 * Math.log2(F_BAS / ref);
+      else return;
+      e.preventDefault(); ouvrirSon();
+      etat.f = borner(ref * Math.pow(2, m / 12));
+      majReleve(); dessinerRepere(); demander("direct");
+    });
+
+    // La case du pointé : toucher pour écouter (au stylet, la pression choisit la frappe).
+    const casePointe = $("case-pointe");
+    /* Glisser dans le cadre place le pointé à gauche ou à droite ; lâcher le fait entendre. */
+    function placerLateral(e) {
+      const r = casePointe.getBoundingClientRect();
+      etat.place = Math.max(-1, Math.min(1, (e.clientX - r.left) / r.width * 2 - 1));
+      majReleve(); dessinerPlace(); dessiner();
+    }
+    let glisseLateral = false;
+    casePointe.addEventListener("pointerdown", e => {
+      ouvrirSon(); pression = null; suivrePression(e);
+      glisseLateral = true; placerLateral(e);
+      try { casePointe.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    casePointe.addEventListener("pointermove", e => { suivrePression(e); if (glisseLateral) placerLateral(e); });
+    casePointe.addEventListener("pointercancel", () => { glisseLateral = false; });
+    casePointe.addEventListener("pointerup", () => {
+      glisseLateral = false;
+      if (etat.u < 1) { anim = null; etat.u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); }
+      jouer();
+    });
+    casePointe.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ouvrirSon(); jouer(); } });
+
+    $("enroulement").addEventListener("input", e => {
+      anim = null; etat.u = Number(e.target.value) / 1000;
+      $("etape").textContent = etapeDe(etat.u); dessiner();
+    });
+    $("rejouer").addEventListener("click", () => { ouvrirSon(); enrouler(() => jouer()); });
+    $("ecouter").addEventListener("click", () => { ouvrirSon(); if (etat.u < 1) { anim = null; etat.u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); } jouer(); });
+
+    // La hauteur de l'axe suit celle de la case du pointé.
+    function ajuster() {
+      const cote = casePointe.getBoundingClientRect().height;
+      axe.style.setProperty("--cote", cote + "px");
+      graduer(); dessinerRepere(); dessinerPlace(); dessiner();
+    }
+    if (window.ResizeObserver) new ResizeObserver(ajuster).observe(casePointe);
+    window.addEventListener("resize", ajuster);
+    window.addEventListener("pagehide", () => { try { if (voix) voix.s.stop(); } catch (e) {} });
+
+    /* Départ : le piano, frappe moyenne, à sa note enregistrée. L'enroulement se joue
+       en silence ; le son viendra au premier geste (les navigateurs l'exigent). */
+    document.querySelector('[data-frappe="70"]').setAttribute("aria-pressed", "true");
+    document.querySelectorAll("[data-frappe]").forEach(b => { if (b.dataset.frappe !== "70") b.setAttribute("aria-pressed", "false"); });
+    etat.f = HAUTEURS[fichier("Piano", 70)];
+    ajuster();
+    choisirInstrument("Piano");
+  })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience : la forme de votre voix</title>
+  <link rel="stylesheet" href="../../style.css?v=15">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+  <style>
+    /* ==========================================================================
+       EXPÉRIENCE : LA FORME DE VOTRE VOIX — styles propres à cette page.
+       Même facture que les deux expériences précédentes : la feuille du site n'est
+       pas modifiée, les couleurs reprennent les variables de la charte.
+       ========================================================================== */
+    .experience {
+      --a-fond: var(--fond, #f7f4ee);
+      --a-encre: var(--encre, #16130f);
+      --a-doux: var(--encre-doux, #55504a);
+      --a-tenu: var(--encre-tenu, #8a847c);
+      --a-filet: var(--filet, #ded8cc);
+      --a-vif: var(--vif, #8a5e12);
+      --a-case: #ffffff;
+      --a-noir: #1d1a1a;
+      margin-top: 1.6rem;
+    }
+    .experience p { display: block; margin: 0 0 1rem; }
+    .experience .intro { max-width: 40em; }
+
+    .experience .etiquette {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .68rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--a-tenu);
+    }
+    .experience .case-onde {
+      position: relative; width: 100%; aspect-ratio: 4 / 1; background: var(--a-noir); margin: 0 0 .9rem;
+    }
+    .experience canvas { display: block; width: 100%; height: 100%; }
+    .experience .legende {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .68rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--a-tenu); margin: .35rem 0 0;
+    }
+
+    .experience .scene { display: grid; grid-template-columns: minmax(0, 440px) minmax(12rem, 1fr); gap: 16px 22px; align-items: start; }
+    .experience .case-pointe {
+      position: relative; width: 100%; aspect-ratio: 1; background: var(--a-case);
+      border: 1.5px solid var(--a-encre); box-sizing: border-box; cursor: pointer;
+      touch-action: none; user-select: none; -webkit-user-select: none;
+    }
+    .experience .cote { display: flex; flex-direction: column; gap: 1rem; }
+    .experience .releve { margin: 0; line-height: 1.5; }
+    .experience .releve .nom { font-family: var(--texte, serif); font-size: 1.15rem; display: block; }
+    .experience .releve .rapport {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .78rem; font-variant-numeric: tabular-nums;
+      color: var(--a-doux); display: block; margin-top: .25rem; letter-spacing: .02em;
+    }
+    .experience .etape { font-style: italic; color: var(--a-doux); min-height: 4.8em; margin: 0; font-size: .98rem; }
+    .experience .curseur { display: flex; flex-direction: column; gap: .35rem; }
+    .experience input[type="range"] { width: 100%; accent-color: var(--a-encre); }
+    .experience .boutons { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1rem; }
+    .experience .bouton {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .85rem;
+      background: transparent; color: var(--a-encre);
+      border: 1px solid color-mix(in srgb, var(--a-encre) 35%, transparent);
+      border-radius: 8px; padding: .45rem .8rem; cursor: pointer;
+    }
+    .experience .bouton:hover { border-color: var(--a-encre); }
+    .experience .bouton:disabled { opacity: .4; cursor: default; }
+    .experience .bouton.capital {
+      background: var(--a-encre); color: var(--a-fond); border-color: var(--a-encre);
+      font-size: .95rem; padding: .6rem 1.2rem;
+    }
+    .experience .bouton:focus-visible, .experience .case-pointe:focus-visible { outline: 2px solid var(--a-vif); outline-offset: 3px; }
+
+    /* Le vu-mètre : un seul trait qui monte pendant la prise. */
+    .experience .niveau { position: relative; height: 6px; background: var(--a-filet); margin: .2rem 0 1rem; max-width: 26rem; }
+    .experience .niveau i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--a-vif); }
+    .experience .compte {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .78rem; font-variant-numeric: tabular-nums;
+      color: var(--a-doux); min-height: 1.3em; margin: 0 0 .6rem;
+    }
+    .experience .etat { font-size: .82rem; color: var(--a-tenu); margin: .6rem 0 0; min-height: 1.3em; }
+
+    /* L'encart de confidentialité : il doit se lire avant qu'on touche au micro. */
+    .experience .prive {
+      border-left: 2px solid var(--a-filet); padding: .1rem 0 .1rem 1rem;
+      max-width: 40em; margin: 0 0 1.4rem;
+    }
+    .experience .prive p { font-size: .92rem; color: var(--a-doux); margin: 0; }
+
+    .experience details.precisions { margin-top: 2rem; max-width: 44em; }
+    .experience details.precisions summary {
+      cursor: pointer; font-family: var(--titre, "Jost", sans-serif); font-size: .74rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--a-doux);
+    }
+    .experience details.precisions ul { padding-left: 1.1em; margin: .8rem 0 0; }
+    .experience details.precisions li { margin: .45rem 0; }
+
+    @media (max-width: 760px) {
+      .experience .scene { grid-template-columns: minmax(0, 1fr); }
+    }
+  </style>
+</head>
+
+<body class="page-etude etude-008 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience : la forme de votre voix</h1>
+    <div class="cat">Le retournement de la loi · à manipuler</div>
+
+    <section class="experience" aria-label="Expérience : la forme de votre voix">
+      <p class="intro">
+        Jusqu'ici, une forme produisait un son. Ici, un son produit sa forme.
+        Prononcez une voyelle, soufflez, claquez des doigts — le son capté est relevé
+        et son pointé en est extrait par le procédé de l'étude 008 : l'enveloppe
+        s'enroule depuis le sommet sur un demi-tour, et la symétrie referme la figure.
+        Rien n'est choisi : la figure est celle de ce que vous venez d'émettre.
+      </p>
+
+      <div class="prive">
+        <p>
+          Le son reste dans votre navigateur. Il n'est pas enregistré, pas envoyé,
+          pas conservé : il vit le temps de la page et disparaît dès que vous la fermez.
+          Le micro ne s'ouvre que lorsque vous le demandez, et se referme aussitôt après.
+        </p>
+      </div>
+
+      <div class="boutons">
+        <button class="bouton capital" id="capter">● Capter un son</button>
+        <button class="bouton" id="ecouter" disabled>▶ Réécouter</button>
+        <button class="bouton" id="rejouer" disabled>↻ Revoir l'enroulement</button>
+        <button class="bouton" id="emporter" disabled>↓ Emporter la figure</button>
+      </div>
+      <div class="niveau" aria-hidden="true"><i id="jauge"></i></div>
+      <p class="compte" id="compte"></p>
+
+      <div class="case-onde"><canvas id="onde" aria-label="Forme d'onde du son capté"></canvas></div>
+
+      <div class="scene">
+        <div>
+          <div class="case-pointe" id="case-pointe" tabindex="0" role="button" aria-label="Pointé. Cliquer pour écouter.">
+            <canvas id="pointe"></canvas>
+          </div>
+          <p class="legende">Votre pointé · toucher pour écouter</p>
+        </div>
+
+        <div class="cote">
+          <p class="releve" id="releve" aria-live="polite"></p>
+          <p class="etape" id="etape"></p>
+          <div class="curseur">
+            <label class="etiquette" for="enroulement">Du son au pointé</label>
+            <input type="range" id="enroulement" min="0" max="1000" value="1000" />
+          </div>
+        </div>
+      </div>
+      <p class="etat" id="etat" aria-live="polite"></p>
+
+      <details class="precisions">
+        <summary>Ce que montre l'expérience, et ce qu'elle ne montre pas</summary>
+        <ul>
+          <li>Le micro est demandé sans correction : ni réduction de bruit, ni écho annulé,
+            ni gain automatique. Ces traitements lissent l'enveloppe, et c'est précisément
+            l'enveloppe qu'on relève ici.</li>
+          <li>La prise dure deux secondes et demie au plus : le livre traite des objets sonores
+            de durée mesurable, et au-delà la figure se charge de tout et ne dit plus rien.
+            Les silences de début et de fin sont retirés, et le son est ramené à son maximum —
+            seule compte sa forme, pas son niveau d'entrée.</li>
+          <li>Le pointé est calculé selon le procédé de l'étude 008, le même que celui des deux
+            expériences précédentes et du logiciel SIGN. Les pointés imprimés dans le livre ont
+            été finalisés à la main : les silhouettes sont de la même famille, pas identiques.</li>
+          <li>Le rapport entre le rayon des pics et celui du corps sépare les familles : sous 1,25
+            pour les sons soutenus — une voyelle tenue —, au-delà de 1,39 pour les sons percussifs —
+            un claquement, un « t », un « k » (étude 008).</li>
+          <li>C'est une transcription, pas une traduction : le son que vous réécoutez est le vôtre,
+            pas un objet du livre qui lui ressemblerait.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../velocite/">← Expérience : vélocité</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/010/">Étude 010 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+
+  <script>
+  /* ==========================================================================
+     EXPÉRIENCE : LA FORME DE VOTRE VOIX
+     Le son capté au micro est relevé, puis son pointé est extrait selon le
+     procédé de l'étude 008 : enveloppe supérieure, le temps devient un angle sur
+     un demi-tour depuis le sommet, l'amplitude un rayon, symétrie verticale.
+     C'est la même fonction que dans les deux expériences précédentes et dans le
+     prototype SIGN ; seul l'amont change — un micro au lieu d'un enregistrement.
+     Rien ne sort du navigateur : pas de requête, pas de stockage.
+     ========================================================================== */
+  (function () {
+    "use strict";
+    const DUREE_MAX = 2.5;            // secondes : objet sonore de durée mesurable
+    const SEUIL_SILENCE = 0.02;       // ≈ −34 dB sous la crête : début et fin de l'objet
+    const $ = id => document.getElementById(id);
+    const reduit = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* ---------------- Son ---------------- */
+    let ctx = null, bus = null, voix = null, flux = null;
+    function ouvrirSon() {
+      try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
+      if (!ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        ctx = new AC();
+        bus = ctx.createGain(); bus.gain.value = 0.9; bus.connect(ctx.destination);
+      }
+      if (ctx.state !== "running") { try { const p = ctx.resume(); if (p && p.catch) p.catch(() => {}); } catch (e) {} }
+      return ctx;
+    }
+
+    /* ---------------- Le pointé (étude 008) ----------------
+       Les deux mesures sont celles du prototype SIGN, au chiffre près : l'enveloppe
+       sur 120 pas pour le rapport pics/corps, et un relevé fin (S pas) pour le dessin. */
+    function rapportPicsCorps(x, sr) {
+      const P = 120, n = x.length, demiF = Math.max(n / P, 0.03 * sr) / 2, env = new Float64Array(P);
+      let max = 0;
+      for (let k = 0; k < P; k++) {
+        const c = (k + 0.5) * n / P; let m = 0;
+        for (let i = Math.max(0, Math.floor(c - demiF)), f = Math.min(n, Math.ceil(c + demiF)); i < f; i++) { const v = x[i]; if (v > m) m = v; }
+        env[k] = m; if (m > max) max = m;
+      }
+      const r = Array.from(env, e => 0.5 + 0.5 * (max ? e / max : 0));
+      const corps = r.slice(P / 6, 5 * P / 6).sort((a, b) => a - b);
+      return Math.max(...r) / corps[corps.length >> 1];
+    }
+    const S = 540;
+    const DECALAGES = (() => { let g = 20261026; const d = new Float32Array(S); for (let k = 0; k < S; k++) { g = (g * 1103515245 + 12345) >>> 0; d[k] = g / 4294967296 - 0.5; } return d; })();
+    function profil(x, sr) {
+      const n = x.length, haut = new Float32Array(S), bas = new Float32Array(S);
+      const demiF = Math.max(n / S, 0.0025 * sr) / 2;
+      let max = 0;
+      for (let k = 0; k < S; k++) {
+        const c = (k + 0.5 + DECALAGES[k]) * n / S; let h = 0, b = 0;
+        for (let i = Math.max(0, Math.floor(c - demiF)), f = Math.min(n, Math.ceil(c + demiF)); i < f; i++) { const v = x[i]; if (v > h) h = v; if (v < b) b = v; }
+        haut[k] = h; bas[k] = b; max = Math.max(max, h, -b);
+      }
+      for (let k = 0; k < S; k++) { haut[k] /= max || 1; bas[k] /= max || 1; }
+      return { haut, bas };
+    }
+
+    /* ---------------- Dessin ---------------- */
+    function preparer(canvas) {
+      const r = canvas.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+      const w = Math.max(1, Math.round(r.width * d)), h = Math.max(1, Math.round(r.height * d));
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+      const c = canvas.getContext("2d");
+      c.setTransform(d, 0, 0, d, 0, 0);
+      return { c, w: r.width, h: r.height };
+    }
+    const couleur = (nom, secours) => (getComputedStyle(document.querySelector(".experience")).getPropertyValue(nom) || secours).trim() || secours;
+    const doux = t => t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
+
+    let courant = null;        // { y, sr, profil, rapport, duree }
+    let u = 1;
+
+    function dessinerOnde(tLecture) {
+      const { c, w, h } = preparer($("onde"));
+      c.clearRect(0, 0, w, h);
+      const blanc = "#ffffff", marge = w * 0.04, mi = h / 2, A = h * 0.4;
+      c.strokeStyle = blanc; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(marge * 0.5, mi); c.lineTo(w - marge * 0.5, mi); c.stroke();
+      if (!courant) return;
+      const x = courant.y, n = x.length, larg = w - 2 * marge;
+      let max = 0; for (let i = 0; i < n; i++) max = Math.max(max, Math.abs(x[i]));
+      const cols = Math.max(2, Math.round(larg));
+      const hauts = new Float32Array(cols), bass = new Float32Array(cols);
+      for (let k = 0; k < cols; k++) {
+        const i0 = Math.floor(k * n / cols), i1 = Math.max(i0 + 1, Math.floor((k + 1) * n / cols));
+        let a = 0, b = 0; for (let i = i0; i < i1 && i < n; i++) { if (x[i] > a) a = x[i]; if (x[i] < b) b = x[i]; }
+        hauts[k] = a / (max || 1); bass[k] = b / (max || 1);
+      }
+      c.fillStyle = blanc; c.beginPath(); c.moveTo(marge, mi);
+      for (let k = 0; k < cols; k++) c.lineTo(marge + larg * k / (cols - 1), mi - A * hauts[k]);
+      for (let k = cols - 1; k >= 0; k--) c.lineTo(marge + larg * k / (cols - 1), mi - A * bass[k]);
+      c.closePath(); c.fill();
+      if (tLecture != null) {
+        const xl = marge + larg * Math.min(1, tLecture / courant.duree);
+        c.strokeStyle = couleur("--a-vif", "#8a5e12"); c.lineWidth = 2;
+        c.beginPath(); c.moveTo(xl, h * 0.06); c.lineTo(xl, h * 0.94); c.stroke();
+      }
+    }
+
+    const ETAPES = [
+      [0.00, "La forme d'onde : le son dans son déroulement."],
+      [0.16, "On relève l'enveloppe supérieure du signal."],
+      [0.32, "Le temps devient un angle, l'amplitude un rayon : la fenêtre se déploie sur un demi-tour, depuis le sommet."],
+      [0.76, "La symétrie selon l'axe vertical referme la figure."],
+      [0.93, "Votre pointé : le sommet est l'attaque, le corps la tenue, le bas la fin."]
+    ];
+    function etapeDe(v) { let t = ETAPES[0][1]; for (const [s, m] of ETAPES) if (v >= s) t = m; return t; }
+
+    function pointsPointe(cx, cy, R0, v, p) {
+      const Rb = R0 * 0.5, A = R0 * 0.5, L = Math.PI * Rb;
+      const cour = doux((v - 0.32) / 0.44), sym = doux((v - 0.76) / 0.17), releve = doux((v - 0.16) / 0.14);
+      const tx = -L / 2 * (1 - cour), ty = Rb * (1 - cour);
+      const droite = [], dessous = [];
+      for (let k = 0; k < S; k++) {
+        const s = L * k / (S - 1);
+        let bx, by, nx, ny;
+        if (cour < 1e-4) { bx = s; by = -Rb; nx = 0; ny = -1; }
+        else {
+          const kap = cour / Rb, a = kap * s;
+          bx = Math.sin(a) / kap; by = -Rb + (1 - Math.cos(a)) / kap; nx = Math.sin(a); ny = -Math.cos(a);
+        }
+        const r = A * p.haut[k];
+        droite.push([cx + bx + nx * r + tx, cy + by + ny * r + ty]);
+        if (releve < 1) dessous.push([cx + bx - nx * A * -p.bas[k] + tx, cy + by - ny * A * -p.bas[k] + ty]);
+      }
+      return { droite, dessous, sym, releve, base: { tx, ty } };
+    }
+
+    function tracerPointe(c, w, h, v, p, encre, tLecture, duree) {
+      const cx = w / 2, cy = h / 2, R0 = Math.min(w, h) * 0.45;
+      const g = pointsPointe(cx, cy, R0, v, p);
+      const { droite, dessous, sym, releve } = g;
+      const remplir = doux((v - 0.9) / 0.1);
+      c.lineJoin = "round";
+      if (releve < 1 && dessous.length) {
+        c.globalAlpha = 1 - releve; c.fillStyle = encre; c.beginPath();
+        c.moveTo(droite[0][0], droite[0][1]);
+        for (const q of droite) c.lineTo(q[0], q[1]);
+        for (let k = dessous.length - 1; k >= 0; k--) c.lineTo(dessous[k][0], dessous[k][1]);
+        c.closePath(); c.fill(); c.globalAlpha = 1;
+      }
+      c.fillStyle = encre; c.strokeStyle = encre;
+      const moitie = (sx, alpha) => {
+        c.globalAlpha = alpha; c.beginPath();
+        const R = R0 * 0.5, L = Math.PI * R, cour = doux((v - 0.32) / 0.44);
+        const base = s => {
+          if (cour < 1e-4) return [s, -R];
+          const kap = cour / R, a = kap * s;
+          return [Math.sin(a) / kap, -R + (1 - Math.cos(a)) / kap];
+        };
+        const tx = g.base.tx, ty = g.base.ty, px = q => cx + (q - cx) * sx;
+        c.moveTo(px(droite[0][0]), droite[0][1]);
+        for (let k = 1; k < S; k++) c.lineTo(px(droite[k][0]), droite[k][1]);
+        for (let k = S - 1; k >= 0; k -= 6) { const b = base(L * k / (S - 1)); c.lineTo(px(cx + b[0] + tx), cy + b[1] + ty); }
+        c.closePath(); c.fill();
+      };
+      if (remplir < 1) { moitie(1, releve < 1 ? releve : 1); if (sym > 0) moitie(1 - 2 * sym, 0.35 + 0.65 * sym); }
+      if (remplir > 0) {
+        c.globalAlpha = remplir; c.beginPath();
+        c.moveTo(droite[0][0], droite[0][1]);
+        for (let k = 1; k < S; k++) c.lineTo(droite[k][0], droite[k][1]);
+        for (let k = S - 1; k >= 0; k--) c.lineTo(2 * cx - droite[k][0], droite[k][1]);
+        c.closePath(); c.fill();
+      }
+      c.globalAlpha = 1;
+      if (tLecture != null && v >= 0.999) {
+        const a = Math.PI * Math.min(1, tLecture / duree);
+        c.strokeStyle = couleur("--a-vif", "#8a5e12"); c.lineWidth = 2;
+        c.beginPath();
+        c.moveTo(cx, cy); c.lineTo(cx + Math.sin(a) * R0 * 1.12, cy - Math.cos(a) * R0 * 1.12);
+        c.moveTo(cx, cy); c.lineTo(cx - Math.sin(a) * R0 * 1.12, cy - Math.cos(a) * R0 * 1.12);
+        c.stroke();
+      }
+    }
+
+    function dessinerPointe(v, tLecture) {
+      const { c, w, h } = preparer($("pointe"));
+      c.clearRect(0, 0, w, h);
+      if (!courant) return;
+      tracerPointe(c, w, h, v, courant.profil, couleur("--a-noir", "#1d1a1a"), tLecture, courant.duree);
+    }
+
+    /* ---------------- Animation et lecture ---------------- */
+    let anim = null, lecture = null;
+    function dessiner() {
+      const t = lecture && ctx ? ctx.currentTime - lecture.depart : null;
+      const dedans = t != null && t <= lecture.duree;
+      dessinerOnde(dedans ? t : null);
+      dessinerPointe(u, dedans ? t : null);
+      if (lecture && t > lecture.duree + 0.05) lecture = null;
+    }
+    function boucle() {
+      if (anim) {
+        const v = Math.min(1, (performance.now() - anim.debut) / anim.duree);
+        u = anim.de + (1 - anim.de) * v;
+        $("enroulement").value = Math.round(u * 1000);
+        $("etape").textContent = etapeDe(u);
+        if (v >= 1) { const fin = anim.fin; anim = null; if (fin) fin(); }
+      }
+      dessiner();
+      if (anim || lecture) requestAnimationFrame(boucle);
+    }
+    function enrouler(fin) {
+      if (reduit) { u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); dessiner(); if (fin) fin(); return; }
+      anim = { debut: performance.now(), duree: 2600, de: 0, fin };
+      requestAnimationFrame(boucle);
+    }
+    function jouer() {
+      if (!courant) return;
+      const c = ouvrirSon();
+      if (voix) { try { const v = voix; v.g.gain.setTargetAtTime(0, c.currentTime, 0.008); v.s.stop(c.currentTime + 0.06); } catch (e) {} }
+      const b = c.createBuffer(1, courant.y.length, courant.sr);
+      b.copyToChannel ? b.copyToChannel(courant.y, 0) : b.getChannelData(0).set(courant.y);
+      const s = c.createBufferSource(), g = c.createGain();
+      s.buffer = b; s.connect(g); g.connect(bus);
+      const t0 = c.currentTime + 0.02;
+      s.start(t0); voix = { s, g };
+      lecture = { depart: t0, duree: courant.duree };
+      requestAnimationFrame(boucle);
+    }
+
+    /* ---------------- La prise au micro ----------------
+       On demande le micro SANS correction : la réduction de bruit, l'annulation d'écho
+       et le gain automatique lissent l'enveloppe, et c'est l'enveloppe qu'on relève. */
+    const CONTRAINTES = {
+      audio: {
+        echoCancellation: false, noiseSuppression: false, autoGainControl: false,
+        channelCount: 1
+      }
+    };
+    let enPrise = false;
+
+    function arreterFlux() {
+      if (flux) { try { flux.getTracks().forEach(t => t.stop()); } catch (e) {} flux = null; }
+    }
+
+    /* Le collecteur : un AudioWorklet si le navigateur en a un, sinon un
+       ScriptProcessor. Les deux rendent la même chose : les échantillons bruts. */
+    async function collecteur(c, source, surBloc) {
+      const CODE = `
+        class Collecte extends AudioWorkletProcessor {
+          process(entrees) {
+            const e = entrees[0];
+            if (e && e[0]) this.port.postMessage(new Float32Array(e[0]));
+            return true;
+          }
+        }
+        registerProcessor("collecte", Collecte);`;
+      if (c.audioWorklet) {
+        try {
+          const url = URL.createObjectURL(new Blob([CODE], { type: "text/javascript" }));
+          await c.audioWorklet.addModule(url);
+          URL.revokeObjectURL(url);
+          const n = new AudioWorkletNode(c, "collecte");
+          n.port.onmessage = e => surBloc(e.data);
+          source.connect(n);
+          // Un worklet non relié à la sortie peut être suspendu : on le relie à un gain muet.
+          const muet = c.createGain(); muet.gain.value = 0; n.connect(muet); muet.connect(c.destination);
+          return () => { try { source.disconnect(n); n.disconnect(); muet.disconnect(); } catch (e) {} };
+        } catch (e) { /* on retombe sur le ScriptProcessor */ }
+      }
+      const p = c.createScriptProcessor(2048, 1, 1);
+      p.onaudioprocess = e => surBloc(new Float32Array(e.inputBuffer.getChannelData(0)));
+      const muet = c.createGain(); muet.gain.value = 0;
+      source.connect(p); p.connect(muet); muet.connect(c.destination);
+      return () => { try { source.disconnect(p); p.disconnect(); muet.disconnect(); } catch (e) {} };
+    }
+
+    /* Rognage des silences de début et de fin, puis remise au maximum : seule la
+       forme compte, pas le niveau auquel on a parlé. */
+    function nettoyer(x, sr) {
+      let crete = 0;
+      for (let i = 0; i < x.length; i++) { const v = Math.abs(x[i]); if (v > crete) crete = v; }
+      if (crete < 1e-4) return null;
+      const seuil = crete * SEUIL_SILENCE;
+      let a = 0, b = x.length - 1;
+      while (a < b && Math.abs(x[a]) < seuil) a++;
+      while (b > a && Math.abs(x[b]) < seuil) b--;
+      a = Math.max(0, a - Math.round(0.01 * sr));          // on garde 10 ms avant l'attaque
+      b = Math.min(x.length - 1, b + Math.round(0.03 * sr));
+      if (b - a < 0.04 * sr) return null;                   // moins de 40 ms : rien à relever
+      const y = new Float32Array(b - a + 1);
+      const g = 0.99 / crete;
+      for (let i = 0; i < y.length; i++) y[i] = x[a + i] * g;
+      return y;
+    }
+
+    async function capter() {
+      if (enPrise) return;
+      const c = ouvrirSon();
+      $("etat").textContent = "";
+      let s;
+      try { s = await navigator.mediaDevices.getUserMedia(CONTRAINTES); }
+      catch (e) {
+        $("etat").textContent = e && e.name === "NotAllowedError"
+          ? "Le micro a été refusé. Rien n'est capté. Vous pouvez l'autoriser dans les réglages du navigateur, pour ce site seulement."
+          : "Le micro n'est pas disponible sur cet appareil (" + (e && e.name ? e.name : "inconnu") + ").";
+        return;
+      }
+      flux = s;
+      enPrise = true;
+      $("capter").textContent = "■ Arrêter";
+      $("capter").classList.remove("capital");
+      const source = c.createMediaStreamSource(s);
+      const blocs = [];
+      let total = 0, crete = 0;
+      const sr = c.sampleRate;
+      /* Déclaré avant le collecteur : les premiers blocs peuvent arriver pendant que
+         le reste se met en place, et ils doivent déjà savoir si la prise est close. */
+      let fini = false;
+      const surBloc = b => {
+        if (fini) return;
+        blocs.push(b); total += b.length;
+        for (let i = 0; i < b.length; i++) { const v = Math.abs(b[i]); if (v > crete) crete = v; }
+        $("jauge").style.width = Math.min(100, crete * 130) + "%";
+        crete *= 0.86;
+        $("compte").textContent = "Prise en cours · " + (total / sr).toFixed(1).replace(".", ",") + " s sur " + String(DUREE_MAX).replace(".", ",");
+        if (total >= DUREE_MAX * sr) finir();
+      };
+      const defaire = await collecteur(c, source, surBloc);
+
+      function finir() {
+        if (fini) return;
+        fini = true; enPrise = false;
+        try { defaire(); } catch (e) {}
+        try { source.disconnect(); } catch (e) {}
+        arreterFlux();
+        $("capter").textContent = "● Capter un son";
+        $("capter").classList.add("capital");
+        $("jauge").style.width = "0%";
+        const x = new Float32Array(total);
+        let o = 0; for (const b of blocs) { x.set(b, o); o += b.length; }
+        const y = nettoyer(x, sr);
+        if (!y) {
+          $("compte").textContent = "";
+          $("etat").textContent = "Rien d'assez fort n'a été capté. Approchez-vous du micro et réessayez.";
+          return;
+        }
+        courant = { y, sr, profil: profil(y, sr), rapport: rapportPicsCorps(y, sr), duree: y.length / sr };
+        ["ecouter", "rejouer", "emporter"].forEach(id => { $(id).disabled = false; });
+        $("compte").textContent = "Pris · " + courant.duree.toFixed(2).replace(".", ",") + " s";
+        majReleve();
+        enrouler(() => jouer());
+      }
+      arret = finir;
+    }
+    let arret = null;
+
+    const fmt = (v, d = 0) => v.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
+    function majReleve() {
+      if (!courant) { $("releve").innerHTML = ""; return; }
+      const q = courant.rapport;
+      const famille = q < 1.25 ? "sous 1,25 : soutenu" : q > 1.39 ? "au-delà de 1,39 : percussif" : "entre 1,25 et 1,39 : entre les deux familles";
+      $("releve").innerHTML =
+        `<span class="nom">Votre son</span>` +
+        `<span class="rapport">Durée ${fmt(courant.duree, 2)} s</span>` +
+        `<span class="rapport">Pics / corps ${fmt(q, 2)} — ${famille}</span>`;
+    }
+
+    /* ---------------- Emporter la figure ----------------
+       Le dessin est refait à 1400 px sur fond clair, avec une ligne de provenance. */
+    function emporter() {
+      if (!courant) return;
+      const T = 1400, cv = document.createElement("canvas");
+      cv.width = T; cv.height = T;
+      const c = cv.getContext("2d");
+      c.fillStyle = "#f7f4ee"; c.fillRect(0, 0, T, T);
+      c.save(); c.translate(0, -T * 0.03);
+      tracerPointe(c, T, T, 1, courant.profil, "#1d1a1a", null, courant.duree);
+      c.restore();
+      c.fillStyle = "#55504a";
+      c.font = "500 26px Jost, system-ui, sans-serif";
+      c.textAlign = "center";
+      c.fillText("Le Livre des Sons · lelivredessons.fr", T / 2, T - 54);
+      const fin = () => { $("etat").textContent = ""; };
+      if (cv.toBlob) cv.toBlob(b => {
+        if (!b) { $("etat").textContent = "La figure n'a pas pu être enregistrée."; return; }
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(b);
+        a.download = "pointe-le-livre-des-sons.png";
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+        fin();
+      }, "image/png");
+      else { const a = document.createElement("a"); a.href = cv.toDataURL("image/png"); a.download = "pointe-le-livre-des-sons.png"; a.click(); fin(); }
+    }
+
+    /* ---------------- Gestes ---------------- */
+    $("capter").addEventListener("click", () => { if (enPrise) { if (arret) arret(); } else capter(); });
+    $("ecouter").addEventListener("click", () => { if (u < 1) { anim = null; u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); } jouer(); });
+    $("rejouer").addEventListener("click", () => { ouvrirSon(); enrouler(() => jouer()); });
+    $("emporter").addEventListener("click", emporter);
+    $("enroulement").addEventListener("input", e => { anim = null; u = Number(e.target.value) / 1000; $("etape").textContent = etapeDe(u); dessiner(); });
+    const casePointe = $("case-pointe");
+    casePointe.addEventListener("pointerup", () => { if (!courant) return; if (u < 1) { anim = null; u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); } jouer(); });
+    casePointe.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (courant) jouer(); } });
+    window.addEventListener("resize", () => dessiner());
+    window.addEventListener("pagehide", () => { try { if (voix) voix.s.stop(); } catch (e) {} arreterFlux(); });
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      $("capter").disabled = true;
+      $("etat").textContent = "Ce navigateur ne donne pas accès au micro. Sur iPhone et iPad, l'accès au micro demande Safari.";
+    }
+    $("etape").textContent = "Captez un son : sa figure se construira ici.";
+    dessiner();
+  })();
+  </script>
+
+</body>
+</html>
