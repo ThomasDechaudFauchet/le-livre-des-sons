@@ -844,6 +844,11 @@ function transposerExperience(x, demi) {
       const s = c.createBufferSource(), g = c.createGain();
       s.buffer = b; s.connect(g); g.connect(bus);
       const t0 = c.currentTime + 0.02;
+      /* Rampe d'attaque de 4 ms : inaudible, mais elle évite le clic quand le
+         premier échantillon rendu n'est pas nul (c'est le cas après une
+         transposition au vocodeur). */
+      g.gain.setValueAtTime(0, t0);
+      g.gain.linearRampToValueAtTime(1, t0 + 0.004);
       s.start(t0); voix = { s, g };
       lecture = { depart: t0, duree: courant.duree };
       requestAnimationFrame(boucle);

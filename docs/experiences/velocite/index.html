@@ -602,7 +602,12 @@ function transposerExperience(x, demi) {
         // le niveau, lui, glisse en décibels d'une frappe à l'autre.
         const ca = crete(A) || 1, cb = crete(B) || 1, niveau = Math.exp(Math.log(ca) * (1 - w) + Math.log(cb) * w);
         const da = debut(A), db = debut(B), d = Math.round(da * (1 - w) + db * w);
-        const n = Math.max(A.length - da, B.length - db) + d;
+        /* La durée glisse elle aussi d'une frappe à l'autre, comme la hauteur,
+           le niveau et le début. Prendre la plus longue des deux laissait, à la
+           fin, une traîne où une seule frappe sonnait encore, à poids réduit :
+           on entendait le son se couper puis un reste ténu. La flûte le montrait
+           crûment, ses trois couches n'ayant pas la même longueur. */
+        const n = Math.max(1, Math.round(d + (A.length - da) * (1 - w) + (B.length - db) * w));
         y = new Float32Array(n);
         for (let i = 0; i < n; i++) {
           const ia = i - d + da, ib = i - d + db;
@@ -610,6 +615,9 @@ function transposerExperience(x, demi) {
         }
         const cy = crete(y) || 1;
         for (let i = 0; i < n; i++) y[i] *= niveau / cy;
+        /* Couper une couche encore sonore ferait une marche : 10 ms d'extinction. */
+        const fo = Math.min(Math.round(0.010 * SR), n);
+        for (let i = 0; i < fo; i++) y[n - fo + i] *= 1 - i / fo;
       }
       melanges.set(cle, y);
       if (melanges.size > 120) melanges.delete(melanges.keys().next().value);
@@ -856,6 +864,11 @@ function transposerExperience(x, demi) {
       const s = c.createBufferSource(), g = c.createGain();
       s.buffer = b; s.connect(g); g.connect(bus);
       const t0 = c.currentTime + 0.02;
+      /* Rampe d'attaque de 4 ms : inaudible, mais elle évite le clic quand le
+         premier échantillon rendu n'est pas nul (c'est le cas après une
+         transposition au vocodeur). */
+      g.gain.setValueAtTime(0, t0);
+      g.gain.linearRampToValueAtTime(1, t0 + 0.004);
       s.start(t0);
       voix = { s, g };
       lecture = { depart: t0, duree: courant.duree };
