@@ -47,7 +47,15 @@ async src="https://gc.zgo.at/count.js"></script>
     .experience .choix:focus-visible, .experience .bouton:focus-visible, .experience .axe:focus-visible,
     .experience .case-pointe:focus-visible, .experience .reference:focus-visible { outline: 2px solid var(--a-vif); outline-offset: 3px; }
 
-    .experience .case-onde { position: relative; width: 100%; aspect-ratio: 4 / 1; background: var(--a-noir); margin: 0 0 .9rem; }
+    .experience .case-onde {
+      position: relative; width: 100%; aspect-ratio: 4 / 1; background: var(--a-noir);
+      margin: 0 0 .35rem; cursor: pointer;
+      touch-action: manipulation; user-select: none; -webkit-user-select: none;
+    }
+    .experience .case-onde:focus-visible { outline: 2px solid var(--a-vif); outline-offset: 3px; }
+    /* Pas d'image de planche derrière une expérience : la page montre une mesure,
+       pas une planche, et le filigrane brouillait la lecture. */
+    body.page-experience::before { background-image: none !important; }
     .experience canvas { display: block; width: 100%; height: 100%; }
     .experience .legende {
       font-family: var(--titre, "Jost", sans-serif); font-size: .68rem; font-weight: 500;
@@ -165,7 +173,11 @@ async src="https://gc.zgo.at/count.js"></script>
         </div>
       </div>
 
-      <div class="case-onde"><canvas id="onde" aria-label="Forme d'onde du son"></canvas></div>
+      <div class="case-onde" id="case-onde" tabindex="0" role="button"
+           aria-label="Forme d'onde du son. Toucher pour écouter.">
+        <canvas id="onde"></canvas>
+      </div>
+      <p class="legende">Forme d'onde · toucher pour écouter</p>
 
       <div class="scene">
         <div>
@@ -229,7 +241,7 @@ async src="https://gc.zgo.at/count.js"></script>
     <nav>
       <a href="../../etudes/009/">← Étude 009</a>
       <a href="../../">Sommaire</a>
-      <a href="../voix/">Expérience : la voix →</a>
+      <a href="../../experiences/voix/">Expérience : la voix →</a>
     </nav>
 
     <footer class="site-signature">
@@ -493,7 +505,7 @@ function transposerExperience(x, demi) {
                    Kalimba: "Kalimba", Kick: "Kick", Clave: "Clave", Shaker: "Shaker" };
     const FRAPPES = [20, 70, 120];
     const fichier = (inst, v) => `${inst} - ${v} (velocite).wav`;
-    const HAUTEURS = {"Clave - 120 (velocite).wav": 1167.87, "Clave - 20 (velocite).wav": 1136.12, "Clave - 70 (velocite).wav": 1159.9, "Flute - 120 (velocite).wav": 438.96, "Flute - 20 (velocite).wav": 440.9, "Flute - 70 (velocite).wav": 440.73, "Kalimba - 120 (velocite).wav": 220.78, "Kalimba - 20 (velocite).wav": 221.81, "Kalimba - 70 (velocite).wav": 221.86, "Kick - 120 (velocite).wav": 70.41, "Kick - 20 (velocite).wav": 70.41, "Kick - 70 (velocite).wav": 70.41, "Piano - 120 (velocite).wav": 221.64, "Piano - 20 (velocite).wav": 220.5, "Piano - 70 (velocite).wav": 220.74, "Shaker - 120 (velocite).wav": null, "Shaker - 20 (velocite).wav": null, "Shaker - 70 (velocite).wav": null, "Violoncelle - 120 (velocite).wav": 220.86, "Violoncelle - 20 (velocite).wav": 220.29, "Violoncelle - 70 (velocite).wav": 219.97, "Voix - 120 (velocite).wav": 218.77, "Voix - 20 (velocite).wav": 219.71, "Voix - 70 (velocite).wav": 219.81};
+    const HAUTEURS = {"Clave - 120 (velocite).wav": 1167.87, "Clave - 20 (velocite).wav": 1136.12, "Clave - 70 (velocite).wav": 1159.9, "Flute - 120 (velocite).wav": 438.96, "Flute - 20 (velocite).wav": 440.9, "Flute - 70 (velocite).wav": 440.73, "Kalimba - 120 (velocite).wav": 220.78, "Kalimba - 20 (velocite).wav": 221.81, "Kalimba - 70 (velocite).wav": 221.86, "Kick - 120 (velocite).wav": 70.41, "Kick - 20 (velocite).wav": 70.41, "Kick - 70 (velocite).wav": 70.41, "Piano - 120 (velocite).wav": 221.64, "Piano - 20 (velocite).wav": 220.5, "Piano - 70 (velocite).wav": 220.74, "Shaker - 120 (velocite).wav": null, "Shaker - 20 (velocite).wav": null, "Shaker - 70 (velocite).wav": null, "Violoncelle - 120 (velocite).wav": 220.86, "Violoncelle - 20 (velocite).wav": 220.29, "Violoncelle - 70 (velocite).wav": 219.97, "Voix - 120 (velocite).wav": 218.77, "Voix - 20 (velocite).wav": 219.71, "Voix - 70 (velocite).wav": 219.81, "Basse - unique.wav": 55.27, "Guitare - unique.wav": 219.36, "Snap - unique.wav": null, "HH - unique.wav": null};
 
     const etat = { instrument: "Piano", v: 70, u: 1 };
     const $ = id => document.getElementById(id);
@@ -937,6 +949,15 @@ function transposerExperience(x, demi) {
     casePointe.addEventListener("pointermove", e => { if (frappe && !frappe.fait && frappe.stylet) frappe.max = Math.max(frappe.max, e.pressure || 0); });
     casePointe.addEventListener("pointerup", conclure);
     casePointe.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ouvrirSon(); figer(); jouer(); } });
+
+    /* La bande de forme d'onde s'écoute elle aussi : c'est le même objet sonore,
+       montré dans le temps au lieu d'être enroulé. */
+    const caseOnde = $("case-onde");
+    const ecouterDepuisOnde = () => { ouvrirSon(); figer(); jouer(); };
+    caseOnde.addEventListener("pointerup", ecouterDepuisOnde);
+    caseOnde.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ecouterDepuisOnde(); }
+    });
 
     $("enroulement").addEventListener("input", e => { anim = null; etat.u = Number(e.target.value) / 1000; $("etape").textContent = etapeDe(etat.u); dessiner(); });
     $("rejouer").addEventListener("click", () => { ouvrirSon(); enrouler(() => jouer()); });

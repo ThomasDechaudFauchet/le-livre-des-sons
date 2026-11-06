@@ -43,7 +43,8 @@ async src="https://gc.zgo.at/count.js"></script>
       border-radius: 999px; padding: .38rem .85rem; cursor: pointer;
       transition: background .15s, color .15s, border-color .15s;
     }
-    .experience .choix:hover { border-color: var(--a-encre); }
+    .experience .choix:hover:not(:disabled) { border-color: var(--a-encre); }
+    .experience .choix:disabled { opacity: .32; cursor: default; }
     .experience .choix[aria-pressed="true"] { background: var(--a-encre); color: var(--a-fond); border-color: var(--a-encre); }
     .experience .choix:focus-visible, .experience .bouton:focus-visible, .experience .axe:focus-visible,
     .experience .case-pointe:focus-visible { outline: 2px solid var(--a-vif); outline-offset: 3px; }
@@ -51,8 +52,16 @@ async src="https://gc.zgo.at/count.js"></script>
     /* La case de la forme d'onde : noire, comme sur les planches de l'étude 008. */
     .experience .case-onde {
       position: relative; width: 100%; aspect-ratio: 4 / 1; background: var(--a-noir);
-      margin: 0 0 .9rem;
+      margin: 0 0 .35rem; cursor: pointer;
+      touch-action: manipulation; user-select: none; -webkit-user-select: none;
     }
+    .experience .case-onde:focus-visible { outline: 2px solid var(--a-vif); outline-offset: 3px; }
+    .experience .sans-frappe {
+      font-family: var(--texte, serif); font-style: italic; font-size: .92rem; color: var(--a-doux);
+    }
+    /* Pas d'image de planche derrière une expérience : la page montre une mesure,
+       pas une planche, et le filigrane brouillait la lecture. */
+    body.page-experience::before { background-image: none !important; }
     .experience canvas { display: block; width: 100%; height: 100%; }
     .experience .legende {
       font-family: var(--titre, "Jost", sans-serif); font-size: .68rem; font-weight: 500;
@@ -168,6 +177,8 @@ async src="https://gc.zgo.at/count.js"></script>
           <button class="choix" data-instrument="Violoncelle">Violoncelle</button>
           <button class="choix" data-instrument="Flute">Flûte</button>
           <button class="choix" data-instrument="Voix">Voix</button>
+          <button class="choix" data-instrument="Basse">Contrebasse</button>
+          <button class="choix" data-instrument="Guitare">Guitare</button>
         </div>
         <div class="rangee" role="group" aria-label="Instruments percussifs">
           <span class="etiquette">Percussifs</span>
@@ -175,12 +186,15 @@ async src="https://gc.zgo.at/count.js"></script>
           <button class="choix" data-instrument="Kick">Kick</button>
           <button class="choix" data-instrument="Clave">Clave</button>
           <button class="choix" data-instrument="Shaker">Shaker</button>
+          <button class="choix" data-instrument="Snap">Claquement</button>
+          <button class="choix" data-instrument="HH">Charleston</button>
         </div>
         <div class="rangee" role="group" aria-label="Frappe">
           <span class="etiquette">Frappe</span>
           <button class="choix" data-frappe="20">20 · faible</button>
           <button class="choix" data-frappe="70">70 · moyenne</button>
           <button class="choix" data-frappe="120">120 · forte</button>
+          <span class="sans-frappe" id="sans-frappe"></span>
         </div>
         <div class="rangee" role="group" aria-label="Mode tessiture">
           <span class="etiquette">Tessiture</span>
@@ -188,7 +202,11 @@ async src="https://gc.zgo.at/count.js"></script>
         </div>
       </div>
 
-      <div class="case-onde"><canvas id="onde" aria-label="Forme d'onde du son"></canvas></div>
+      <div class="case-onde" id="case-onde" tabindex="0" role="button"
+           aria-label="Forme d'onde du son. Toucher pour écouter.">
+        <canvas id="onde"></canvas>
+      </div>
+      <p class="legende">Forme d'onde · toucher pour écouter</p>
 
       <div class="scene">
         <div class="colonne-axe">
@@ -519,12 +537,21 @@ function transposerExperience(x, demi) {
 
     /* Les instruments de l'étude 009, regroupés par famille de jeu comme dans l'étude. */
     const NOMS = { Piano: "Piano", Violoncelle: "Violoncelle", Flute: "Flûte", Voix: "Voix",
-                   Kalimba: "Kalimba", Kick: "Kick", Clave: "Clave", Shaker: "Shaker" };
+                   Basse: "Contrebasse", Guitare: "Guitare",
+                   Kalimba: "Kalimba", Kick: "Kick", Clave: "Clave", Shaker: "Shaker",
+                   Snap: "Claquement", HH: "Charleston" };
     const FRAPPES = [20, 70, 120];
-    const fichier = (inst, v) => `${inst} - ${v} (velocite).wav`;
+    /* Huit instruments ont été enregistrés en trois frappes (étude 009). Les quatre
+       autres — ceux des études 14 et suivantes — n'existent qu'en une seule nuance :
+       la hauteur se règle quand même, la frappe non. */
+    const UNE_SEULE = ["Basse", "Guitare", "Snap", "HH"];
+    const unique = inst => UNE_SEULE.indexOf(inst) >= 0;
+    const fichier = (inst, v) => unique(inst)
+      ? `${inst} - unique.wav`
+      : `${inst} - ${v} (velocite).wav`;
     /* Hauteur mesurée de chaque enregistrement (détection par autocorrélation normalisée).
        null : pas de hauteur mesurable ; la référence est alors posée à 440 Hz. */
-    const HAUTEURS = {"Clave - 120 (velocite).wav": 1167.87, "Clave - 20 (velocite).wav": 1136.12, "Clave - 70 (velocite).wav": 1159.9, "Flute - 120 (velocite).wav": 438.96, "Flute - 20 (velocite).wav": 440.9, "Flute - 70 (velocite).wav": 440.73, "Kalimba - 120 (velocite).wav": 220.78, "Kalimba - 20 (velocite).wav": 221.81, "Kalimba - 70 (velocite).wav": 221.86, "Kick - 120 (velocite).wav": 70.41, "Kick - 20 (velocite).wav": 70.41, "Kick - 70 (velocite).wav": 70.41, "Piano - 120 (velocite).wav": 221.64, "Piano - 20 (velocite).wav": 220.5, "Piano - 70 (velocite).wav": 220.74, "Shaker - 120 (velocite).wav": null, "Shaker - 20 (velocite).wav": null, "Shaker - 70 (velocite).wav": null, "Violoncelle - 120 (velocite).wav": 220.86, "Violoncelle - 20 (velocite).wav": 220.29, "Violoncelle - 70 (velocite).wav": 219.97, "Voix - 120 (velocite).wav": 218.77, "Voix - 20 (velocite).wav": 219.71, "Voix - 70 (velocite).wav": 219.81};
+    const HAUTEURS = {"Clave - 120 (velocite).wav": 1167.87, "Clave - 20 (velocite).wav": 1136.12, "Clave - 70 (velocite).wav": 1159.9, "Flute - 120 (velocite).wav": 438.96, "Flute - 20 (velocite).wav": 440.9, "Flute - 70 (velocite).wav": 440.73, "Kalimba - 120 (velocite).wav": 220.78, "Kalimba - 20 (velocite).wav": 221.81, "Kalimba - 70 (velocite).wav": 221.86, "Kick - 120 (velocite).wav": 70.41, "Kick - 20 (velocite).wav": 70.41, "Kick - 70 (velocite).wav": 70.41, "Piano - 120 (velocite).wav": 221.64, "Piano - 20 (velocite).wav": 220.5, "Piano - 70 (velocite).wav": 220.74, "Shaker - 120 (velocite).wav": null, "Shaker - 20 (velocite).wav": null, "Shaker - 70 (velocite).wav": null, "Violoncelle - 120 (velocite).wav": 220.86, "Violoncelle - 20 (velocite).wav": 220.29, "Violoncelle - 70 (velocite).wav": 219.97, "Voix - 120 (velocite).wav": 218.77, "Voix - 20 (velocite).wav": 219.71, "Voix - 70 (velocite).wav": 219.81, "Basse - unique.wav": 55.27, "Guitare - unique.wav": 219.36, "Snap - unique.wav": null, "HH - unique.wav": null};
 
     /* ---------------- Tessitures ----------------
        La plage de hauteurs dans laquelle l'instrument existe vraiment. Hors d'elle,
@@ -540,7 +567,9 @@ function transposerExperience(x, demi) {
       Flute:       [293.7, 1174.7],   // ré3 – ré5 [à vérifier]
       Voix:        [82.4,  1046.5],   // mi1 – do5, toutes tessitures confondues
       Kalimba:     [220.0, 1760.0],   // la2 – la5 [à vérifier]
-      Kick: null, Clave: null, Shaker: null
+      Basse:       [41.2,  392.0],    // mi0 – sol3, contrebasse à quatre cordes
+      Guitare:     [82.4,  1318.5],   // mi1 – mi5
+      Kick: null, Clave: null, Shaker: null, Snap: null, HH: null
     };
     const OCTAVES_PERCU = 1;
     function tessiture(inst, frappe) {
@@ -948,7 +977,7 @@ function transposerExperience(x, demi) {
                 (TESSITURES[etat.instrument] ? "" : " (une octave autour de l'enregistrement)");
       }
       $("releve").innerHTML =
-        `<span class="nom">${NOMS[etat.instrument]} · frappe ${etat.frappe}</span>` +
+        `<span class="nom">${NOMS[etat.instrument]}${unique(etat.instrument) ? "" : " · frappe " + etat.frappe}</span>` +
         `<span class="note">${nomNote(etat.f)} · ${fmt(etat.f, etat.f < 100 ? 1 : 0)} Hz</span>` +
         `<span class="ecart">${ecart}</span>` +
         `<span class="rapport">${rapport}</span>` +
@@ -1034,9 +1063,20 @@ function transposerExperience(x, demi) {
       etat.f = borner(etat.f);              // la tessiture du nouvel instrument s'applique
       // On garde la hauteur choisie ; au premier choix, la note enregistrée.
       document.querySelectorAll("[data-instrument]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.instrument === nom)));
-      graduer(); majReleve();
-      FRAPPES.forEach(v => charger(fichier(nom, v)));      // les trois couches, d'avance
+      graduer(); majReleve(); majFrappes();
+      if (unique(nom)) charger(fichier(nom, null));        // une seule nuance
+      else FRAPPES.forEach(v => charger(fichier(nom, v))); // les trois couches, d'avance
       demander("enrouler");
+    }
+    /* La rangée des frappes n'a de sens que pour les instruments à trois couches. */
+    function majFrappes() {
+      const sans = unique(etat.instrument);
+      document.querySelectorAll("[data-frappe]").forEach(b => {
+        b.disabled = sans;
+        b.setAttribute("aria-pressed", String(!sans && Number(b.dataset.frappe) === etat.frappe));
+      });
+      const e = document.getElementById("sans-frappe");
+      if (e) e.textContent = sans ? "une seule nuance enregistrée" : "";
     }
     function choisirFrappe(v) {
       etat.frappe = v;
@@ -1067,6 +1107,7 @@ function transposerExperience(x, demi) {
     let pression = null;
     function suivrePression(e) {
       if (e.pointerType !== "pen" || !(e.pressure > 0)) return;
+      if (unique(etat.instrument)) return;        // pas de couches : rien à choisir
       if (!pression) pression = { debut: performance.now(), max: 0, fait: false };
       if (performance.now() - pression.debut <= FENETRE_FRAPPE) pression.max = Math.max(pression.max, e.pressure);
       else if (!pression.fait) {
@@ -1134,6 +1175,19 @@ function transposerExperience(x, demi) {
     });
     casePointe.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ouvrirSon(); jouer(); } });
 
+    /* La bande de forme d'onde s'écoute elle aussi : c'est le même objet
+       sonore, montré dans le temps au lieu d'être enroulé. */
+    const caseOnde = $("case-onde");
+    function ecouterDepuisOnde() {
+      ouvrirSon();
+      if (etat.u < 1) { anim = null; etat.u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); }
+      jouer();
+    }
+    caseOnde.addEventListener("pointerup", ecouterDepuisOnde);
+    caseOnde.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ecouterDepuisOnde(); }
+    });
+
     $("enroulement").addEventListener("input", e => {
       anim = null; etat.u = Number(e.target.value) / 1000;
       $("etape").textContent = etapeDe(etat.u); dessiner();
@@ -1157,6 +1211,7 @@ function transposerExperience(x, demi) {
     document.querySelectorAll("[data-frappe]").forEach(b => { if (b.dataset.frappe !== "70") b.setAttribute("aria-pressed", "false"); });
     etat.f = HAUTEURS[fichier("Piano", 70)];
     ajuster();
+    majFrappes();
     choisirInstrument("Piano");
   })();
   </script>

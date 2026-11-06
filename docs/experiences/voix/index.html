@@ -33,8 +33,14 @@ async src="https://gc.zgo.at/count.js"></script>
       min-width: 7.2em;
     }
     .experience .case-onde {
-      position: relative; width: 100%; aspect-ratio: 4 / 1; background: var(--a-noir); margin: 0 0 .9rem;
+      position: relative; width: 100%; aspect-ratio: 4 / 1; background: var(--a-noir);
+      margin: 0 0 .35rem; cursor: pointer;
+      touch-action: manipulation; user-select: none; -webkit-user-select: none;
     }
+    .experience .case-onde:focus-visible { outline: 2px solid var(--a-vif); outline-offset: 3px; }
+    /* Pas d'image de planche derrière une expérience : la page montre une mesure,
+       pas une planche, et le filigrane brouillait la lecture. */
+    body.page-experience::before { background-image: none !important; }
     .experience canvas { display: block; width: 100%; height: 100%; }
     .experience .legende {
       font-family: var(--titre, "Jost", sans-serif); font-size: .68rem; font-weight: 500;
@@ -185,7 +191,11 @@ async src="https://gc.zgo.at/count.js"></script>
       <div class="niveau" aria-hidden="true"><i id="jauge"></i></div>
       <p class="compte" id="compte"></p>
 
-      <div class="case-onde"><canvas id="onde" aria-label="Forme d'onde du son capté"></canvas></div>
+      <div class="case-onde" id="case-onde" tabindex="0" role="button"
+           aria-label="Forme d'onde du son capté. Toucher pour écouter.">
+        <canvas id="onde"></canvas>
+      </div>
+      <p class="legende">Forme d'onde · toucher pour écouter</p>
 
       <section class="second" id="second" hidden aria-label="Jouer du son capté">
         <h2 class="palier">Maintenant, jouez-en</h2>
@@ -263,9 +273,9 @@ async src="https://gc.zgo.at/count.js"></script>
     </section>
 
     <nav>
-      <a href="../velocite/">← Expérience : vélocité</a>
+      <a href="../../experiences/velocite/">← Expérience : la vélocité</a>
       <a href="../../">Sommaire</a>
-      <a href="../../etudes/010/">Étude 010 →</a>
+      <a href="../../lire/discours-1/">Discours 1 →</a>
     </nav>
 
     <footer class="site-signature">
@@ -1157,6 +1167,20 @@ function transposerExperience(x, demi) {
       e.preventDefault(); ouvrirSon();
       etat.f = Math.min(F_HAUT, Math.max(F_BAS, ref * Math.pow(2, m / 12)));
       majReleve(); dessinerRepere(); recalculer("direct");
+    });
+
+    /* La bande de forme d'onde s'écoute elle aussi : c'est le même son, montré
+       dans le temps au lieu d'être enroulé. */
+    const caseOnde = $("case-onde");
+    function ecouterDepuisOnde() {
+      if (!courant) return;
+      ouvrirSon();
+      if (etat.u < 1) { anim = null; etat.u = 1; $("enroulement").value = 1000; $("etape").textContent = etapeDe(1); }
+      jouer();
+    }
+    caseOnde.addEventListener("pointerup", ecouterDepuisOnde);
+    caseOnde.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ecouterDepuisOnde(); }
     });
 
     const casePointe = $("case-pointe");
