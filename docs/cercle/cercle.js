@@ -96,22 +96,24 @@
   }
 
   var extinction = null;
+  /* Les voix en cours de retrait sortent tout de suite de « voix » : sans
+     cela, un nouveau geste pendant l'extinction croirait pouvoir réaccorder
+     des oscillateurs déjà condamnés. */
   function coupe(brutal) {
     sonne = false;
     page.classList.remove("sonne");
     clearTimeout(extinction); clearTimeout(garde);
     if (!ctx) return;
+    var partantes = voix; voix = []; forme = null;
     maitre.gain.cancelScheduledValues(ctx.currentTime);
     if (brutal) {
       maitre.gain.setValueAtTime(0, ctx.currentTime);
-      voix.forEach(function (v) { try { v.stop(); } catch (e) {} });
-      voix = [];
+      partantes.forEach(function (v) { try { v.osc.stop(); } catch (e) {} });
       return;
     }
     maitre.gain.setTargetAtTime(0, ctx.currentTime, 0.05);
     extinction = setTimeout(function () {
-      voix.forEach(function (v) { try { v.stop(); } catch (e) {} });
-      voix = [];
+      partantes.forEach(function (v) { try { v.osc.stop(); } catch (e) {} });
     }, 320);
   }
 
@@ -134,33 +136,84 @@
   });
 
   var sonne = false;
+  var forme = null;              // régime et nombre de composantes en cours
+  var GLISSE = 0.020;            // le temps que met une teinte à devenir l'autre
+  var RETRAIT = 0.025;           // l'extinction d'une voix qu'on remplace
+
+  function niveauDe(c) {
+    return c.poids * compense(c.f) * (regime === "spectral" ? 0.17 : 0.26);
+  }
+  function borne(f) { return Math.max(1, Math.min(f, ctx.sampleRate / 2 * 0.9)); }
+
+  /* Une voix : l'oscillateur, son gain, et — en régime spectral — le filtre
+     en cloche dont la fréquence centrale porte la teinte. */
+  function voixNeuve(c) {
+    var osc = ctx.createOscillator();
+    var g = ctx.createGain();
+    var cloche = null;
+    if (regime === "spectral") {
+      if (ondeDouce) osc.setPeriodicWave(ondeDouce); else osc.type = "triangle";
+      osc.frequency.value = F0_SOURCE;
+      cloche = ctx.createBiquadFilter();
+      cloche.type = "peaking";
+      cloche.frequency.value = borne(c.f);
+      cloche.Q.value = 1.1;
+      cloche.gain.value = 14;
+      osc.connect(cloche); cloche.connect(g);
+    } else {
+      osc.type = "sine";
+      osc.frequency.value = borne(c.f);
+      osc.connect(g);
+    }
+    /* Le gain part de zéro dès la création : un AudioParam laissé à 1 peut
+       laisser passer un quantum à plein niveau avant la première consigne. */
+    g.gain.value = 0;
+    g.connect(maitre);
+    osc.start();
+    return { osc: osc, g: g, cloche: cloche };
+  }
+
   function fabrique(h) {
     demarre(); relance();
-    voix.forEach(function (v) { try { v.stop(); } catch (e) {} });
-    voix = [];
     var comps = composantes(h, regime === "spectral" ? SPECTRAL : HAUTEUR);
-    comps.forEach(function (c) {
-      var osc = ctx.createOscillator();
-      var g = ctx.createGain();
-      if (regime === "spectral") {
-        if (ondeDouce) osc.setPeriodicWave(ondeDouce); else osc.type = "triangle";
-        osc.frequency.value = F0_SOURCE;
-        var cloche = ctx.createBiquadFilter();
-        cloche.type = "peaking";
-        cloche.frequency.value = Math.min(c.f, ctx.sampleRate / 2 * 0.9);
-        cloche.Q.value = 1.1;
-        cloche.gain.value = 14;
-        osc.connect(cloche); cloche.connect(g);
-      } else {
-        osc.type = "sine";
-        osc.frequency.value = Math.min(c.f, ctx.sampleRate / 2 * 0.9);
-        osc.connect(g);
-      }
-      g.gain.value = c.poids * compense(c.f) * (regime === "spectral" ? 0.17 : 0.26);
-      g.connect(maitre);
-      osc.start();
-      voix.push(osc);
-    });
+    var signature = regime + "|" + comps.length;
+    var t = ctx.currentTime;
+
+    if (forme === signature && voix.length === comps.length) {
+      /* Même structure : on ne recrée rien, on réaccorde. L'oscillateur ne
+         s'interrompt pas, donc sa phase est continue — pas de clic, et le
+         déplacement du doigt s'entend comme un balayage. */
+      comps.forEach(function (c, i) {
+        var v = voix[i];
+        var p = regime === "spectral" ? v.cloche.frequency : v.osc.frequency;
+        p.cancelScheduledValues(t);
+        p.setValueAtTime(Math.max(p.value, 1), t);
+        p.exponentialRampToValueAtTime(borne(c.f), t + GLISSE);
+        v.g.gain.cancelScheduledValues(t);
+        v.g.gain.setValueAtTime(v.g.gain.value, t);
+        v.g.gain.linearRampToValueAtTime(niveauDe(c), t + GLISSE);
+      });
+    } else {
+      /* La structure change — on passe la ligne des pourpres, ou on change de
+         régime. Les anciennes voix s'effacent pendant que les neuves montent. */
+      var partantes = voix;
+      partantes.forEach(function (v) {
+        try {
+          v.g.gain.cancelScheduledValues(t);
+          v.g.gain.setValueAtTime(v.g.gain.value, t);
+          v.g.gain.linearRampToValueAtTime(0, t + RETRAIT);
+          v.osc.stop(t + RETRAIT + 0.04);
+        } catch (e) {}
+      });
+      voix = comps.map(function (c) {
+        var v = voixNeuve(c);
+        v.g.gain.setValueAtTime(0, t);
+        v.g.gain.linearRampToValueAtTime(niveauDe(c), t + RETRAIT);
+        return v;
+      });
+      forme = signature;
+    }
+
     if (!sonne) {
       maitre.gain.cancelScheduledValues(ctx.currentTime);
       maitre.gain.setTargetAtTime(1, ctx.currentTime, 0.07);
