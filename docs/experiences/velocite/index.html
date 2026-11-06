@@ -163,6 +163,8 @@ async src="https://gc.zgo.at/count.js"></script>
           <button class="choix" data-instrument="Violoncelle">Violoncelle</button>
           <button class="choix" data-instrument="Flute">Flûte</button>
           <button class="choix" data-instrument="Voix">Voix</button>
+          <button class="choix" data-instrument="Basse">Contrebasse</button>
+          <button class="choix" data-instrument="Guitare">Guitare</button>
         </div>
         <div class="rangee" role="group" aria-label="Instruments percussifs">
           <span class="etiquette">Percussifs</span>
@@ -170,6 +172,8 @@ async src="https://gc.zgo.at/count.js"></script>
           <button class="choix" data-instrument="Kick">Kick</button>
           <button class="choix" data-instrument="Clave">Clave</button>
           <button class="choix" data-instrument="Shaker">Shaker</button>
+          <button class="choix" data-instrument="Snap">Claquement</button>
+          <button class="choix" data-instrument="HH">Charleston</button>
         </div>
       </div>
 
@@ -197,7 +201,7 @@ async src="https://gc.zgo.at/count.js"></script>
             <button class="reference" data-velocite="70"><canvas class="vignette" aria-hidden="true"></canvas><span>70 · moyenne</span></button>
             <button class="reference" data-velocite="120"><canvas class="vignette" aria-hidden="true"></canvas><span>120 · forte</span></button>
           </div>
-          <p class="legende">Les trois frappes enregistrées de l'étude 009</p>
+          <p class="legende">Les trois frappes enregistrées</p>
         </div>
 
         <div class="cote">
@@ -219,7 +223,9 @@ async src="https://gc.zgo.at/count.js"></script>
       <details class="precisions">
         <summary>Ce que montre l'expérience, et ce qu'il ne montre pas</summary>
         <ul>
-          <li>Chaque instrument a trois frappes enregistrées, celles de l'étude 009 : 20, 70 et 120.
+          <li>Les douze instruments ont trois frappes enregistrées : 20, 70 et 120. Huit viennent
+            de l'étude 009, les quatre autres — contrebasse, guitare, claquement, charleston — des
+            études 014 et suivantes.
             Entre deux frappes, la page mêle les deux enregistrements, accordés et calés sur leur
             attaque. C'est une interpolation, pas un son enregistré. Sous 20, c'est la frappe 20
             jouée plus doucement ; au-delà de 120, la frappe 120.</li>
@@ -502,10 +508,12 @@ function transposerExperience(x, demi) {
     "use strict";
     const SR = 44100;
     const NOMS = { Piano: "Piano", Violoncelle: "Violoncelle", Flute: "Flûte", Voix: "Voix",
-                   Kalimba: "Kalimba", Kick: "Kick", Clave: "Clave", Shaker: "Shaker" };
+                   Basse: "Contrebasse", Guitare: "Guitare",
+                   Kalimba: "Kalimba", Kick: "Kick", Clave: "Clave", Shaker: "Shaker",
+                   Snap: "Claquement", HH: "Charleston" };
     const FRAPPES = [20, 70, 120];
     const fichier = (inst, v) => `${inst} - ${v} (velocite).wav`;
-    const HAUTEURS = {"Clave - 120 (velocite).wav": 1167.87, "Clave - 20 (velocite).wav": 1136.12, "Clave - 70 (velocite).wav": 1159.9, "Flute - 120 (velocite).wav": 438.96, "Flute - 20 (velocite).wav": 440.9, "Flute - 70 (velocite).wav": 440.73, "Kalimba - 120 (velocite).wav": 220.78, "Kalimba - 20 (velocite).wav": 221.81, "Kalimba - 70 (velocite).wav": 221.86, "Kick - 120 (velocite).wav": 70.41, "Kick - 20 (velocite).wav": 70.41, "Kick - 70 (velocite).wav": 70.41, "Piano - 120 (velocite).wav": 221.64, "Piano - 20 (velocite).wav": 220.5, "Piano - 70 (velocite).wav": 220.74, "Shaker - 120 (velocite).wav": null, "Shaker - 20 (velocite).wav": null, "Shaker - 70 (velocite).wav": null, "Violoncelle - 120 (velocite).wav": 220.86, "Violoncelle - 20 (velocite).wav": 220.29, "Violoncelle - 70 (velocite).wav": 219.97, "Voix - 120 (velocite).wav": 218.77, "Voix - 20 (velocite).wav": 219.71, "Voix - 70 (velocite).wav": 219.81, "Basse - unique.wav": 55.27, "Guitare - unique.wav": 219.36, "Snap - unique.wav": null, "HH - unique.wav": null};
+    const HAUTEURS = {"Basse - 120 (velocite).wav": 55.06, "Basse - 20 (velocite).wav": 54.77, "Basse - 70 (velocite).wav": 55.09, "Clave - 120 (velocite).wav": 1167.87, "Clave - 20 (velocite).wav": 1136.12, "Clave - 70 (velocite).wav": 1159.9, "Flute - 120 (velocite).wav": 438.96, "Flute - 20 (velocite).wav": 440.9, "Flute - 70 (velocite).wav": 440.73, "Guitare - 120 (velocite).wav": 219.53, "Guitare - 20 (velocite).wav": 219.37, "Guitare - 70 (velocite).wav": 219.38, "HH - 120 (velocite).wav": null, "HH - 20 (velocite).wav": null, "HH - 70 (velocite).wav": null, "Kalimba - 120 (velocite).wav": 220.78, "Kalimba - 20 (velocite).wav": 221.81, "Kalimba - 70 (velocite).wav": 221.86, "Kick - 120 (velocite).wav": 70.41, "Kick - 20 (velocite).wav": 70.41, "Kick - 70 (velocite).wav": 70.41, "Piano - 120 (velocite).wav": 221.64, "Piano - 20 (velocite).wav": 220.5, "Piano - 70 (velocite).wav": 220.74, "Shaker - 120 (velocite).wav": null, "Shaker - 20 (velocite).wav": null, "Shaker - 70 (velocite).wav": null, "Snap - 120 (velocite).wav": null, "Snap - 20 (velocite).wav": null, "Snap - 70 (velocite).wav": null, "Violoncelle - 120 (velocite).wav": 220.86, "Violoncelle - 20 (velocite).wav": 220.29, "Violoncelle - 70 (velocite).wav": 219.97, "Voix - 120 (velocite).wav": 218.77, "Voix - 20 (velocite).wav": 219.71, "Voix - 70 (velocite).wav": 219.81};
 
     const etat = { instrument: "Piano", v: 70, u: 1 };
     const $ = id => document.getElementById(id);
