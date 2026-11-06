@@ -150,7 +150,7 @@
                mais jamais plus de deux dixièmes avant que ça s'entende. */
             var ta = (entree.ouie && entree.ouie[n] != null) ? entree.ouie[n] : t0;
             var t = Math.max(0, Math.max(t0 - 0.05, ta - 0.22));
-            try { player.currentTime = t; } catch (e) {}
+            sauter(t);
             depuisClic = n;
             finDuClic = maintenant() + 600;
             if (player.paused) player.play().catch(function () {});
@@ -161,6 +161,32 @@
     });
     piste = i; courante = -1;
     eclaire(0);
+  }
+
+  /* Déplacer la tête de lecture en pleine écoute coupe l'onde net : c'est
+     le clic qu'on entend en passant d'une case à l'autre. On descend donc le
+     gain à zéro, on déplace, et on remonte. Les études 001 et 003 portent une
+     version ancienne du script de page, sans gain : là, on se contente du
+     déplacement — mais le son y est à l'arrêt au moment du clic. */
+  var SAUT = 0.018;
+  function sauter(t) {
+    var g = (typeof gainNode !== "undefined") ? gainNode : null;
+    var c = (typeof audioCtx !== "undefined") ? audioCtx : null;
+    if (!g || !c || player.paused) {
+      try { player.currentTime = t; } catch (e) {}
+      return;
+    }
+    var t0 = c.currentTime;
+    g.gain.cancelScheduledValues(t0);
+    g.gain.setValueAtTime(g.gain.value, t0);
+    g.gain.linearRampToValueAtTime(0, t0 + SAUT);
+    setTimeout(function () {
+      try { player.currentTime = t; } catch (e) {}
+      var t1 = c.currentTime;
+      g.gain.cancelScheduledValues(t1);
+      g.gain.setValueAtTime(0, t1);
+      g.gain.linearRampToValueAtTime(1, t1 + SAUT);
+    }, Math.round(SAUT * 1000) + 8);
   }
 
   function eclaire(n) {
