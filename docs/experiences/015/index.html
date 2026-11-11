@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 015 : les copies donnent l'écho</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-015 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 015 : les copies donnent l'écho</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 015, Reproduction & Delay</div>
+<section class="xp" aria-label="Expérience : les copies donnent l'écho">
+      <p class="xp-intro">Dans l'étude 015, une forme reproduite fait entendre son son répété : chaque copie est une
+        répétition, et l'écart entre les copies donne le temps qui sépare les répétitions. Ici chaque copie reste un
+        objet de plein droit : posée plus à droite, elle sonne plus à droite ; posée plus haut, plus aigu ; plus
+        pâle, plus doucement. Les lois déjà établies suffisent à faire voyager l'écho.</p>
+      <p class="xp-hors-livre"><strong>Hors du livre :</strong> le chiffre qui relie la distance au temps de répétition
+        est une proposition de SIGN ; les copies placées en hauteur, qui changent la note de l'écho, combinent l'étude
+        015 avec l'étude 003 sans que le livre les montre.</p>
+
+      <div class="xp-scene">
+        <div class="xp-planche">
+          <div id="planche"></div>
+          <p class="xp-legende">Glisser la forme d'origine · toucher pour l'entendre</p>
+        </div>
+        <div class="xp-cote">
+          <div class="xp-rangee" id="sens"><span class="xp-etiquette">Les copies vont</span></div>
+          <div class="xp-curseur">
+            <label class="xp-etiquette" for="nombre">Copies</label>
+            <input type="range" id="nombre" min="1" max="6" value="3">
+            <output id="nombre-v" for="nombre"></output>
+          </div>
+          <div class="xp-curseur">
+            <label class="xp-etiquette" for="ecart">Écart entre les copies</label>
+            <input type="range" id="ecart" min="3" max="25" value="10">
+            <output id="ecart-v" for="ecart"></output>
+          </div>
+          <div class="xp-curseur">
+            <label class="xp-etiquette" for="estompe">Chaque copie garde</label>
+            <input type="range" id="estompe" min="30" max="95" value="65">
+            <output id="estompe-v" for="estompe"></output>
+          </div>
+          <div class="xp-rangee" id="source"><span class="xp-etiquette">Forme ou pointé</span></div>
+          <button class="xp-bouton" id="note" type="button">Écouter</button>
+          <dl class="xp-entendu" id="entendu"></dl>
+        </div>
+      </div>
+      <p class="xp-etat" aria-live="polite"></p>
+
+      <details class="xp-precisions">
+        <summary>La loi, et ce que l'expérience y ajoute</summary>
+        <ul>
+          <li>L'écart entre deux copies successives donne le temps qui sépare leurs répétitions : ici 10,75 s par côté
+            de case, soit 1,08 s pour un écart d'un dixième de case. Ce facteur est une proposition.</li>
+          <li>Chaque copie garde une part de l'opacité de la précédente ; son écho garde la même part de l'intensité
+            (étude 011). Une copie sortie de la case ne sonne pas.</li>
+          <li>Chaque copie suit les lois de position : la stéréo (étude 002) et la hauteur (étude 003). D'où un écho
+            qui traverse l'espace, ou qui monte et descend.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/015/">← Étude 015</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/016/">Étude 016 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+  <script src="../commun/sign.js?v=1"></script>
+  <script>(()=>{const{Planche:e,chaine:n,jouerForme:t,jouerSon:i,rendre:r,charger:a,son:o,ui:s,fmt:c,fmtHz:l,fmtDb:u,note:d,INSTRUMENTS:f,referenceDe:g,fichierDe:h,borne:p,$:m}=SIGN,x={droite:[1,0],gauche:[-1,0],haut:[0,-1],bas:[0,1],diagonale:[.7071,-.7071]},y={id:"forme",angles:0,x:-.7,y:LOIS.yDepuisFrequence(330),taille:.12,opacite:1,couleur:"#8c8c8c"};let v="droite",S=3,b=.1,$=.65,I="clave",j=[];const D=[],L=new e(m("planche"),{fond:"noir",objets:[y],verrous:{taille:!0},poignee:!1,label:"Planche : glisser la forme d'origine, ses copies suivent ; Entrée la fait entendre",surChange:()=>{O(),F()},surToucher:()=>q(),surFin:()=>q()});function O(){const[e,n]=x[v];j=Array.from({length:S},((t,i)=>({id:"copie"+i,angles:y.angles,son:y.son,figure:y.figure,taille:y.taille,couleur:y.couleur,fixe:!0,x:y.x+2*e*b*(i+1),y:y.y+n*b*(i+1),opacite:Math.pow($,i+1)}))),j.forEach((e=>{e.dedans=e.x>=-1&&e.x<=1&&e.y>=0&&e.y<=1})),L.objets=[...j.slice().reverse(),y],L.dessiner()}L.selection="forme",s.choix("sens",[["droite","à droite"],["gauche","à gauche"],["haut","vers le haut"],["bas","vers le bas"],["diagonale","en diagonale"]],v,(e=>{v=e,O(),F(),q()})),s.curseur("nombre",((e,n)=>{S=e,O(),F(),n&&q()}),(e=>`${e}`)),s.curseur("ecart",((e,n)=>{b=e/100,O(),F(),n&&q()}),(e=>`${c(e/100,2)} case`)),s.curseur("estompe",((e,n)=>{$=e/100,O(),F(),n&&q()}),(e=>`${e} % de la précédente`)),s.choix("source",[["cercle","Cercle"],["clave","Clave"],["piano","Piano"],["voix","Voix"],["kalimba","Kalimba"]],I,(async e=>{if(I=e,"cercle"===e)delete y.son,delete y.figure,y.taille=.12;else{const n=await a(h(e));y.son=e,y.figure=LOIS.figureDepuisSignal(n).points,y.taille=.16,y.y=p(LOIS.yDepuisFrequence(g(e)),.1,.9)}O(),F(),q()}));const T=()=>10.75*b,w=()=>[y,...j.filter((e=>e.dedans))];function M(e,t){return D[e]||(D[e]=n()),D[e].regler({teinte:null,niveau:.7*t.opacite,x:t.x},!0),D[e]}async function q(){const e=o(),n=e.currentTime+.05,a=[y,...j];for(let o=0;o<a.length;o++){const s=a[o];if(o&&!s.dedans)continue;const c=n+o*T(),l=LOIS.frequence(s.y);if("cercle"===I)t({angles:0,f:l,d:LOIS.duree(s.taille),t0:c,voix:M(o,s)});else{const n=await r(I,{f:l});i(n.x,{t0:Math.max(c,e.currentTime+.02),voix:M(o,s),d:Math.max(.2,Math.min(2,.95*T()))})}}}function F(){const e=j.filter((e=>!e.dedans)).length,n=w(),t=[...new Set(n.map((e=>d(LOIS.frequence(e.y)).split(" ")[0])))];s.lecture("entendu",[["Répétitions",`${n.length-1}${e?` (${e} hors de la case, muette${e>1?"s":""})`:""}`],["Temps",`${c(T(),2)} s entre deux répétitions`],["Intensité",n.slice(1).map((e=>u(e.opacite))).join(" · ")||"—"],["Place",n.length>1?`de ${c(n[0].x,2)} à ${c(n[n.length-1].x,2)}`:"—"],["Hauteurs",t.join(" · ")]])}O(),F()})();</script>
+</body>
+</html>

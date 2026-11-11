@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 004 : le nombre de côtés donne l'onde</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-004 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 004 : le nombre de côtés donne l'onde</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 004, Formes & Formes d'ondes</div>
+<section class="xp" aria-label="Expérience : le nombre de côtés donne l'onde">
+      <p class="xp-intro">L'étude 004 fait correspondre le cercle à la sinusoïde, le triangle à l'onde triangulaire,
+        le carré à l'onde carrée ; au-delà, plus le polygone a de côtés, plus il approche du cercle et plus son onde
+        approche de la sinusoïde. Ici on parcourt la série côté par côté, de trois à seize, et l'on voit l'onde
+        et ses harmoniques pendant qu'on l'entend. La taille garde sa loi : elle donne le volume.</p>
+
+      <div class="xp-scene">
+        <div class="xp-planche">
+          <div id="planche"></div>
+          <p class="xp-legende">La poignée agrandit · toucher la forme pour l'entendre</p>
+        </div>
+        <div class="xp-cote">
+          <div class="xp-curseur">
+            <label class="xp-etiquette" for="cotes">Côtés</label>
+            <input type="range" id="cotes" min="2" max="16" step="1" value="4">
+            <output id="cotes-v" for="cotes"></output>
+          </div>
+          <div class="xp-rangee" id="formes"><span class="xp-etiquette">Les formes des planches</span></div>
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="tenir" type="button" aria-pressed="false">Son tenu</button>
+            <button class="xp-bouton" id="note" type="button">Une note</button>
+            <button class="xp-bouton" id="serie" type="button">Toute la série</button>
+          </div>
+          <dl class="xp-entendu" id="entendu"></dl>
+        </div>
+      </div>
+      <p class="xp-etat" aria-live="polite"></p>
+
+      <div class="xp-bande" role="img" id="bande-onde" aria-label="Une période de l'onde"><canvas id="onde"></canvas></div>
+      <p class="xp-legende" style="margin-left:0">Une période de l'onde · les harmoniques impairs, du 1er au 31e</p>
+      <div class="xp-bande" role="img" id="bande-spectre" aria-label="Amplitude des harmoniques"><canvas id="spectre"></canvas></div>
+
+      <details class="xp-precisions">
+        <summary>La loi, et ce que l'expérience y ajoute</summary>
+        <ul>
+          <li>Le triangle et le carré gardent l'onde de la planche 1, « par identité de profil ». À partir du pentagone,
+            la position du morphing entre la sinusoïde et l'onde carrée vaut m(n) = 1 − cos(π/n) : 19,1 % pour le
+            pentagone, 13,4 % pour l'hexagone, 7,6 % pour l'octogone, 3,4 % pour le dodécagone, 1,9 % pour
+            l'hexadécagone.</li>
+          <li>L'échelle se resserre vers le cercle, là où l'oreille est la plus sensible : quelques pour cent
+            d'angularité ajoutés à un son pur s'entendent.</li>
+          <li>L'expérience donne aussi les formes que les planches n'ont pas : heptagone, ennéagone, décagone… La loi
+            les couvre toutes ; seize côtés est la limite du logiciel.</li>
+          <li>Le morphing est fait ici comme un fondu entre les deux ondes : il n'ajoute que des harmoniques impairs,
+            ceux de l'onde carrée. C'est une lecture de la loi, que le livre ne précise pas.</li>
+          <li>La forme est placée à la hauteur de 220 Hz (étude 003), la note des études précédentes.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/004/">← Étude 004</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/005/">Étude 005 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+  <script src="../commun/sign.js?v=1"></script>
+  <script>(()=>{const{Planche:e,chaine:t,tenir:n,jouerForme:r,son:a,ui:o,fmt:l,$:i}=SIGN,s={0:"cercle",3:"triangle",4:"carré",5:"pentagone",6:"hexagone",7:"heptagone",8:"octogone",9:"ennéagone",10:"décagone",11:"hendécagone",12:"dodécagone",13:"tridécagone",14:"tétradécagone",15:"pentadécagone",16:"hexadécagone"},c=[3,4,5,6,8,12,16,0],u={id:"forme",angles:4,x:0,y:LOIS.yDepuisFrequence(220),taille:.5,opacite:1};let d=null,g=null,h=null;const f=new e(i("planche"),{fond:"clair",objets:[u],stereo:!1,verrous:{x:!0,y:!0},tailleMin:.03,label:"Planche : la poignée agrandit la forme ; Entrée la fait entendre",surChange:()=>T(),surToucher:()=>w()});f.selection="forme",f.dessiner();const m=o.curseur("cotes",(e=>b(e<3?0:e)),(e=>e<3?"cercle":`${e} côtés`)),p=o.choix("formes",c.map((e=>[e,s[e]])),u.angles,(e=>{b(e),w()}));function b(e){u.angles=e,m.poser(e||2),p.poser(e),g&&g.onde(e),f.dessiner(),T(),M()}function v(){return d||(d=t(),d.regler({teinte:null,x:0,niveau:u.taille},!0)),d}function x(e){const t=i(e),n=window.devicePixelRatio||1,r=t.clientWidth||400,a=t.clientHeight||80;t.width=Math.round(r*n),t.height=Math.round(a*n);const o=t.getContext("2d");return o.setTransform(n,0,0,n,0,0),o.clearRect(0,0,r,a),{x:o,w:r,h:a}}function M(){const e=function(e){const t=new Float32Array(32);if(0===e)return t[1]=1,t;if(3===e){for(let e=1;e<32;e+=2)t[e]=8/(Math.PI*Math.PI*e*e)*((e-1)/2%2?-1:1);return t}if(4===e){for(let e=1;e<32;e+=2)t[e]=4/(Math.PI*e);return t}const n=LOIS.onde(e);for(let e=1;e<32;e++)t[e]=n.imag[e]||0;return t}(u.angles);{const{x:t,w:n,h:r}=x("onde"),a=400;let o=0;const l=new Float32Array(a);for(let t=0;t<a;t++){let n=0;const r=2*Math.PI*2*t/a;for(let t=1;t<32;t++)e[t]&&(n+=e[t]*Math.sin(t*r));l[t]=n,o=Math.max(o,Math.abs(n))}t.strokeStyle="rgba(242,239,232,.25)",t.lineWidth=1,t.beginPath(),t.moveTo(0,r/2+.5),t.lineTo(n,r/2+.5),t.stroke(),t.strokeStyle="#f2efe8",t.lineWidth=1.6,t.beginPath();for(let e=0;e<a;e++){const i=e/(a-1)*n,s=r/2-l[e]/(o||1)*r*.38;e?t.lineTo(i,s):t.moveTo(i,s)}t.stroke()}{const{x:t,w:n,h:r}=x("spectre"),a=[];for(let e=1;e<32;e+=2)a.push(e);const o=n/a.length,l=Math.abs(e[1])||1;a.forEach(((n,a)=>{const i=Math.abs(e[n])/l,s=(1+(i>0?Math.max(-48,20*Math.log10(i)):-48)/48)*(r-10);t.fillStyle=1===n?"#f2efe8":"rgba(242,239,232,.72)",s>.5&&t.fillRect(a*o+.28*o,r-4-s,.44*o,s)}))}}function T(){d&&d.regler({niveau:u.taille});const e=LOIS.onde(u.angles),t=u.angles;o.lecture("entendu",[["Forme",t?`${s[t]}, ${t} côtés`:"cercle"],["Onde",e.libelle],...t>=5?[["m(n)",`1 − cos(π/${t}) = ${l(100*LOIS.morphing(t),1)} %`]]:[],["Volume",`${l(20*Math.log10(u.taille),1)} dBFS (étude 001)`],["Hauteur","220 Hz · la2"]])}function w(e=1){return r({angles:u.angles,f:220,d:e,voix:v()})}i("note").addEventListener("click",(()=>w())),i("tenir").addEventListener("click",(e=>{if(g)return g.arreter(),g=null,void e.currentTarget.setAttribute("aria-pressed","false");g=n({angles:u.angles,f:220,voix:v()}),e.currentTarget.setAttribute("aria-pressed","true")})),i("serie").addEventListener("click",(e=>{if(h)return h.forEach(clearTimeout),h=null,void e.currentTarget.setAttribute("aria-pressed","false");const t=e.currentTarget;t.setAttribute("aria-pressed","true"),a(),h=c.map(((e,n)=>setTimeout((()=>{b(e),w(1),n===c.length-1&&setTimeout((()=>{h=null,t.setAttribute("aria-pressed","false")}),1100)}),1300*n)))})),new ResizeObserver(M).observe(i("bande-onde")),T(),M()})();</script>
+</body>
+</html>

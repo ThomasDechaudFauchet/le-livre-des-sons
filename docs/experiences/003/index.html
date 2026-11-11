@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 003 : la position verticale donne la hauteur</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-003 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 003 : la position verticale donne la hauteur</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 003, Axe Vertical & Fréquence</div>
+<section class="xp" aria-label="Expérience : la position verticale donne la hauteur">
+      <p class="xp-intro">L'étude 003 étage le cercle du bas vers le haut de la case : le son monte de 21,8 Hz,
+        au seuil du grave, à 12 500 Hz. Ici on le glisse sur toute la hauteur, et l'on peut faire monter un instrument
+        de la même façon : son enregistrement est transposé sans changer de durée.</p>
+
+      <div class="xp-scene">
+        <div class="xp-planche">
+          <div id="planche"></div>
+          <p class="xp-legende">Glisser de bas en haut · toucher pour entendre</p>
+        </div>
+        <div class="xp-cote">
+          <div class="xp-rangee" id="source"><span class="xp-etiquette">Source</span></div>
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="tenir" type="button" aria-pressed="false">Son tenu</button>
+            <button class="xp-bouton" id="note" type="button">Une note</button>
+          </div>
+          <dl class="xp-entendu" id="entendu"></dl>
+        </div>
+      </div>
+      <p class="xp-etat" aria-live="polite"></p>
+
+      <details class="xp-precisions">
+        <summary>La loi, et ce que l'expérience y ajoute</summary>
+        <ul>
+          <li>La position verticale y va de 0 (haut de la case) à 1 (bas). La fréquence est
+            f = 21,8 × (12 500 / 21,8)<sup>1 − y</sup> : chaque centième de hauteur vaut à peu près un demi-ton,
+            et le milieu de la case donne 522 Hz.</li>
+          <li>Les repères de la marge sont les do, dans la convention du livre (la3 = 440 Hz).</li>
+          <li>Un instrument est transposé depuis la hauteur mesurée de son enregistrement. Plus on s'en éloigne, plus
+            le son quitte l'instrument réel : un do aigu de piano ne sonne pas comme un la transposé.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/003/">← Étude 003</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/004/">Étude 004 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+  <script src="../commun/sign.js?v=1"></script>
+  <script>(()=>{const{Planche:e,chaine:n,tenir:r,jouerForme:t,jouerSon:i,rendre:s,ui:u,fmt:l,fmtHz:o,note:a,INSTRUMENTS:c,$:d}=SIGN,f={id:"cercle",angles:0,x:0,y:LOIS.yDepuisFrequence(220),taille:.16,opacite:1};let h=null,p=null,v="sinus",g=null;new e(d("planche"),{fond:"clair",objets:[f],stereo:!1,verrous:{x:!0,taille:!0},poignee:!1,label:"Planche : flèches haut et bas pour monter ou descendre le cercle ; Entrée le fait entendre",surChange:()=>b(),surToucher:()=>m(),surFin:()=>{"sinus"!==v&&m()}}).selection="cercle",u.choix("source",[["sinus","Sinusoïde"],["piano","Piano"],["violoncelle","Violoncelle"],["voix","Voix"],["kalimba","Kalimba"]],v,(e=>{v=e,"sinus"!==e&&p&&(p.arreter(),p=null,d("tenir").setAttribute("aria-pressed","false")),d("tenir").disabled="sinus"!==e,b(),m()}));const x=()=>LOIS.frequence(f.y);function S(){return h||(h=n(),h.regler({teinte:null,niveau:1,x:0},!0)),h}function b(){p&&p.frequence(x());const e=[["Position",`y ${l(f.y,3)}`],["Hauteur",`${o(x())} · ${a(x())}`]];if("sinus"!==v){const n=SIGN.referenceDe(v),r=12*Math.log2(x()/n);e.push(["Source",`${c[v].nom}, enregistré à ${o(n)}`],["Transposé",`${r>0?"+":""}${l(r,1)} demi-tons`])}else e.push(["Source","sinusoïde"]);u.lecture("entendu",e)}async function m(){if("sinus"===v)return void t({angles:0,f:x(),d:1,voix:S()});const e=g={},n=await s(v,{f:x()});e===g&&i(n.x,{voix:S(),d:1.6})}d("note").addEventListener("click",m),d("tenir").addEventListener("click",(e=>{if(p)return p.arreter(),p=null,void e.currentTarget.setAttribute("aria-pressed","false");p=r({angles:0,f:x(),voix:S()}),e.currentTarget.setAttribute("aria-pressed","true")})),b()})();</script>
+</body>
+</html>

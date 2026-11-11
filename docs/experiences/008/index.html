@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 008 : du son au pointé</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+  <style>
+    /* ==========================================================================
+       ATELIER : DU SON AU POINTÉ — styles propres à cette page.
+       Tout ce qui suit ne touche que cette page ; la feuille du site n'est pas
+       modifiée. Les couleurs reprennent les variables de la charte (fond clair
+       des études 001 à 011), avec des valeurs de secours.
+       ========================================================================== */
+    .atelier {
+      --a-fond: var(--fond, #f7f4ee);
+      --a-encre: var(--encre, #16130f);
+      --a-doux: var(--encre-doux, #55504a);
+      --a-tenu: var(--encre-tenu, #8a847c);
+      --a-filet: var(--filet, #ded8cc);
+      --a-vif: var(--vif, #8a5e12);
+      --a-case: #ffffff;
+      --a-noir: #1d1a1a;
+      margin-top: 1.6rem;
+    }
+    /* La feuille du site met les paragraphes des sections en ligne (sommaire) : on les rend à la page. */
+    .atelier p { display: block; margin: 0 0 1rem; }
+    .atelier .intro { max-width: 40em; }
+
+    .atelier .reglages { display: grid; gap: .9rem; margin: 1.4rem 0 1.2rem; }
+    .atelier .rangee { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .5rem; }
+    .atelier .etiquette {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .68rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--a-tenu);
+      min-width: 7.2em;
+    }
+    .atelier .choix {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .9rem; letter-spacing: .01em;
+      background: transparent; color: var(--a-encre);
+      border: 1px solid color-mix(in srgb, var(--a-encre) 28%, transparent);
+      border-radius: 999px; padding: .38rem .85rem; cursor: pointer;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .atelier .choix:hover { border-color: var(--a-encre); }
+    .atelier .choix[aria-pressed="true"] { background: var(--a-encre); color: var(--a-fond); border-color: var(--a-encre); }
+    .atelier .choix:focus-visible, .atelier .bouton:focus-visible, .atelier .axe:focus-visible,
+    .atelier .case-pointe:focus-visible { outline: 2px solid var(--a-vif); outline-offset: 3px; }
+
+    /* La case de la forme d'onde : noire, comme sur les planches de l'étude 008. */
+    .atelier .case-onde {
+      position: relative; width: 100%; aspect-ratio: 4 / 1; background: var(--a-noir);
+      margin: 0 0 .9rem;
+    }
+    .atelier canvas { display: block; width: 100%; height: 100%; }
+    .atelier .legende {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .68rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--a-tenu);
+      margin: .35rem 0 0;
+    }
+
+    .atelier .scene { display: grid; grid-template-columns: 64px minmax(0, 440px) minmax(12rem, 1fr); gap: 16px 22px; align-items: start; }
+    .atelier .colonne-axe { display: flex; flex-direction: column; }
+    .atelier .axe {
+      position: relative; aspect-ratio: auto; height: var(--cote, 380px);
+      border-left: 1px solid var(--a-encre); margin-left: 34px; cursor: ns-resize;
+      touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+    }
+    .atelier .axe .graduation {
+      position: absolute; left: -34px; width: 30px; text-align: right; transform: translateY(-50%);
+      font-family: var(--titre, "Jost", sans-serif); font-size: .62rem; font-variant-numeric: tabular-nums;
+      color: var(--a-tenu); pointer-events: none;
+    }
+    .atelier .axe .graduation::after {
+      content: ""; position: absolute; right: -8px; top: 50%; width: 6px; border-top: 1px solid var(--a-tenu);
+    }
+    .atelier .axe .enregistree {
+      position: absolute; left: -4px; width: 26px; border-top: 1px dashed var(--a-vif); pointer-events: none;
+    }
+    .atelier .axe canvas.repere { position: absolute; left: 0; width: 30px; height: 30px; transform: translate(-2px, -50%); pointer-events: none; }
+
+    .atelier .case-pointe {
+      position: relative; width: 100%; aspect-ratio: 1; background: var(--a-case);
+      border: 1.5px solid var(--a-encre); box-sizing: border-box; cursor: pointer;
+      touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+    }
+
+    .atelier .cote { display: flex; flex-direction: column; gap: 1rem; }
+    .atelier .releve { margin: 0; line-height: 1.5; }
+    .atelier .releve .nom { font-family: var(--texte, serif); font-size: 1.15rem; display: block; }
+    .atelier .releve .note {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .95rem; font-variant-numeric: tabular-nums;
+      color: var(--a-vif); letter-spacing: .02em; display: block; margin-top: .15rem;
+    }
+    .atelier .releve .ecart, .atelier .releve .rapport {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .78rem; font-variant-numeric: tabular-nums;
+      color: var(--a-doux); display: block; margin-top: .25rem; letter-spacing: .02em;
+    }
+    .atelier .etape { font-style: italic; color: var(--a-doux); min-height: 4.8em; margin: 0; font-size: .98rem; }
+    .atelier .curseur { display: flex; flex-direction: column; gap: .35rem; }
+    .atelier input[type="range"] { width: 100%; accent-color: var(--a-encre); }
+    .atelier .boutons { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .atelier .bouton {
+      font-family: var(--titre, "Jost", sans-serif); font-size: .85rem;
+      background: transparent; color: var(--a-encre);
+      border: 1px solid color-mix(in srgb, var(--a-encre) 35%, transparent);
+      border-radius: 8px; padding: .45rem .8rem; cursor: pointer;
+    }
+    .atelier .bouton:hover { border-color: var(--a-encre); }
+    .atelier .stylet { font-size: .8rem; color: var(--a-doux); margin: 0; min-height: 1.2em; }
+    .atelier .etat { font-size: .82rem; color: var(--a-tenu); margin: .6rem 0 0; min-height: 1.3em; }
+
+    .atelier details.precisions { margin-top: 2rem; max-width: 44em; }
+    .atelier details.precisions summary {
+      cursor: pointer; font-family: var(--titre, "Jost", sans-serif); font-size: .74rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--a-doux);
+    }
+    .atelier details.precisions ul { padding-left: 1.1em; margin: .8rem 0 0; }
+    .atelier details.precisions li { margin: .45rem 0; }
+
+    @media (max-width: 760px) {
+      .atelier .scene { grid-template-columns: 52px minmax(0, 1fr); }
+      .atelier .cote { grid-column: 1 / -1; }
+      .atelier .axe { margin-left: 26px; }
+      .atelier .axe .graduation { left: -28px; width: 24px; font-size: .56rem; }
+      .atelier .etiquette { min-width: 100%; }
+    }
+  </style>
+</head>
+
+<body class="page-etude etude-008 page-atelier">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 008 : du son au pointé</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 008, Formes complexes & Richesses timbrales</div>
+
+    <section class="atelier" aria-label="Atelier du pointé instrumental">
+      <p class="intro">
+        Choisis un instrument, monte ou descends sa note le long de l'axe des hauteurs,
+        frappe plus ou moins fort. À chaque geste, le son est recalculé et son pointé
+        en est extrait comme à l'étude 008 : l'enveloppe du son s'enroule depuis le
+        sommet sur un demi-tour, puis la symétrie referme la figure.
+      </p>
+
+      <div class="reglages">
+        <div class="rangee" role="group" aria-label="Instruments mélodiques">
+          <span class="etiquette">Mélodiques</span>
+          <button class="choix" data-instrument="Piano">Piano</button>
+          <button class="choix" data-instrument="Violoncelle">Violoncelle</button>
+          <button class="choix" data-instrument="Flute">Flûte</button>
+          <button class="choix" data-instrument="Voix">Voix</button>
+        </div>
+        <div class="rangee" role="group" aria-label="Instruments percussifs">
+          <span class="etiquette">Percussifs</span>
+          <button class="choix" data-instrument="Kalimba">Kalimba</button>
+          <button class="choix" data-instrument="Kick">Kick</button>
+          <button class="choix" data-instrument="Clave">Clave</button>
+          <button class="choix" data-instrument="Shaker">Shaker</button>
+        </div>
+        <div class="rangee" role="group" aria-label="Frappe">
+          <span class="etiquette">Frappe</span>
+          <button class="choix" data-frappe="20">20 · faible</button>
+          <button class="choix" data-frappe="70">70 · moyenne</button>
+          <button class="choix" data-frappe="120">120 · forte</button>
+        </div>
+      </div>
+
+      <div class="case-onde"><canvas id="onde" aria-label="Forme d'onde du son"></canvas></div>
+
+      <div class="scene">
+        <div class="colonne-axe">
+          <div class="axe" id="axe" tabindex="0" role="slider" aria-orientation="vertical"
+               aria-label="Hauteur de la note" aria-valuemin="21.8" aria-valuemax="12500">
+            <canvas class="repere" id="repere" aria-hidden="true"></canvas>
+          </div>
+        </div>
+
+        <div>
+          <div class="case-pointe" id="case-pointe" tabindex="0" role="button" aria-label="Pointé instrumental. Cliquer pour écouter.">
+            <canvas id="pointe"></canvas>
+          </div>
+          <p class="legende">Pointé instrumental · toucher pour écouter</p>
+        </div>
+
+        <div class="cote">
+          <p class="releve" id="releve" aria-live="polite"></p>
+          <p class="etape" id="etape"></p>
+          <div class="curseur">
+            <label class="etiquette" for="enroulement">Du son au pointé</label>
+            <input type="range" id="enroulement" min="0" max="1000" value="1000" />
+          </div>
+          <div class="boutons">
+            <button class="bouton" id="rejouer">↻ Revoir l'enroulement</button>
+            <button class="bouton" id="ecouter">▶ Écouter</button>
+          </div>
+          <p class="stylet" id="stylet"></p>
+        </div>
+      </div>
+      <p class="etat" id="etat" aria-live="polite"></p>
+
+      <details class="precisions">
+        <summary>Ce que montre l'atelier, et ce qu'il ne montre pas</summary>
+        <ul>
+          <li>Les sons sont les enregistrements de l'étude 009 : une seule note par instrument et par frappe.
+            La ligne pointillée de l'axe marque sa hauteur.</li>
+          <li>Pour changer de note, l'enregistrement est transposé sans changer de durée, comme le veut l'étude 003.
+            Plus on s'en éloigne, plus le son quitte l'instrument réel, et son pointé avec lui :
+            un vrai do aigu de piano ne tient pas comme un la grave transposé.</li>
+          <li>Le pointé est calculé ici, à l'écoute, selon le procédé décrit à l'étude 008. Les pointés
+            imprimés dans le livre ont été finalisés à la main : les silhouettes sont de la même famille,
+            pas identiques.</li>
+          <li>Le rapport entre le rayon des pics et celui du corps sépare les familles : sous 1,25 pour les
+            instruments soutenus, au-delà de 1,39 pour les percussifs (étude 008).</li>
+          <li>Au stylet, la pression du premier contact choisit la frappe, comme l'étude 009 l'envisage
+            pour SIGN.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/008/">← Étude 008</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/009/">Étude 009 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+
+  <script src="../commun/sign.js?v=1"></script>
+  <script>!function(){"use strict";const e=44100,t=21.8,n=12500,o=e=>1-Math.log(e/t)/Math.log(n/t),a={Piano:"Piano",Violoncelle:"Violoncelle",Flute:"Flûte",Voix:"Voix",Kalimba:"Kalimba",Kick:"Kick",Clave:"Clave",Shaker:"Shaker"},r=[20,70,120],i=(e,t)=>`${e} - ${t} (velocite).wav`,s=Object.fromEntries(Object.entries(SIGN.HAUTEURS).map((([e,t])=>[e+".wav",t]))),l={instrument:"Piano",frappe:70,f:220.74,u:1},c=e=>document.getElementById(e),u=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;let d=null,f=null,h=null,m=null;function p(){try{navigator.audioSession&&(navigator.audioSession.type="playback")}catch(e){}if(!d){const e=window.AudioContext||window.webkitAudioContext;d=new e,f=d.createGain(),f.gain.value=.5,f.connect(d.destination),d.onstatechange=()=>{"running"===d.state&&c("etat").dataset.son&&(c("etat").textContent="",delete c("etat").dataset.son)}}if("running"!==d.state){try{const e=d.resume();e&&e.catch&&e.catch((()=>{}))}catch(e){}try{const e=d.createBufferSource();e.buffer=d.createBuffer(1,1,d.sampleRate),e.connect(d.destination),e.start(0)}catch(e){}}return clearTimeout(m),m=setTimeout((()=>{d&&"running"!==d.state&&(c("etat").dataset.son="bloque",c("etat").textContent="Le son reste fermé. Sur iPad : désactive le mode silencieux (la cloche du Centre de contrôle), monte le volume, puis touche à nouveau le pointé.")}),900),d}const g=()=>{p(),d&&"running"===d.state&&["touchend","pointerup","click","keydown"].forEach((e=>document.removeEventListener(e,g,!0)))};async function M(t){const n=new(window.OfflineAudioContext||window.webkitOfflineAudioContext)(1,e,e),o=await new Promise(((e,o)=>{const a=n.decodeAudioData(t,e,o);a&&a.then&&a.then(e,o)})),a=o.length,r=new Float32Array(a);for(let e=0;e<o.numberOfChannels;e++){const t=o.getChannelData(e);for(let e=0;e<a;e++)r[e]+=t[e]/o.numberOfChannels}return{x:r,sr:o.sampleRate}}["touchend","pointerup","click","keydown"].forEach((e=>document.addEventListener(e,g,!0)));const y=new Map;function w(e){return y.has(e)||y.set(e,(async()=>{const t=window.SONS_EMBARQUES&&window.SONS_EMBARQUES[e];if(t){const e=atob(t),n=new Uint8Array(e.length);for(let t=0;t<e.length;t++)n[t]=e.charCodeAt(t);return M(n.buffer)}const n=await fetch("../commun/sons/"+encodeURIComponent(e.replace(/\.wav$/,".flac")));if(!n.ok)throw new Error(e+" : "+n.status);return M(await n.arrayBuffer())})()),y.get(e)}let v=null,b=!1,x=0;const A=new Map;function S(e,t){if(Math.abs(t)<.005)return Promise.resolve(Float32Array.from(e));if(function(){if(!v&&!b)try{const e=`const DSP = (${fabriquerDSP.toString()})();\n${transposerAtelier.toString()}\nonmessage = e => { const y = transposerAtelier(e.data.x, e.data.demi); postMessage({ id: e.data.id, y }, [y.buffer]); };`;v=new Worker(URL.createObjectURL(new Blob([e],{type:"text/javascript"}))),v.onmessage=e=>{const t=A.get(e.data.id);t&&(A.delete(e.data.id),t.ok(e.data.y))},v.onerror=()=>{b=!0,v=null;for(const[e,t]of A)A.delete(e),t.ok(transposerAtelier(t.x,t.demi))}}catch(e){b=!0,v=null}}(),!v)return Promise.resolve(transposerAtelier(e,t));const n=++x;return new Promise((o=>{A.set(n,{ok:o,x:e,demi:t}),v.postMessage({id:n,x:Float32Array.from(e),demi:t}),setTimeout((()=>{A.has(n)&&(A.delete(n),b=!0,o(transposerAtelier(e,t)))}),6e3)}))}const E=new Map;function C(t){const n=120,o=t.length,a=Math.max(o/n,.03*e)/2,r=new Float64Array(n);let i=0;for(let e=0;e<n;e++){const s=(e+.5)*o/n;let l=0;for(let e=Math.max(0,Math.floor(s-a)),n=Math.min(o,Math.ceil(s+a));e<n;e++){const n=t[e];n>l&&(l=n)}r[e]=l,l>i&&(i=l)}const s=Array.from(r,(e=>.5+.5*(i?e/i:0))),l=s.slice(20,100).sort(((e,t)=>e-t));return Math.max(...s)/l[l.length>>1]}const P=540,T=(()=>{let e=20261026;const t=new Float32Array(P);for(let n=0;n<P;n++)e=1103515245*e+12345>>>0,t[n]=e/4294967296-.5;return t})();function k(t){const n=t.length,o=new Float32Array(P),a=new Float32Array(P),r=Math.max(n/P,.0025*e)/2;let i=0;for(let e=0;e<P;e++){const s=(e+.5+T[e])*n/P;let l=0,c=0;for(let e=Math.max(0,Math.floor(s-r)),o=Math.min(n,Math.ceil(s+r));e<o;e++){const n=t[e];n>l&&(l=n),n<c&&(c=n)}o[e]=l,a[e]=c,i=Math.max(i,l,-c)}for(let e=0;e<P;e++)o[e]/=i||1,a[e]/=i||1;return{haut:o,bas:a}}function L(e){const t=e.getBoundingClientRect(),n=window.devicePixelRatio||1,o=Math.max(1,Math.round(t.width*n)),a=Math.max(1,Math.round(t.height*n));e.width===o&&e.height===a||(e.width=o,e.height=a);const r=e.getContext("2d");return r.setTransform(n,0,0,n,0,0),{c:r,w:t.width,h:t.height}}const $=(e,t)=>(getComputedStyle(document.querySelector(".atelier")).getPropertyValue(e)||t).trim()||t;let F=null;const R=e=>e<=0?0:e>=1?1:e*e*(3-2*e),q=[[0,"La forme d'onde : le son dans son déroulement."],[.16,"On relève l'enveloppe supérieure du signal."],[.32,"Le temps devient un angle, l'amplitude un rayon : la fenêtre se déploie sur un demi-tour, depuis le sommet."],[.76,"La symétrie selon l'axe vertical referme la figure."],[.93,"Le pointé instrumental : le sommet est l'attaque, le corps la tenue, le bas la fin."]];function B(e){let t=q[0][1];for(const[n,o]of q)e>=n&&(t=o);return t}function D(e,t){const{c:n,w:o,h:a}=L(c("pointe"));if(n.clearRect(0,0,o,a),!F)return;const r=$("--a-noir","#1d1a1a"),i=o/2,s=a/2,l=.45*Math.min(o,a),u=function(e,t,n,o,a){const r=.5*n,i=.5*n,s=Math.PI*r,l=R((o-.32)/.44),c=R((o-.76)/.17),u=R((o-.16)/.14),d=-s/2*(1-l),f=r*(1-l),h=[],m=[];for(let n=0;n<P;n++){const o=s*n/(P-1);let c,p,g,M;if(l<1e-4)c=o,p=-r,g=0,M=-1;else{const e=l/r,t=e*o;c=Math.sin(t)/e,p=-r+(1-Math.cos(t))/e,g=Math.sin(t),M=-Math.cos(t)}const y=i*a.haut[n];h.push([e+c+g*y+d,t+p+M*y+f]),u<1&&m.push([e+c-g*i*-a.bas[n]+d,t+p-M*i*-a.bas[n]+f])}return{droite:h,dessous:m,sym:c,releve:u,base:{tx:d,ty:f}}}(i,s,l,e,F.profil),{droite:d,dessous:f,sym:h,releve:m}=u,p=R((e-.9)/.1);if(n.lineJoin="round",m<1&&f.length){n.globalAlpha=1-m,n.fillStyle=r,n.beginPath(),n.moveTo(d[0][0],d[0][1]);for(const e of d)n.lineTo(e[0],e[1]);for(let e=f.length-1;e>=0;e--)n.lineTo(f[e][0],f[e][1]);n.closePath(),n.fill(),n.globalAlpha=1}n.fillStyle=r,n.strokeStyle=r;const g=(t,o)=>{n.globalAlpha=o,n.beginPath();const a=.5*l,r=Math.PI*a,c=R((e-.32)/.44),f=e=>{if(c<1e-4)return[e,-a];const t=c/a,n=t*e;return[Math.sin(n)/t,-a+(1-Math.cos(n))/t]},h=u.base.tx,m=u.base.ty,p=e=>i+(e-i)*t;n.moveTo(p(d[0][0]),d[0][1]);for(let e=1;e<P;e++)n.lineTo(p(d[e][0]),d[e][1]);for(let e=P-1;e>=0;e-=6){const t=f(r*e/(P-1));n.lineTo(p(i+t[0]+h),s+t[1]+m)}n.closePath(),n.fill()};if(p<1&&(g(1,m<1?m:1),h>0&&g(1-2*h,.35+.65*h)),p>0){n.globalAlpha=p,n.beginPath(),n.moveTo(d[0][0],d[0][1]);for(let e=1;e<P;e++)n.lineTo(d[e][0],d[e][1]);for(let e=P-1;e>=0;e--)n.lineTo(2*i-d[e][0],d[e][1]);n.closePath(),n.fill()}if(n.globalAlpha=1,null!=t&&e>=.999){const e=Math.PI*Math.min(1,t/F.duree);n.strokeStyle=$("--a-vif","#8a5e12"),n.lineWidth=2,n.beginPath(),n.moveTo(i,s),n.lineTo(i+Math.sin(e)*l*1.12,s-Math.cos(e)*l*1.12),n.moveTo(i,s),n.lineTo(i-Math.sin(e)*l*1.12,s-Math.cos(e)*l*1.12),n.stroke()}}function O(){const e=c("repere"),t=c("axe").clientHeight,n=o(l.f);e.style.top=n*t+"px";const{c:a,w:r,h:i}=L(e);if(a.clearRect(0,0,r,i),!F)return;a.fillStyle=$("--a-noir","#1d1a1a");const s=r/2,u=i/2,d=.48*Math.min(r,i),f=F.profil;a.beginPath();for(let e=0;e<P;e+=3){const t=Math.PI*e/(P-1),n=d*(.5+.5*f.haut[e]);a.lineTo(s+n*Math.sin(t),u-n*Math.cos(t))}for(let e=P-1;e>=0;e-=3){const t=Math.PI*e/(P-1),n=d*(.5+.5*f.haut[e]);a.lineTo(s-n*Math.sin(t),u-n*Math.cos(t))}a.closePath(),a.fill()}function I(){const e=c("axe");e.querySelectorAll(".graduation, .enregistree").forEach((e=>e.remove()));for(const t of[12500,5e3,2e3,1e3,500,200,100,50,21.8]){const n=document.createElement("span");n.className="graduation",n.textContent=t>=1e3?(t/1e3).toLocaleString("fr-FR")+"k":String(t).replace(".",","),n.style.top=100*o(t)+"%",e.appendChild(n)}const t=s[i(l.instrument,l.frappe)];if(t){const n=document.createElement("span");n.className="enregistree",n.title="Note enregistrée",n.style.top=100*o(t)+"%",e.appendChild(n)}}const U=["do","do♯","ré","mi♭","mi","fa","fa♯","sol","sol♯","la","si♭","si"];function N(e){const t=Math.round(69+12*Math.log2(e/440));return U[(t%12+12)%12]+(Math.floor(t/12)-2)}const z=(e,t=0)=>e.toLocaleString("fr-FR",{minimumFractionDigits:t,maximumFractionDigits:t});function H(){const e=i(l.instrument,l.frappe),t=s[e],n=12*Math.log2(l.f/(t||440));let o;o=t?Math.abs(n)<.05?"La note enregistrée":`${n>0?"+":"−"}${z(Math.abs(n),1)} demi-ton${Math.abs(n)>=2?"s":""} depuis la note enregistrée`:"Sans hauteur mesurable : la référence est posée à 440 Hz";let r="";if(F){const e=F.rapport,t=e<1.25?"sous 1,25 : soutenu":e>1.39?"au-delà de 1,39 : percussif":"entre 1,25 et 1,39 : entre les deux familles";r=`Pics / corps ${z(e,2)} — ${t}`}c("releve").innerHTML=`<span class="nom">${a[l.instrument]} · frappe ${l.frappe}</span><span class="note">${N(l.f)} · ${z(l.f,l.f<100?1:0)} Hz</span><span class="ecart">${o}</span><span class="rapport">${r}</span>`;const u=c("axe");u.setAttribute("aria-valuenow",l.f.toFixed(1)),u.setAttribute("aria-valuetext",`${N(l.f)}, ${Math.round(l.f)} hertz`)}let j=null,V=null;function K(){const e=V&&d?d.currentTime-V.depart:null;!function(e){const{c:t,w:n,h:o}=L(c("onde"));t.clearRect(0,0,n,o);const a="#ffffff",r=.04*n,i=o/2,s=.4*o;if(t.strokeStyle=a,t.lineWidth=1,t.beginPath(),t.moveTo(.5*r,i),t.lineTo(n-.5*r,i),t.stroke(),!F)return;const l=F.y,u=l.length,d=n-2*r;let f=0;for(let e=0;e<u;e++)f=Math.max(f,Math.abs(l[e]));const h=Math.max(2,Math.round(d));t.fillStyle=a,t.beginPath();const m=new Float32Array(h),p=new Float32Array(h);for(let e=0;e<h;e++){const t=Math.floor(e*u/h),n=Math.max(t+1,Math.floor((e+1)*u/h));let o=0,a=0;for(let e=t;e<n&&e<u;e++)l[e]>o&&(o=l[e]),l[e]<a&&(a=l[e]);m[e]=o/(f||1),p[e]=a/(f||1)}t.moveTo(r,i);for(let e=0;e<h;e++)t.lineTo(r+d*e/(h-1),i-s*m[e]);for(let e=h-1;e>=0;e--)t.lineTo(r+d*e/(h-1),i-s*p[e]);if(t.closePath(),t.fill(),null!=e){const n=r+d*Math.min(1,e/F.duree);t.strokeStyle=$("--a-vif","#8a5e12"),t.lineWidth=2,t.beginPath(),t.moveTo(n,.06*o),t.lineTo(n,.94*o),t.stroke()}}(null!=e&&e<=V.duree?e:null),D(l.u,null!=e&&e<=V.duree?e:null),V&&e>V.duree+.05&&(V=null)}function W(){if(j){const e=Math.min(1,(performance.now()-j.debut)/j.duree);if(l.u=j.de+(1-j.de)*e,c("enroulement").value=Math.round(1e3*l.u),c("etape").textContent=B(l.u),e>=1){const e=j.fin;j=null,e&&e()}}K(),(j||V)&&requestAnimationFrame(W)}function G(e){if(u)return l.u=1,c("enroulement").value=1e3,c("etape").textContent=B(1),K(),void(e&&e());j={debut:performance.now(),duree:2600,de:0,fin:e},requestAnimationFrame(W)}function Q(){if(!F)return;const t=p();if(h)try{const e=h;e.g.gain.setTargetAtTime(0,t.currentTime,.008),e.s.stop(t.currentTime+.06)}catch(e){}const n=t.createBuffer(1,F.y.length,e);n.copyToChannel?n.copyToChannel(F.y,0):n.getChannelData(0).set(F.y);const o=t.createBufferSource(),a=t.createGain();o.buffer=n,o.connect(a),a.connect(f);const r=t.currentTime+.02;o.start(r),h={s:o,g:a},V={depart:r,duree:F.duree},requestAnimationFrame(W)}let _=!1,J=null;function Y(e){J={mode:J&&"enrouler"===J.mode?"enrouler":e},_||X()}async function X(){if(!J)return;const{mode:t}=J;J=null,_=!0;const n=l.instrument,o=l.frappe,a=l.f;c("etat").textContent=y.has(i(n,o))?"":"Chargement du son…";try{const r=await function(e,t,n){const o=i(e,t),a=s[o]||440,r=Math.round(12*Math.log2(n/a)*20)/20,l=o+"|"+r;return E.has(l)||(E.set(l,w(o).then((e=>S(e.x,r)))),E.size>60&&E.delete(E.keys().next().value)),E.get(l).then((e=>({y:e,demi:r,ref:a,nom:o})))}(n,o,a);F={y:r.y,profil:k(r.y),rapport:C(r.y),duree:r.y.length/e,demi:r.demi,ref:r.ref,nom:r.nom},c("etat").textContent="",H(),O(),"enrouler"===t?G((()=>{d&&Q()})):(K(),"direct"===t&&d&&Q())}catch(e){c("etat").textContent="Le son n'a pas pu être chargé ("+e.message+")."}_=!1,J&&X()}function Z(e){l.instrument=e,document.querySelectorAll("[data-instrument]").forEach((t=>t.setAttribute("aria-pressed",String(t.dataset.instrument===e)))),I(),H(),r.forEach((t=>w(i(e,t)))),Y("enrouler")}function ee(e){l.frappe=e,document.querySelectorAll("[data-frappe]").forEach((t=>t.setAttribute("aria-pressed",String(Number(t.dataset.frappe)===e)))),I(),H(),Y("enrouler")}document.querySelectorAll("[data-instrument]").forEach((e=>e.addEventListener("click",(()=>{p();const t=e=>s[i(e,l.frappe)]||440;e.dataset.instrument!==l.instrument&&Math.abs(12*Math.log2(l.f/t(l.instrument)))<.05&&(l.f=t(e.dataset.instrument)),Z(e.dataset.instrument)})))),document.querySelectorAll("[data-frappe]").forEach((e=>e.addEventListener("click",(()=>{p(),ee(Number(e.dataset.frappe))}))));let te=null;function ne(e){if("pen"===e.pointerType&&e.pressure>0)if(te||(te={debut:performance.now(),max:0,fait:!1}),performance.now()-te.debut<=150)te.max=Math.max(te.max,e.pressure);else if(!te.fait){te.fait=!0;const e=Math.round(127*te.max),t=r.reduce(((t,n)=>Math.abs(n-e)<Math.abs(t-e)?n:t));c("stylet").textContent=`Stylet · pression ${z(te.max,2)} → frappe ${t}`,t!==l.frappe&&ee(t)}}const oe=c("axe");let ae=!1,re=0;function ie(e){const o=oe.getBoundingClientRect(),a=Math.min(1,Math.max(0,(e.clientY-o.top)/o.height));l.f=(e=>t*Math.pow(n/t,1-e))(a),H(),O();const r=performance.now();r-re>120&&(re=r,Y("direct"))}oe.addEventListener("pointerdown",(e=>{p(),ae=!0,te=null,j=null,l.u=1,c("enroulement").value=1e3,c("etape").textContent=B(1);try{oe.setPointerCapture(e.pointerId)}catch(e){}ne(e),ie(e),e.preventDefault()})),oe.addEventListener("pointermove",(e=>{ae&&(ne(e),ie(e))}));const se=()=>{ae&&(ae=!1,Y("direct"))};oe.addEventListener("pointerup",se),oe.addEventListener("pointercancel",se),oe.addEventListener("keydown",(e=>{const o=s[i(l.instrument,l.frappe)]||440;let a=12*Math.log2(l.f/o);const r={ArrowUp:1,ArrowDown:-1,PageUp:12,PageDown:-12}[e.key];if(r)a=Math.round(a)+r;else if("Home"===e.key)a=12*Math.log2(n/o);else{if("End"!==e.key)return;a=12*Math.log2(t/o)}e.preventDefault(),p(),l.f=Math.min(n,Math.max(t,o*Math.pow(2,a/12))),H(),O(),Y("direct")}));const le=c("case-pointe");function ce(){const e=le.getBoundingClientRect().height;oe.style.setProperty("--cote",e+"px"),I(),O(),K()}le.addEventListener("pointerdown",(e=>{p(),te=null,ne(e);try{le.setPointerCapture(e.pointerId)}catch(e){}})),le.addEventListener("pointermove",ne),le.addEventListener("pointerup",(()=>{l.u<1&&(j=null,l.u=1,c("enroulement").value=1e3,c("etape").textContent=B(1)),Q()})),le.addEventListener("keydown",(e=>{"Enter"!==e.key&&" "!==e.key||(e.preventDefault(),p(),Q())})),c("enroulement").addEventListener("input",(e=>{j=null,l.u=Number(e.target.value)/1e3,c("etape").textContent=B(l.u),K()})),c("rejouer").addEventListener("click",(()=>{p(),G((()=>Q()))})),c("ecouter").addEventListener("click",(()=>{p(),l.u<1&&(j=null,l.u=1,c("enroulement").value=1e3,c("etape").textContent=B(1)),Q()})),window.ResizeObserver&&new ResizeObserver(ce).observe(le),window.addEventListener("resize",ce),window.addEventListener("pagehide",(()=>{try{h&&h.s.stop()}catch(e){}})),document.querySelector('[data-frappe="70"]').setAttribute("aria-pressed","true"),document.querySelectorAll("[data-frappe]").forEach((e=>{"70"!==e.dataset.frappe&&e.setAttribute("aria-pressed","false")})),l.f=s[i("Piano",70)],ce(),Z("Piano")}();</script>
+
+</body>
+</html>

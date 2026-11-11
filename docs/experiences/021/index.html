@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 021 : les plans s'empilent</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-021 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 021 : les plans s'empilent</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 021, Plans visuels & Plans sonores — Stratifications</div>
+<section class="xp" aria-label="Expérience : les plans s'empilent">
+      <p class="xp-intro">L'étude 021 empile les plans : trois formes qui se recouvrent en escalier font entendre trois
+        profondeurs, chacune 7 dB sous la précédente. Ici on ajoute des formes jusqu'à cinq, on les fait passer devant
+        ou derrière, et l'on entend la stratification se recomposer : le rang d'une forme dépend de la chaîne des
+        recouvrements, non de l'ordre de pose.</p>
+
+      <div class="xp-scene">
+        <div class="xp-planche">
+          <div id="planche"></div>
+          <p class="xp-legende">Toucher une forme la fait passer devant · glisser pour la déplacer</p>
+        </div>
+        <div class="xp-cote">
+          <div class="xp-rangee" id="exemples"><span class="xp-etiquette">Configurations</span></div>
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="tenir" type="button" aria-pressed="false">Son tenu</button>
+            <button class="xp-bouton" id="note" type="button">Une note</button>
+          </div>
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="ajouter" type="button">Ajouter une forme</button>
+            <button class="xp-bouton" id="retirer" type="button">Retirer la forme choisie</button>
+          </div>
+          <dl class="xp-entendu" id="entendu"></dl>
+        </div>
+      </div>
+      <p class="xp-etat" aria-live="polite"></p>
+
+      <details class="xp-precisions">
+        <summary>La loi, et ce que l'expérience y ajoute</summary>
+        <ul>
+          <li>Chaque plan retire 7 dB : −7 dB au deuxième, −14 dB au troisième, −21 dB au quatrième. Le rang d'une forme
+            est la longueur de la plus longue chaîne de formes qui la recouvrent : une forme cachée par une forme
+            elle-même cachée est au troisième plan.</li>
+          <li>Deux formes qui ne se touchent pas peuvent être au même plan, même si l'une a été posée après l'autre.</li>
+          <li>La profondeur est un facteur : elle s'ajoute à l'opacité (étude 011) et aux autres lois, qui restent
+            actives. Les formes sont grises : sans teinte, elles n'ouvrent aucune fenêtre (étude 012).</li>
+          <li>Chaque forme garde sa place et sa hauteur ; sa taille donne la durée de la note.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/021/">← Étude 021</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/022/">Étude 022 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+  <script src="../commun/sign.js?v=1"></script>
+  <script>(()=>{const{Planche:e,chaine:n,tenir:t,jouerForme:a,son:r,ui:i,fmt:c,fmtHz:l,note:s,$:o}=SIGN,u={0:"Cercle",3:"Triangle",4:"Carré",6:"Hexagone"},d=["devant","2e plan","3e plan","4e plan","5e plan"],f=(e,n,t,a,r,i)=>({id:e,angles:n,x:t,y:a,taille:r,couleur:i,opacite:1}),p={escalier:()=>[f("a",0,-.42,.34,.4,"#6e6e6e"),f("b",4,0,.5,.38,"#a8a8a8"),f("c",3,.4,.64,.4,"#e4e4e4")],deux:()=>[f("a",0,-.45,.4,.42,"#6e6e6e"),f("b",4,-.1,.55,.38,"#a8a8a8"),f("c",3,.6,.3,.34,"#e4e4e4")],pile:()=>[f("a",6,0,.5,.8,"#4a4a4a"),f("b",0,0,.5,.56,"#8a8a8a"),f("c",4,0,.5,.34,"#c4c4c4"),f("d",3,0,.5,.16,"#f0f0f0")]};let g=p.escalier(),h=[],x=new Map,L=new Map,O=!1;const m=new e(o("planche"),{fond:"noir",objets:g,label:"Planche : toucher une forme la fait passer devant ; les flèches la déplacent",surChange:()=>{S()},surToucher:e=>{e&&function(e){g.splice(g.indexOf(e),1),g.push(e),m.selection=e.id,m.dessiner(),S(),O||E()}(e)},surFin:()=>S()});function v(e){return x.has(e.id)||x.set(e.id,n()),x.get(e.id)}function S(){h=LOIS.plans(g),g.forEach(((e,n)=>{const t=x.get(e.id);t&&t.regler({teinte:null,niveau:.4*LOIS.gainPlan(h[n]),x:e.x});const a=L.get(e.id);a&&a.frequence(LOIS.frequence(e.y))})),function(){const e=g.map(((e,n)=>({o:e,r:h[n]}))).sort(((e,n)=>e.r-n.r||g.indexOf(n.o)-g.indexOf(e.o)));i.lecture("entendu",e.map((({o:e,r:n})=>{const t=LOIS.frequence(e.y);return[u[e.angles],`${d[n]} · ${n?c(LOIS.PLAN_DB*n,0)+" dB":"0 dB"} · ${l(t)} · ${s(t).split(" ")[0]}`]})).concat([["Plans",Math.max(...h)?`${Math.max(...h)+1}`:"un seul : aucune forme n'en recouvre une autre"]]))}()}function I(){g.forEach(((e,n)=>v(e).regler({teinte:null,niveau:.4*LOIS.gainPlan(h[n]),x:e.x},!0)))}function E(){r(),I();const e=r().currentTime+.05;g.forEach((n=>a({angles:n.angles,f:LOIS.frequence(n.y),d:LOIS.duree(n.taille),t0:e,voix:v(n)})))}function q(){L.forEach((e=>e.arreter())),L.clear(),O=!1,o("tenir").setAttribute("aria-pressed","false")}i.choix("exemples",[["escalier","Escalier"],["deux","Deux et une"],["pile","Pile"]],"escalier",(e=>{q(),g.splice(0,g.length,...p[e]()),m.selection=null,m.dessiner(),S(),O||E()})),o("note").addEventListener("click",E);const b=["#5a5a5a","#7c7c7c","#9e9e9e","#c0c0c0","#e2e2e2"];let y=0;o("ajouter").addEventListener("click",(()=>{if(g.length>=5)return void(document.querySelector(".xp-etat").textContent="Cinq formes au plus dans cette expérience.");const e=[0,3,4,6][y%4],n=f("n"+ ++y,e,y%5*.3-.6,.25+y%5*.12,.3,b[g.length]);g.push(n),m.selection=n.id,m.dessiner(),O&&(v(n),L.set(n.id,t({angles:n.angles,f:LOIS.frequence(n.y),voix:v(n)}))),S()})),o("retirer").addEventListener("click",(()=>{const e=g.find((e=>e.id===m.selection));if(!e||g.length<=1)return;g.splice(g.indexOf(e),1);const n=L.get(e.id);n&&(n.arreter(),L.delete(e.id)),m.selection=null,m.dessiner(),S()})),o("tenir").addEventListener("click",(e=>{O?q():(I(),g.forEach((e=>L.set(e.id,t({angles:e.angles,f:LOIS.frequence(e.y),voix:v(e)})))),O=!0,e.currentTarget.setAttribute("aria-pressed","true"))})),S()})();</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 005 : le tracé devient une durée</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-005 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 005 : le tracé devient une durée</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 005, Formes ouvertes & Objets sonores mesurables dans le temps</div>
+<section class="xp" aria-label="Expérience : le tracé devient une durée">
+      <p class="xp-intro">L'étude 005 pose trois lois pour les formes ouvertes : la longueur parcourue donne la durée,
+        la position verticale donne la hauteur à chaque instant, le style du trait découpe le temps en sons et en
+        silences. Ici on trace soi-même : dessine un trait dans la case, de gauche à droite, et écoute-le se
+        dérouler.</p>
+
+      <div class="xp-scene">
+        <div class="xp-planche">
+          <div id="planche"></div>
+          <p class="xp-legende">Tracer dans la case · toucher pour réécouter</p>
+        </div>
+        <div class="xp-cote">
+          <div class="xp-rangee" id="exemples"><span class="xp-etiquette">Les tracés de la planche 2</span></div>
+          <div class="xp-rangee" id="style"><span class="xp-etiquette">Style du trait</span></div>
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="ecouter" type="button">Écouter le tracé</button>
+            <button class="xp-bouton" id="echelle" type="button">L'échelle 1, 2, 4, 8</button>
+          </div>
+          <dl class="xp-entendu" id="entendu"></dl>
+        </div>
+      </div>
+      <p class="xp-etat" aria-live="polite"></p>
+
+      <details class="xp-precisions">
+        <summary>La loi, et ce que l'expérience y ajoute</summary>
+        <ul>
+          <li>La durée suit la longueur parcourue, non la largeur occupée : une verticale dure autant qu'une horizontale
+            de même longueur. Ici, une longueur égale au côté de la case dure 2,43 s, la valeur que donne l'étude 010
+            pour le diamètre (« une seule règle vaut pour les deux ») ; au-delà de 12 s, la durée est plafonnée.</li>
+          <li>Les extrémités fixent l'intervalle, la longueur la durée du parcours : la vitesse du glissando s'en
+            déduit. Le glissando est linéaire en demi-tons, la hauteur suivant la loi de l'étude 003.</li>
+          <li>La spatialisation est suspendue : un trait sonne au centre, l'axe horizontal étant devenu le temps.</li>
+          <li>La marque donne la durée du son, l'intervalle celle du silence qui suit. Les motifs des tirets et des
+            pointillés sont ceux de SIGN ; la part des tirets (53 %) est mesurée sur tes fichiers 006, les autres sont
+            provisoires.</li>
+          <li>Un tracé qui revient vers la gauche demanderait au temps de reculer : l'étude le dit sans traduction.
+            L'expérience le joue quand même, le long du geste, et le signale. Cette lecture n'est pas celle du livre.</li>
+          <li>Le trait sonne en sinusoïde : comme le point rond de la planche 1, il n'a pas d'angle (étude 004).</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/005/">← Étude 005</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/006/">Étude 006 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+  <script src="../commun/sign.js?v=1"></script>
+  <script>(()=>{const{Planche:e,chaine:t,jouerForme:n,son:r,ui:o,fmt:s,fmtHz:a,note:i,borne:u,$:c}=SIGN,l={continu:null,tirets:[.024,.008],"tirets-courts":[.012,.008],pointilles:[.004,.008]},h={continu:"continu",tirets:"tirets","tirets-courts":"tirets courts",pointilles:"pointillés"},d=e=>LOIS.yDepuisFrequence(e),f=(e,t,n,r,o=24)=>Array.from({length:o},((s,a)=>[e+(n-e)*a/(o-1),t+(r-t)*a/(o-1)])),m={horizontale:f(.15,d(440),.85,d(440)),montante:f(.1,.9,.9,.1),descendante:f(.1,.1,.9,.9),verticale:f(.5,.15,.5,.85),courbe:Array.from({length:40},((e,t)=>{const n=t/39;return[.1+.8*n,.85-.7*Math.pow(n,2.4)]})),vague:Array.from({length:80},((e,t)=>{const n=t/79;return[.1+.8*n,.5-.16*Math.sin(2*Math.PI*2.5*n)]}))},g={id:"trait",x:-1,y:0,taille:1,angles:0,trace:{points:m.montante,fermee:!1},contour:"continu",epaisseur:.012};let p=null,v=null,M=!1;const L=new e(c("planche"),{fond:"clair",objets:[g],stereo:!1,saisir:!1,poignee:!1,curseur:"crosshair",verrous:{x:!0,y:!0,taille:!0},label:"Planche : tracer un trait avec le doigt, la souris ou le stylet ; Entrée le fait entendre",surTrace:(e,t)=>{const n=e.filter(((t,n)=>0===n||Math.hypot(t[0]-e[n-1][0],t[1]-e[n-1][1])>.004));n.length<2||($(),g.trace={points:n,fermee:!1},I.poser(null),L.dessiner(),t&&(A(),O()))},surToucher:()=>O(),dessinApres:(e,t)=>{if(!v)return;const n=(r().currentTime-v.t0)/v.d;if(n<0||n>1)return;const[o,s]=y(n),[a,i]=t.ecran(o,s);e.save(),e.strokeStyle="#1d1a1a",e.fillStyle="#ffffff",e.lineWidth=2,e.beginPath(),e.arc(a,i,7,0,2*Math.PI),e.fill(),e.stroke(),e.restore()}}),I=o.choix("exemples",[["horizontale","Horizontale"],["montante","Diagonale montante"],["descendante","Diagonale descendante"],["verticale","Verticale"],["courbe","Courbe"],["vague","Vague"]],"montante",(e=>{$(),g.trace={points:m[e],fermee:!1},L.dessiner(),A(),O()}));o.choix("style",Object.entries(h),"continu",(e=>{g.contour=e,g.tirets=l[e],L.dessiner(),A(),O()}));let S=[];function x(){const e=g.trace.points,t=[0];for(let n=1;n<e.length;n++)t.push(t[n-1]+Math.hypot(e[n][0]-e[n-1][0],e[n][1]-e[n-1][1]));const n=t[t.length-1]||1;S=[];for(let r=0,o=0;r<96;r++){const s=n*r/95;for(;o<t.length-2&&t[o+1]<s;)o++;const a=(s-t[o])/(t[o+1]-t[o]||1);S.push([e[o][0]+(e[o+1][0]-e[o][0])*a,e[o][1]+(e[o+1][1]-e[o][1])*a])}let r=-1;M=!1,e.forEach((([e])=>{e<r-.03&&(M=!0),r=Math.max(r,e)}))}function y(e){const t=u(e,0,1)*(S.length-1),n=Math.floor(t),r=t-n,o=Math.min(S.length-1,n+1);return[S[n][0]+(S[o][0]-S[n][0])*r,S[n][1]+(S[o][1]-S[n][1])*r]}const b=e=>LOIS.frequence(u(y(e)[1],0,1));function T(){return p||(p=t(),p.regler({teinte:null,x:0,niveau:.7},!0)),p}function $(){v&&(v.sons.forEach((e=>e.stop())),cancelAnimationFrame(v.raf),v=null,L.dessiner())}function O(){$(),x();const e=r(),t=LOIS.dureeTrait(LOIS.longueur(g)),o=e.currentTime+.05,s=LOIS.articulation(g,t)||[[0,t]],a=[];s.forEach((([e,r])=>{const s=Math.max(2,Math.round(48*(r-e)/t)),i=[];for(let n=0;n<s;n++){const o=e+(r-e)*n/(s-1);i.push([o-e,b(o/t)])}a.push(n({angles:0,f:i[0][1],d:r-e,t0:o+e,voix:T(),glisse:i}))})),v={t0:o,d:t,sons:a,raf:0};const i=()=>{v&&(L.dessiner(),e.currentTime<o+t+.05?v.raf=requestAnimationFrame(i):(v=null,L.dessiner()))};v.raf=requestAnimationFrame(i),c("ecouter").textContent="Réécouter",document.querySelector(".xp-etat").textContent=M?"Ce tracé revient vers la gauche : le temps devrait reculer. L'étude 005 le dit sans traduction ; il est joué ici le long du geste.":""}function A(){x();const e=LOIS.longueur(g),t=LOIS.dureeTrait(e),n=b(0),r=b(1),u=12*Math.log2(r/n),c=LOIS.articulation(g,t);o.lecture("entendu",[["Longueur",`${s(e,2)} côté de case`],["Durée",`${s(t,2)} s`],["Départ",`${a(n)} · ${i(n)}`],["Arrivée",`${a(r)} · ${i(r)}`],["Intervalle",Math.abs(u)<.05?"nul : une seule hauteur":`${u>0?"+":"−"}${s(Math.abs(u),1)} demi-tons`],["Vitesse",Math.abs(u)<.05?"—":`${s(Math.abs(u)/t,1)} demi-tons par seconde`],["Trait",c?`${h[g.contour]} : ${c.length} sons séparés de silences`:"continu : un son tenu"]])}c("ecouter").addEventListener("click",O),c("echelle").addEventListener("click",(()=>{$(),I.poser(null);const e=d(440),t=r();let a=t.currentTime+.05;const i=[];g.trace={points:f(.05,e,.05+.8,e),fermee:!1},L.dessiner(),[1,2,4,8].forEach((e=>{const t=LOIS.dureeTrait(.1*e);i.push(n({angles:0,f:440,d:t,t0:a,voix:T()})),a+=t+.35})),v={t0:t.currentTime,d:0,sons:i,raf:0},o.lecture("entendu",[["Longueurs","0,1 · 0,2 · 0,4 · 0,8 côté"],["Durées",[1,2,4,8].map((e=>s(LOIS.dureeTrait(.1*e),2))).join(" · ")+" s"],["Hauteur","440 Hz · la3"]])})),A()})();</script>
+</body>
+</html>

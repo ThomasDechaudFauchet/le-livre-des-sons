@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 010 : la taille donne la durée</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-010 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 010 : la taille donne la durée</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 010, Taille & Durée</div>
+<section class="xp" aria-label="Expérience : la taille donne la durée">
+      <p class="xp-intro">Après la rupture, la taille ne donne plus le volume mais la durée. L'étude 010 fait grandir
+        un cercle sur vingt-quatre cases, de 33 millisecondes à deux secondes, puis applique la loi aux pointés
+        instrumentaux. Ici on règle la taille d'un geste et l'on entend la durée suivre, sur la sinusoïde ou sur un
+        instrument, étiré ou resserré sans changer de hauteur.</p>
+
+      <div class="xp-scene">
+        <div class="xp-planche">
+          <div id="planche"></div>
+          <p class="xp-legende">La poignée agrandit · toucher la forme pour l'entendre</p>
+        </div>
+        <div class="xp-cote">
+          <div class="xp-rangee" id="source"><span class="xp-etiquette">Source</span></div>
+          <div class="xp-curseur">
+            <label class="xp-etiquette" for="taille">Diamètre</label>
+            <input type="range" id="taille" min="14" max="1000" value="412">
+            <output id="taille-v" for="taille"></output>
+          </div>
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="note" type="button">Écouter</button>
+            <button class="xp-bouton" id="trois" type="button">Trois tailles</button>
+          </div>
+          <dl class="xp-entendu" id="entendu"></dl>
+        </div>
+      </div>
+      <p class="xp-etat" aria-live="polite"></p>
+      <div class="xp-bande" role="img" aria-label="La durée sur une échelle de 0 à 2,4 secondes"><canvas id="duree"></canvas></div>
+      <p class="xp-legende" style="margin-left:0">La durée, de 0 à 2,4 s · le trait clair suit la lecture</p>
+
+      <details class="xp-precisions">
+        <summary>La loi, et ce que l'expérience y ajoute</summary>
+        <ul>
+          <li>La durée suit le diamètre, non la surface : une forme deux fois plus large sonne deux fois plus longtemps.
+            C'est la règle de l'étude 005 : l'étendue linéaire de la forme donne la durée.</li>
+          <li>Le dernier cercle de l'étude occupe 82,4 % de la case et dure 2 s : une forme qui remplirait la case
+            durerait donc 2,43 s. Le plus petit, 33 ms, est le seuil où une note cesse d'être une note : à 220 Hz,
+            sept périodes seulement.</li>
+          <li>Le volume ne bouge plus : toutes les tailles sonnent au même niveau.</li>
+          <li>Un instrument est joué à sa hauteur d'enregistrement ; sa durée est remplie en l'étirant ou en le
+            resserrant, comme dans les fichiers du chapitre 6. Loin de sa durée d'origine, l'étirement s'entend.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/010/">← Étude 010</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/011/">Étude 011 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+  <script src="../commun/sign.js?v=1"></script>
+  <script>(()=>{const{Planche:e,chaine:n,jouerForme:t,jouerSon:i,rendre:r,charger:o,son:s,ui:l,fmt:u,fmtHz:a,note:c,INSTRUMENTS:d,referenceDe:f,fichierDe:h,$:m}=SIGN,S={id:"forme",angles:0,x:0,y:LOIS.yDepuisFrequence(220),taille:.412,opacite:1};let g=null,x="sinus",p=null;const T=new e(m("planche"),{fond:"clair",objets:[S],stereo:!1,verrous:{x:!0,y:!0},tailleMin:.0136,label:"Planche : la poignée agrandit la forme ; Entrée la fait entendre",surChange:()=>D(!0),surToucher:()=>I(),surFin:()=>I()});T.selection="forme";const y=l.curseur("taille",((e,n)=>{S.taille=e/1e3,T.dessiner(),D(!1),n&&I()}),(e=>`${u(e/10,1)} % de la case`));l.choix("source",[["sinus","Sinusoïde"],["piano","Piano"],["violoncelle","Violoncelle"],["flute","Flûte"],["voix","Voix"]],x,(async e=>{if(x=e,"sinus"===e)delete S.son,delete S.figure,S.y=LOIS.yDepuisFrequence(220);else{const n=await o(h(e));S.son=e,S.figure=LOIS.figureDepuisSignal(n).points,S.y=LOIS.yDepuisFrequence(f(e))}T.dessiner(),D(!1),I()}));const v=()=>LOIS.duree(S.taille);function M(){return g||(g=n(),g.regler({teinte:null,x:0,niveau:.8},!0)),g}async function I(e=S.taille,n=null){const o=s(),l=LOIS.duree(e);if(n=n??o.currentTime+.04,"sinus"===x)t({angles:0,f:220,d:l,t0:n,voix:M()});else{const e=await r(x,{duree:l});n=Math.max(n,o.currentTime+.02),i(e.x,{t0:n,voix:M()})}return p={t0:n,d:l},L(),l}function L(){O(),p&&s().currentTime<p.t0+p.d+.1&&requestAnimationFrame(L)}function O(){const e=m("duree"),n=window.devicePixelRatio||1,t=e.clientWidth||400,i=e.clientHeight||80;e.width=Math.round(t*n),e.height=Math.round(i*n);const r=e.getContext("2d");r.setTransform(n,0,0,n,0,0);const o=LOIS.DUREE_MAX,l=e=>12+(t-24)*e/o,u=i/2;r.strokeStyle="rgba(242,239,232,.3)",r.lineWidth=1;for(let e=0;e<=o+1e-9;e+=.5)r.beginPath(),r.moveTo(l(e)+.5,u+10),r.lineTo(l(e)+.5,u+16),r.stroke();if(r.fillStyle="rgba(242,239,232,.85)",r.fillRect(l(0),u-6,Math.max(2,l(v())-l(0)),12),p){const e=s().currentTime-p.t0;e>=0&&e<=p.d&&(r.fillStyle="#d8a657",r.fillRect(l(e)-1,u-14,2,28))}}function D(e){e&&y.poser(Math.round(1e3*S.taille));const n=[["Diamètre",`${u(100*S.taille,1)} % de la case`],["Durée",v()<1?`${Math.round(1e3*v())} ms`:`${u(v(),2)} s`]];if("sinus"===x)n.push(["Son","sinusoïde, 220 Hz"],["Périodes",`${Math.round(220*v())}`]);else{const e=f(x);n.push(["Son",`${d[x].nom}, ${a(e)} · ${c(e)}`])}n.push(["Volume","constant"]),l.lecture("entendu",n),O()}m("note").addEventListener("click",(()=>I())),m("trois").addEventListener("click",(async()=>{const e=s();let n=e.currentTime+.05;"sinus"!==x&&await Promise.all([.25,.5,.824].map((e=>r(x,{duree:LOIS.duree(e)})))),n=Math.max(n,e.currentTime+.05);for(const t of[.25,.5,.824]){const i=LOIS.duree(t),r=n;I(t,r),setTimeout((()=>{S.taille=t,T.dessiner(),D(!0),p={t0:r,d:i},L()}),Math.max(0,1e3*(r-e.currentTime))),n+=i+.5}})),new ResizeObserver(O).observe(m("duree")),D(!0)})();</script>
+</body>
+</html>

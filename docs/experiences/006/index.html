@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 006 : le cadre donne le cycle</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-006 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 006 : le cadre donne le cycle</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 006, Formes fermées & Objets sonores non mesurables dans le temps</div>
+<section class="xp" aria-label="Expérience : le cadre donne le cycle">
+      <p class="xp-intro">Dans l'étude 006, une forme fermée vide qui contient des éléments les organise : son nombre
+        de côtés donne la longueur du cycle, son contour le liage. Ici on change le cadre pendant qu'il tourne, on y
+        fait entrer et sortir des éléments, et l'on pose deux cadres côte à côte : deux cycles de longueurs
+        différentes se décalent puis se retrouvent.</p>
+
+      <div class="xp-scene">
+        <div class="xp-planche">
+          <div id="planche"></div>
+          <p class="xp-legende">Glisser les éléments · saisir un cadre par son bord · toucher le fond pour lire</p>
+        </div>
+        <div class="xp-cote">
+          <div class="xp-rangee" id="exemples"><span class="xp-etiquette">Configurations</span></div>
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="lire" type="button" aria-pressed="false">Lire</button>
+          </div>
+          <div class="xp-rangee" id="cadre"><span class="xp-etiquette">Le cadre choisi</span></div>
+          <div class="xp-rangee" id="contour"><span class="xp-etiquette">Son contour</span></div>
+          <div class="xp-rangee" id="element"><span class="xp-etiquette">L'élément choisi</span></div>
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="ajouter" type="button">Ajouter un élément</button>
+            <button class="xp-bouton" id="retirer" type="button">Retirer l'élément</button>
+          </div>
+          <dl class="xp-entendu" id="entendu"></dl>
+        </div>
+      </div>
+      <p class="xp-etat" aria-live="polite"></p>
+
+      <details class="xp-precisions">
+        <summary>La loi, et ce que l'expérience y ajoute</summary>
+        <ul>
+          <li>Les éléments d'un cadre se lisent dans le sens horaire, depuis le haut, autour de son centre : l'élément k
+            tombe sur le temps k. Plus d'éléments que de temps : ils sonnent ensemble ; moins : les temps restants sont
+            des silences. Le cercle ne prescrit pas de cycle : il active ses éléments au hasard, autrement à chaque
+            tour.</li>
+          <li>Contour continu : chaque élément tient son temps (lié). Discontinu : il n'en sonne qu'une part (piqué),
+            d'autant plus courte que le trait est fragmenté.</li>
+          <li>Un cadre ne régit que ce qu'il contient directement ; un cadre intérieur garde son cycle et son liage et
+            tourne en même temps que celui qui l'enveloppe, sur le même temps. C'est la lecture du texte de l'étude ;
+            le fichier sonore de la planche 4 en fait entendre une autre, où le cadre intérieur partage un temps du
+            cadre principal.</li>
+          <li>Le temps dure 1,33 s, celui de tes fichiers 006. Chaque élément garde les lois déjà posées : sa forme
+            donne l'onde, sa hauteur la note, sa position horizontale la place. Tous sonnent au même niveau.</li>
+          <li>Un élément sorti de tout cadre redevient une forme à fond uni, un objet non mesurable : il tient tant que
+            dure la lecture (planche 2).</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/006/">← Étude 006</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/007/">Étude 007 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+  <script src="../commun/sign.js?v=1"></script>
+  <script>(()=>{const{Planche:e,chaine:t,jouerForme:n,tenir:s,son:r,ui:i,fmt:o,fmtHz:c,note:l,borne:a,$:u}=SIGN,d=LOIS.TEMPS_LIVRE,f=.3,h={continu:null,tirets:[.024,.008],"tirets-courts":[.012,.008],pointilles:[.004,.008]},p={0:"cercle",3:"triangle",4:"carré",6:"hexagone",8:"octogone",16:"hexadécagone"};let g=0;const m=(e,t,n,s,r="continu")=>({id:"c"+ ++g,angles:e,x:t,y:n,taille:s,remplissage:"vide",vide:!0,contour:r,tirets:h[r],opacite:1}),x=(e,t,n)=>({id:"e"+ ++g,angles:e,x:t,y:n,taille:.075,opacite:1});function I(e,t,n,s=.27,r=0){const i=-Math.PI/2+2*Math.PI*t/n+r;return[2*((e.x+1)/2+s*e.taille*Math.cos(i))-1,e.y+s*e.taille*Math.sin(i)]}const b={un:()=>{const e=m(4,0,.5,.82);return[e,...[0,1,2].map((t=>x([0,3,4][t],...I(e,t,4,.3))))]},deux:()=>{const e=m(3,-.5,.5,.44),t=m(4,.5,.5,.44);return[e,t,...[0,1,2].map((t=>x(3,...I(e,t,3,.2)))),...[0,1,2,3].map((e=>x(4,...I(t,e,4,.26))))]},imbriques:()=>{const e=m(6,0,.5,.9,"tirets"),t=m(4,0,.5,.36,"continu");return[e,t,...[0,1,2,3,4,5].map((t=>x(0,...I(e,t,6,.37)))),...[0,1,2,3].map((e=>x(3,...I(t,e,4,.24))))]},cercle:()=>{const e=m(0,0,.5,.8);return[e,...[0,1,2,3].map((t=>x(4,...I(e,t,4,.28,.4))))]}};let S=b.un(),L=S[0].id,y=null;const O=new e(u("planche"),{fond:"clair",objets:S,label:"Planche : glisser les éléments dans ou hors des cadres ; les flèches déplacent l'objet choisi",surChange:(e,t)=>{"deplacer"===t&&LOIS.vide(e)&&function(e){const t=e.x-(e._x??e.x),n=e.y-(e._y??e.y);if(t||n){const s=e.x,r=e.y;e.x=e._x,e.y=e._y;const i=LOIS.structure(S),o=S.indexOf(e),c=new Set,l=e=>(i.enfants.get(e)||[]).forEach((e=>{c.add(e),l(e)}));l(o),e.x=s,e.y=r,c.forEach((e=>{S[e].x=a(S[e].x+t,-1,1),S[e].y=a(S[e].y+n,0,1)}))}v()}(e),$(e),B()},surToucher:e=>{e?$(e):T(),B()},dessinApres:(e,t)=>function(e,t){if(!y)return;const n=r().currentTime;e.save(),e.strokeStyle="#1d1a1a",e.lineWidth=2,y.eclats.forEach((s=>{if(n<s.debut||n>s.fin)return;const r=S.find((e=>e.id===s.id));if(!r)return;const[i,o]=t.ecran((r.x+1)/2,r.y);e.beginPath(),e.arc(i,o,r.taille/2*t.cote+6,0,2*Math.PI),e.stroke()})),e.fillStyle="#1d1a1a",y.horloges.forEach(((s,r)=>{const i=S.find((e=>e.id===r));if(!i||!s.duree)return;const o=((n-s.debut)/s.duree%1+1)%1,c=-Math.PI/2+2*Math.PI*o,l=i.taille/2*1.08,[a,u]=t.ecran((i.x+1)/2+l*Math.cos(c),i.y+l*Math.sin(c));e.beginPath(),e.arc(a,u,3.5,0,2*Math.PI),e.fill()})),e.restore()}(e,t)});const v=()=>S.forEach((e=>{e._x=e.x,e._y=e.y}));v();const M=e=>{if(!e)return null;if(LOIS.vide(e))return e;const t=LOIS.structure(S).parent[S.indexOf(e)];return t>=0?S[t]:null};function $(e){const t=M(e);t&&(L=t.id),O.selection=e.id,A()}const E=()=>S.find((e=>e.id===L))||S.find((e=>LOIS.vide(e))),q=()=>{const e=S.find((e=>e.id===O.selection));return e&&!LOIS.vide(e)?e:null},P=(i.choix("exemples",[["un","Un cadre"],["deux","Trois contre quatre"],["imbriques","Imbriqués"],["cercle","Le cercle"]],"un",(e=>{S=b[e](),O.objets=S,L=S[0].id,O.selection=null,v(),y&&(F(),C()),A(),O.dessiner(),B()})),i.choix("cadre",[3,4,6,8,16,0].map((e=>[e,p[e]])),4,(e=>{const t=E();t&&(t.angles=e,O.dessiner(),B())}))),w=i.choix("contour",[["continu","continu"],["tirets","tirets"],["tirets-courts","tirets courts"],["pointilles","pointillés"]],"continu",(e=>{const t=E();t&&(t.contour=e,t.tirets=h[e],O.dessiner(),B())})),k=i.choix("element",[[0,"cercle"],[3,"triangle"],[4,"carré"]],0,(e=>{const t=q();t&&(t.angles=e,O.dessiner(),B())}));function A(){const e=E(),t=q();e&&(P.poser(e.angles),w.poser(e.contour)),k.poser(t?t.angles:null),u("retirer").disabled=!t}u("ajouter").addEventListener("click",(()=>{const e=E();if(!e)return;const t=(LOIS.structure(S).enfants.get(S.indexOf(e))||[]).filter((e=>!LOIS.vide(S[e]))).length,n=x(0,...I(e,t+.5,Math.max(4,t+1),.2));S.push(n),O.selection=n.id,v(),A(),O.dessiner(),B()})),u("retirer").addEventListener("click",(()=>{const e=q();e&&(S.splice(S.indexOf(e),1),O.selection=null,A(),O.dessiner(),B())}));const _=new Map;function j(e){if(!_.has(e.id)){const n=t();n.regler({teinte:null,niveau:f,x:e.x},!0),_.set(e.id,n)}const n=_.get(e.id);return n.regler({x:e.x}),n}function T(){y?F():C()}function C(){const e=r();y={t0:e.currentTime+.12,horloges:new Map,tenus:new Map,eclats:[],timer:0,raf:0},y.timer=setInterval(H,50),H();const t=()=>{y&&(O.dessiner(),y.raf=requestAnimationFrame(t))};y.raf=requestAnimationFrame(t),u("lire").setAttribute("aria-pressed","true"),u("lire").textContent="Arrêter"}function F(){y&&(clearInterval(y.timer),cancelAnimationFrame(y.raf),y.eclats.forEach((e=>e.son.stop())),y.tenus.forEach((e=>e.arreter())),y=null,O.dessiner(),u("lire").setAttribute("aria-pressed","false"),u("lire").textContent="Lire")}const z=.25;function H(){const e=r().currentTime,t=e+z,i=LOIS.organiser(S),o=new Set;i.horloges.forEach((s=>{const r=S[s];o.add(r.id);let c=y.horloges.get(r.id);if(!c){const t=y.t0+Math.max(0,Math.ceil((e+.05-y.t0)/d))*d;c={debut:t,tour:0,fait:t-1e-6},y.horloges.set(r.id,c)}for(let r=0;r<8;r++){const r=LOIS.cycle(S,i.struct,s,{temps:d,tour:c.tour});if(c.duree=r.duree,c.n=r.temps,r.evenements.forEach((s=>{const r=c.debut+s.t;if(r>c.fait&&r<=t){const t=S[s.i],i=Math.max(.03,s.d-.004),o=n({angles:t.angles,f:LOIS.frequence(t.y),d:i,t0:Math.max(r,e+.005),voix:j(t)});y.eclats.push({id:t.id,debut:r,fin:r+i,son:o})}})),!(c.debut+r.duree<=t)){c.fait=t;break}c.fait=c.debut+r.duree-1e-6,c.debut+=r.duree,c.tour++}}));for(const e of[...y.horloges.keys()])o.has(e)||y.horloges.delete(e);const c=new Set(i.libres.map((e=>S[e].id)));i.libres.forEach((e=>{const t=S[e];y.tenus.has(t.id)?(y.tenus.get(t.id).frequence(LOIS.frequence(t.y)),y.tenus.get(t.id).onde(t.angles),j(t)):y.tenus.set(t.id,s({angles:t.angles,f:LOIS.frequence(t.y),voix:j(t)}))}));for(const[e,t]of y.tenus)c.has(e)||(t.arreter(),y.tenus.delete(e));y.eclats=y.eclats.filter((t=>t.fin>e-.5))}function B(){const e=LOIS.organiser(S),t=E(),n=[];if(t){const s=S.indexOf(t),r=(e.struct.enfants.get(s)||[]).filter((e=>!LOIS.vide(S[e]))),i=t.angles>=3?t.angles:0,c=LOIS.styleDe(t);if(n.push(["Cadre",i?`${p[i]||i+" côtés"} : cycle sur ${i} temps, ${o(i*d,2)} s`:"cercle : activation libre, non périodique"]),i){const e=new Set(r.map(((e,t)=>t%i)));n.push(["Éléments",r.length?`${r.length} · ${i-e.size?i-e.size+" temps de silence":r.length>i?"certains sonnent ensemble":"un par temps"}`:"aucun : silence"])}else n.push(["Éléments",r.length?`${r.length}, à des instants tirés au sort`:"aucun : silence"]);n.push(["Liage",c?`piqué : ${Math.round(100*c.part)} % de chaque temps`:"lié : chaque élément tient son temps"])}const s=e.horloges.map((e=>S[e].angles>=3?S[e].angles:0)).filter(Boolean);if(s.length>1){const e=LOIS.ppcm(s);n.push(["Ensemble",`${s.join(" et ")} temps : ils se retrouvent tous les ${e} temps (${o(e*d,1)} s)`])}e.libres.length&&n.push(["Hors cadre",`${e.libres.length} élément${e.libres.length>1?"s":""} : un son tenu`]);const r=q();if(r){const t=LOIS.frequence(r.y),s=LOIS.place(S,e.struct,S.indexOf(r));n.push(["Élément",`${c(t)} · ${l(t)}${s&&s.pas>=0?` · temps ${s.pas+1}`:""}`])}i.lecture("entendu",n)}u("lire").addEventListener("click",T),A(),B()})();</script>
+</body>
+</html>

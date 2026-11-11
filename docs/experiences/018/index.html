@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 018 : le contour abîmé distord le son</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-018 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 018 : le contour abîmé distord le son</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 018, Distorsions</div>
+<section class="xp" aria-label="Expérience : le contour abîmé distord le son">
+      <p class="xp-intro">L'étude 018 abîme la forme de deux façons : un contour irrégulier fait saturer le son, une
+        surface réduite à des blocs le prive de nuances, comme un son décrit avec moins de valeurs. Ici on dose les
+        deux séparément, puis ensemble.</p>
+      <p class="xp-hors-livre"><strong>Hors du livre :</strong> les deux lois sont celles de l'étude ; leur dosage
+        chiffré (combien de saturation pour combien d'irrégularité, un bit par doublement des blocs) est une proposition
+        de SIGN.</p>
+
+      <div class="xp-scene">
+        <div class="xp-planche">
+          <div id="planche"></div>
+          <p class="xp-legende">Glisser la forme · toucher pour l'entendre</p>
+        </div>
+        <div class="xp-cote">
+          <div class="xp-curseur">
+            <label class="xp-etiquette" for="rugosite">Irrégularité du contour</label>
+            <input type="range" id="rugosite" min="0" max="100" value="40">
+            <output id="rugosite-v" for="rugosite"></output>
+          </div>
+          <div class="xp-curseur">
+            <label class="xp-etiquette" for="blocs">Blocs</label>
+            <input type="range" id="blocs" min="1" max="7" value="7">
+            <output id="blocs-v" for="blocs"></output>
+          </div>
+          <div class="xp-rangee" id="source"><span class="xp-etiquette">Forme ou pointé</span></div>
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="tenir" type="button" aria-pressed="false">Son tenu</button>
+            <button class="xp-bouton" id="note" type="button">Une note</button>
+          </div>
+          <dl class="xp-entendu" id="entendu"></dl>
+        </div>
+      </div>
+      <p class="xp-etat" aria-live="polite"></p>
+
+      <details class="xp-precisions">
+        <summary>La loi, et ce que l'expérience y ajoute</summary>
+        <ul>
+          <li>Contour irrégulier → saturation : l'onde est écrêtée en douceur, d'autant plus fort que le contour
+            s'écarte de sa forme lisse. À zéro, le son est intact.</li>
+          <li>Facettage → réduction de résolution : une forme décrite par n blocs de côté donne un son décrit par n
+            valeurs d'amplitude, soit log₂ n bits. Seize blocs : quatre bits ; quatre blocs : deux bits. Tout à droite,
+            la forme n'est pas facettée.</li>
+          <li>Ces deux altérations agissent avant la couleur, la stéréo et le niveau : la forme garde ses autres lois.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/018/">← Étude 018</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/019/">Étude 019 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+  <script src="../commun/sign.js?v=1"></script>
+  <script>(()=>{const{Planche:e,chaine:r,tenir:n,jouerForme:t,jouerSon:i,rendre:c,charger:u,ui:l,fmt:o,INSTRUMENTS:s,referenceDe:a,fichierDe:f,borne:d,$:g}=SIGN,p={id:"forme",angles:0,x:0,y:LOIS.yDepuisFrequence(220),taille:.46,opacite:1,couleur:"#8c8c8c",rugosite:0,graine:3};let S=null,h=null,v="cercle",y=.4,b=0;const x=new e(g("planche"),{fond:"noir",objets:[p],verrous:{taille:!0},poignee:!1,label:"Planche : glisser la forme ; Entrée la fait entendre",surChange:()=>{q(),m()},surToucher:()=>O(),surFin:()=>{"cercle"!==v&&O()}});function I(){p.rugosite=.32*y,p.facettes=b?Math.pow(2,b):0,x.dessiner(),q(),m()}function L(){return S||(S=r()),S}function q(){S&&(S.regler({teinte:null,niveau:.55,x:p.x,distorsion:y,bits:b},!0),h&&h.frequence(LOIS.frequence(p.y)))}async function O(){const e=L();if(q(),"cercle"===v)return void t({angles:0,f:LOIS.frequence(p.y),d:1.4,voix:e});const r=await c(v,{f:LOIS.frequence(p.y)});i(r.x,{voix:e,d:2.5})}function m(){l.lecture("entendu",[["Saturation",y?`${Math.round(100*y)} %`:"aucune"],["Résolution",b?`${b} bits, ${Math.pow(2,b)} valeurs d'amplitude`:"entière"],["Son","cercle"===v?`sinusoïde, ${Math.round(LOIS.frequence(p.y))} Hz`:s[v].nom]])}x.selection="forme",l.curseur("rugosite",((e,r)=>{y=e/100,I(),r&&!h&&O()}),(e=>e?`${e} %`:"lisse")),l.curseur("blocs",((e,r)=>{b=e>=7?0:e+1,I(),r&&!h&&O()}),(e=>e>=7?"aucun":`${Math.pow(2,e+1)} de côté`)),l.choix("source",[["cercle","Cercle"],["piano","Piano"],["violoncelle","Violoncelle"],["voix","Voix"],["flute","Flûte"]],v,(async e=>{if(v=e,g("tenir").disabled="cercle"!==e,"cercle"!==e&&h&&(h.arreter(),h=null,g("tenir").setAttribute("aria-pressed","false")),"cercle"===e)delete p.son,delete p.figure,p.taille=.46;else{const r=await u(f(e));p.son=e,p.figure=LOIS.figureDepuisSignal(r).points,p.taille=.6,p.y=d(LOIS.yDepuisFrequence(a(e)),.1,.9)}I(),O()})),g("note").addEventListener("click",O),g("tenir").addEventListener("click",(e=>{if(h)return h.arreter(),h=null,void e.currentTarget.setAttribute("aria-pressed","false");L(),q(),h=n({angles:0,f:LOIS.frequence(p.y),voix:L()}),e.currentTarget.setAttribute("aria-pressed","true")})),I()})();</script>
+</body>
+</html>

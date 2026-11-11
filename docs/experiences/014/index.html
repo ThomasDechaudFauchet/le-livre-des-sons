@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 014 : le flou donne la réverbération</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-014 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 014 : le flou donne la réverbération</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 014, Dilution & Réverbération</div>
+<section class="xp" aria-label="Expérience : le flou donne la réverbération">
+      <p class="xp-intro">Dans l'étude 014, une forme qui se dilue dans le noir fait entendre un son qui se dilue dans
+        l'espace : plus le contour est flou, plus la réverbération est longue. La salle reste la même, seul son temps
+        de réverbération change. Ici on règle le flou sans palier et on l'écoute sur des sons brefs, où la queue
+        s'entend le mieux.</p>
+      <p class="xp-hors-livre"><strong>Hors du livre :</strong> la loi est celle de l'étude ; le chiffre qui relie le
+        rayon du flou au temps de réverbération est une proposition de SIGN.</p>
+
+      <div class="xp-scene">
+        <div class="xp-planche">
+          <div id="planche"></div>
+          <p class="xp-legende">Glisser la forme · toucher pour l'entendre</p>
+        </div>
+        <div class="xp-cote">
+          <div class="xp-curseur">
+            <label class="xp-etiquette" for="flou">Flou</label>
+            <input type="range" id="flou" min="0" max="100" value="30">
+            <output id="flou-v" for="flou"></output>
+          </div>
+          <div class="xp-rangee" id="source"><span class="xp-etiquette">Forme ou pointé</span></div>
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="note" type="button">Écouter</button>
+            <button class="xp-bouton" id="comparer" type="button">Net, puis flou</button>
+          </div>
+          <dl class="xp-entendu" id="entendu"></dl>
+        </div>
+      </div>
+      <p class="xp-etat" aria-live="polite"></p>
+
+      <details class="xp-precisions">
+        <summary>La loi, et ce que l'expérience y ajoute</summary>
+        <ul>
+          <li>Le flou est mesuré par l'écart type σ de la dilution, en côté de case. Le temps de réverbération vaut ici
+            60 × σ secondes : un flou de 0,05 case donne 3 s. Ce facteur est une proposition, à vérifier sur tes
+            fichiers.</li>
+          <li>La salle est la même pour toutes les formes : une queue de bruit dont les aigus s'amortissent plus vite.
+            Le son direct reste entier ; seule la réverbération s'allonge.</li>
+          <li>Une forme nette ne réverbère pas. La forme garde ses autres lois : sa hauteur, sa place, sa durée.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/014/">← Étude 014</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/015/">Étude 015 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+  <script src="../commun/sign.js?v=1"></script>
+  <script>(()=>{const{Planche:e,chaine:n,jouerForme:r,jouerSon:o,rendre:l,charger:c,son:i,ui:u,fmt:t,INSTRUMENTS:s,referenceDe:a,fichierDe:f,borne:d,couleurTeinte:v,$:g}=SIGN,S={id:"forme",angles:0,x:0,y:LOIS.yDepuisFrequence(440),taille:.12,opacite:1,couleur:"#8c8c8c",flou:.03};let x=null,h="clave";const m=new e(g("planche"),{fond:"noir",objets:[S],verrous:{taille:!0},poignee:!1,label:"Planche : glisser la forme ; Entrée la fait entendre",surChange:()=>I(),surToucher:()=>y(),surFin:()=>y()});m.selection="forme";const p=()=>60*S.flou;async function y(e=null){const c=(x||(x=n()),x.regler({teinte:null,niveau:.7,x:S.x,reverb:p()},!0),x);if("cercle"===h)return void r({angles:0,f:LOIS.frequence(S.y),d:LOIS.duree(S.taille),voix:c,t0:e});const i=await l(h);o(i.x,{voix:c,t0:e})}function I(){x&&x.regler({x:S.x,reverb:p()}),u.lecture("entendu",[["Flou",S.flou>5e-4?`σ = ${t(S.flou,3)} case`:"aucun : forme nette"],["Réverbération",p()>.05?`${t(p(),1)} s`:"aucune"],["Son","cercle"===h?`sinusoïde, ${Math.round(LOIS.frequence(S.y))} Hz`:s[h].nom]])}u.curseur("flou",((e,n)=>{S.flou=.1*e/100,m.dessiner(),I(),n&&y()}),(e=>`σ ${t(.1*e/100,3)} case`)),u.choix("source",[["cercle","Cercle"],["clave","Clave"],["snap","Claquement"],["piano","Piano"],["voix","Voix"],["kick","Kick"]],h,(async e=>{if(h=e,"cercle"===e)delete S.son,delete S.figure,S.taille=.12;else{const n=await c(f(e));S.son=e,S.figure=LOIS.figureDepuisSignal(n).points,S.taille=.3,S.y=d(LOIS.yDepuisFrequence(a(e)),.05,.95)}m.dessiner(),I(),y()})),g("note").addEventListener("click",(()=>y())),g("comparer").addEventListener("click",(()=>{const e=S.flou;S.flou=0,m.dessiner(),y(),setTimeout((()=>{S.flou=e||.05,m.dessiner(),I(),y()}),1600)})),I()})();</script>
+</body>
+</html>

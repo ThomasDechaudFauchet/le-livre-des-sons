@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 001 : la taille donne le volume</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-001 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 001 : la taille donne le volume</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 001, Taille visuelle & Volume sonore</div>
+<section class="xp" aria-label="Expérience : la taille donne le volume">
+      <p class="xp-intro">Dans l'étude 001, trente et une tailles d'un même cercle font entendre une sinusoïde de 220 Hz
+        de plus en plus fort, de −61,5 à 0 dBFS. Ici la taille varie sans palier : agrandis le cercle par sa poignée
+        ou au curseur, et écoute le volume suivre.</p>
+
+      <div class="xp-scene">
+        <div class="xp-planche">
+          <div id="planche"></div>
+          <p class="xp-legende">La poignée agrandit · toucher le cercle pour l'entendre</p>
+        </div>
+        <div class="xp-cote">
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="tenir" type="button" aria-pressed="false">Son tenu</button>
+            <button class="xp-bouton" id="note" type="button">Une note d'une seconde</button>
+          </div>
+          <div class="xp-curseur">
+            <label class="xp-etiquette" for="taille">Taille</label>
+            <input type="range" id="taille" min="0" max="1000" value="820">
+            <output id="taille-v" for="taille"></output>
+          </div>
+          <dl class="xp-entendu" id="entendu"></dl>
+        </div>
+      </div>
+      <p class="xp-etat" aria-live="polite"></p>
+
+      <details class="xp-precisions">
+        <summary>La loi, et ce que l'expérience y ajoute</summary>
+        <ul>
+          <li>L'étude fait correspondre la surface de la forme à l'intensité du son. L'intensité suivant le carré de
+            l'amplitude, comme la surface suit le carré du diamètre, le niveau suit ici le diamètre : un cercle deux fois
+            plus large sonne 6 dB plus fort.</li>
+          <li>Le cercle qui remplit la case vaut 0 dBFS ; le plus petit, un point à peine visible, −61,5 dBFS, les deux
+            bornes de l'étude.</li>
+          <li>On entend ce que décrit l'étude : sur les petites tailles, un écart minime change beaucoup le volume ; sur
+            les grandes, la surface varie beaucoup pour un écart sonore plus faible.</li>
+          <li>La page joue 6 dB sous le niveau affiché, pour ménager l'écoute.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/001/">← Étude 001</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/002/">Étude 002 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+  <script src="../commun/sign.js?v=1"></script>
+  <script>(()=>{const{Planche:e,chaine:t,tenir:l,jouerForme:r,ui:a,fmt:n,$:i}=SIGN,u=-61.5,c=Math.pow(10,-3.075),s=e=>Math.max(u,20*Math.log10(e)),o={id:"cercle",angles:0,x:0,y:.5,taille:Math.pow(10,u*(1-.82)/20),opacite:1};let d=null,h=null;const g=new e(i("planche"),{fond:"clair",objets:[o],hauteurs:!1,stereo:!1,verrous:{x:!0,y:!0},tailleMin:c,label:"Planche : la poignée du cercle l'agrandit ou le réduit ; Entrée le fait entendre",surChange:()=>v(!0),surToucher:()=>M()});g.selection="cercle",g.dessiner();const f=a.curseur("taille",(e=>{o.taille=Math.pow(10,u*(1-e/1e3)/20),g.dessiner(),v(!1)}),(e=>n(u*(1-e/1e3),1)+" dBFS"));function p(){return d||(d=t(),d.regler({teinte:null,x:0,niveau:o.taille},!0)),d}function v(e){e&&f.poser(Math.round(1e3*(1-s(o.taille)/u))),d&&d.regler({niveau:o.taille}),a.lecture("entendu",[["Taille",`diamètre ${n(100*o.taille,o.taille<.1?2:1)} % de la case`],["Volume",`${n(s(o.taille),1)} dBFS`],["Hauteur","220 Hz · la2"],["Onde","sinusoïde (le cercle, étude 004)"]])}function M(){r({angles:0,f:220,d:1,voix:p()})}i("note").addEventListener("click",M),i("tenir").addEventListener("click",(e=>{if(h)return h.arreter(),h=null,void e.currentTarget.setAttribute("aria-pressed","false");h=l({angles:0,f:220,voix:p()}),e.currentTarget.setAttribute("aria-pressed","true")})),v(!1)})();</script>
+</body>
+</html>

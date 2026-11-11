@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 012 : la couleur ouvre une fenêtre</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-012 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 012 : la couleur ouvre une fenêtre</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 012, Couleurs — Longueurs d'ondes & Ouvertures spectrales</div>
+<section class="xp" aria-label="Expérience : la couleur ouvre une fenêtre">
+      <p class="xp-intro">Dans l'étude 012, la planche devient noire et la forme lumière : le noir se tait, le blanc
+        laisse passer toutes les fréquences, le gris laisse le son tel quel, et chaque teinte ouvre une fenêtre dans
+        le spectre, du grave pour le rouge à l'aigu pour le violet. Ici on parcourt toute la roue des teintes et l'on
+        voit la fenêtre se déplacer dans le spectre de ce qu'on entend.</p>
+
+      <div class="xp-scene">
+        <div class="xp-planche">
+          <div id="planche"></div>
+          <p class="xp-legende">Glisser la forme · toucher pour l'entendre</p>
+        </div>
+        <div class="xp-cote">
+          <div class="xp-rangee" id="couleurs"><span class="xp-etiquette">Couleur</span></div>
+          <div class="xp-curseur">
+            <label class="xp-etiquette" for="teinte">Teinte</label>
+            <input type="range" id="teinte" min="0" max="360" step="0.5" value="0">
+            <output id="teinte-v" for="teinte"></output>
+          </div>
+          <div class="xp-rangee" id="source"><span class="xp-etiquette">Forme ou pointé</span></div>
+          <div class="xp-rangee" id="regime"><span class="xp-etiquette">Régime</span></div>
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="tenir" type="button" aria-pressed="false">Son tenu</button>
+            <button class="xp-bouton" id="note" type="button">Une note</button>
+          </div>
+          <dl class="xp-entendu" id="entendu"></dl>
+        </div>
+      </div>
+      <p class="xp-etat" aria-live="polite"></p>
+      <div class="xp-bande" role="img" aria-label="Spectre de ce qu'on entend, de 20 Hz à 20 kHz"><canvas id="spectre"></canvas></div>
+      <p class="xp-legende" style="margin-left:0">Le spectre entendu, de 20 Hz à 20 kHz · en or, le centre de la fenêtre</p>
+
+      <details class="xp-precisions">
+        <summary>La loi, et ce que l'expérience y ajoute</summary>
+        <ul>
+          <li>La fenêtre est une cloche de +14 dB (facteur de qualité 1,1). Du rouge au violet du livre (teinte
+            282,2°), son centre monte de 50 Hz à 16 kHz, à intervalles égaux sur l'échelle des octaves. Au-delà, les
+            pourpres ne correspondent à aucune longueur d'onde : ils ouvrent deux fenêtres, l'une haute, l'autre basse,
+            dont le poids passe de l'une à l'autre jusqu'au retour du rouge.</li>
+          <li>Sur le cercle, la fenêtre n'a qu'une composante à sélectionner : elle s'entend comme un changement de
+            niveau plutôt que de couleur. La règle s'entend d'autant mieux que la forme est riche : essaie le carré,
+            un pointé, ou le charleston, à qui la couleur donne une note qu'il n'avait pas.</li>
+          <li>Le régime « la teinte donne la note » est celui du Discours 2 : la teinte donne la hauteur, de 20 Hz au
+            rouge à 20 kHz au violet, et la position verticale se retire. Le gris, sans teinte, y garde la hauteur de
+            sa position : c'est un choix de l'expérience.</li>
+          <li>Un pointé est joué à la hauteur de sa position (étude 003) : posé à sa place d'origine, il sonne tel
+            qu'enregistré ; déplacé, il est transposé.</li>
+          <li>La place des pourpres et la répartition de leurs deux fenêtres sont provisoires dans SIGN.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/012/">← Étude 012</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/013/">Étude 013 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+  <script src="../commun/sign.js?v=1"></script>
+  <script>(()=>{const{Planche:e,chaine:n,tenir:t,jouerForme:r,jouerSon:i,rendre:a,charger:l,son:o,maitre:s,ui:c,fmt:u,fmtHz:f,note:h,couleurTeinte:g,INSTRUMENTS:d,referenceDe:p,fichierDe:m,borne:b,$:S}=SIGN,T=[["noir","Noir"],["blanc","Blanc"],["gris","Gris"],[0,"Rouge"],[30,"Orange"],[60,"Jaune"],[120,"Vert"],[180,"Cyan"],[240,"Bleu"],[LOIS.H_VIOLET,"Violet"],[320,"Magenta"]],y={id:"forme",angles:4,x:0,y:LOIS.yDepuisFrequence(220),taille:.42,opacite:1,couleur:g(0)};let v="teinte",x=0,C="carre",L="fenetre",I=null,M=null,O=null,q=!1,A=null,F=null;const w={cercle:0,triangle:3,carre:4},R=new e(S("planche"),{fond:"noir",objets:[y],verrous:{taille:!0},poignee:!1,label:"Planche : glisser la forme pour changer sa hauteur et sa place ; Entrée la fait entendre",surChange:()=>{N(),V()},surToucher:()=>G(),surFin:()=>{k()||G()},dessinApres:(e,n)=>{"noir"===v&&(n.chemin(y),e.strokeStyle="#f2efe8",e.lineWidth=2,e.stroke())}});R.selection="forme";const k=()=>C in w,D=c.choix("couleurs",T,0,(e=>{"number"==typeof e?(v="teinte",x=e,$.poser(e)):v=e,B(),G()})),$=c.curseur("teinte",(e=>{v="teinte",x=e,D.poser(null),B()}),(e=>`${u(e,1)}°`));function B(){y.couleur="noir"===v?"#000000":"blanc"===v?"#ffffff":"gris"===v?"#8c8c8c":g(x),R.dessiner(),N(),V()}function E(){return"hauteur"===L&&"teinte"===v?LOIS.frequenceTeinte(x):LOIS.frequence(y.y)}function H(){if(!I){const e=o();M=e.createGain(),O=e.createAnalyser(),O.fftSize=8192,O.smoothingTimeConstant=.6,M.connect(s()),M.connect(O),I=n(M),N(!0)}return I}function N(e=!1){I&&(I.regler({teinte:"teinte"===v&&"fenetre"===L?x:null,niveau:"noir"===v?0:.6,x:y.x},e),q&&("blanc"===v?(A&&(A.arreter(),A=null),F||(F=j())):(F&&(F.arreter(),F=null),A?(A.frequence(E()),A.onde(y.angles)):A=t({angles:y.angles,f:E(),voix:I}))))}c.choix("source",[["cercle","Cercle"],["triangle","Triangle"],["carre","Carré"],["piano","Piano"],["contrebasse","Contrebasse"],["kalimba","Kalimba"],["clave","Clave"],["charleston","Charleston"]],C,(async e=>{if(C=e,z(),S("tenir").disabled=!k(),k())y.angles=w[e],y.taille=.42,delete y.son,delete y.figure;else{const n=await l(m(e));y.son=e,y.figure=LOIS.figureDepuisSignal(n).points,y.taille=.2,y.y=b(LOIS.yDepuisFrequence(p(e)),.1,.9)}R.dessiner(),N(),V(),G()})),c.choix("regime",[["fenetre","La teinte ouvre une fenêtre"],["hauteur","La teinte donne la note"]],L,(e=>{L=e,N(),V(),G()}));let P=null;function j(e=null){const n=o(),t=n.createBufferSource(),r=n.createGain();if(!P){P=n.createBuffer(1,2*n.sampleRate,n.sampleRate);const e=P.getChannelData(0);for(let n=0;n<e.length;n++)e[n]=.5*(2*Math.random()-1)}t.buffer=P,t.loop=!0,r.gain.value=0,t.connect(r),r.connect(H().entree),t.start(),r.gain.setTargetAtTime(1,n.currentTime,.01);const i={arreter:(e=n.currentTime)=>{r.gain.setTargetAtTime(0,e,.02),t.stop(e+.2)}};return e&&i.arreter(n.currentTime+e),i}function z(){q=!1,A&&(A.arreter(),A=null),F&&(F.arreter(),F=null),S("tenir").setAttribute("aria-pressed","false")}async function G(){if(H(),N(),"blanc"===v)return void j(1);if(k())return void r({angles:y.angles,f:E(),d:1.2,voix:H()});const e=await a(C,{f:E()});i(e.x,{voix:H(),d:2.5})}function V(){const e=[];if("noir"===v)e.push(["Couleur","noir"],["Son","silence"]);else if("blanc"===v)e.push(["Couleur","blanc"],["Son","bruit blanc : toutes les fréquences passent"]);else if("gris"===v)e.push(["Couleur","gris, sans teinte"],["Fenêtre","aucune : le son passe tel quel"]);else if(e.push(["Teinte",`${u(x,1)}°`]),"fenetre"===L){const n=LOIS.fenetres(x);e.push(["Fenêtre",n.map((e=>`${f(e.f)}${n.length>1?` (${Math.round(100*e.poids)} %)`:""}`)).join(" + ")+" · +14 dB"])}else e.push(["Note","donnée par la teinte (Discours 2)"]);"noir"!==v&&"blanc"!==v&&e.push(["Hauteur",`${f(E())} · ${h(E())}`],["Source",k()?LOIS.onde(y.angles).libelle:d[C].nom]),c.lecture("entendu",e)}S("note").addEventListener("click",G),S("tenir").addEventListener("click",(e=>{q?z():(H(),q=!0,e.currentTarget.setAttribute("aria-pressed","true"),N())})),B(),function e(){const n=S("spectre"),t=window.devicePixelRatio||1,r=n.clientWidth||400,i=n.clientHeight||80;n.width!==Math.round(r*t)&&(n.width=Math.round(r*t),n.height=Math.round(i*t));const a=n.getContext("2d");a.setTransform(t,0,0,t,0,0),a.clearRect(0,0,r,i);const l=e=>r*Math.log(e/20)/Math.log(1e3);if(a.fillStyle="rgba(242,239,232,.35)",a.font="10px sans-serif",a.textBaseline="bottom",[100,1e3,1e4].forEach((e=>{a.fillRect(l(e),i-14,1,4),a.fillText(e>=1e3?e/1e3+" kHz":e+" Hz",l(e)+3,i-2)})),O){const e=new Float32Array(O.frequencyBinCount),n=o().sampleRate;O.getFloatFrequencyData(e),a.beginPath();for(let t=0;t<=r;t+=2){const l=20*Math.pow(1e3,t/r),o=Math.round(l/(n/2)*e.length),s=e[Math.min(e.length-1,o)],c=i-16-b((s+110)/90,0,1)*(i-22);t?a.lineTo(t,c):a.moveTo(t,c)}a.strokeStyle="#f2efe8",a.lineWidth=1.4,a.stroke()}"teinte"===v&&"fenetre"===L&&LOIS.fenetres(x).forEach((e=>{a.globalAlpha=.25+.75*e.poids,a.fillStyle="#d8a657",a.fillRect(l(e.f)-1,4,2,i-20),a.globalAlpha=1})),requestAnimationFrame(e)}()})();</script>
+</body>
+</html>

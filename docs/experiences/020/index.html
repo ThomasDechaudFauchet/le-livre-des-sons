@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expérience 020 : ce qui passe derrière s'éloigne</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../commun/experiences.css?v=1">
+  <script data-goatcounter="https://lelivredessons.goatcounter.com/count"
+async src="https://gc.zgo.at/count.js"></script>
+</head>
+
+<body class="page-etude etude-020 page-experience">
+  <main class="wrap">
+
+    <header>
+      <div class="site-title">Le Livre des Sons</div>
+      <div class="site-subtitle">
+        Principes synesthésiques entre la forme visuelle et l'objet sonore
+      </div>
+    </header>
+
+    <h1 class="study-title">Expérience 020 : ce qui passe derrière s'éloigne</h1>
+    <div class="cat">Expérience · à manipuler · prolonge l'étude 020, Profondeur & Intensité relative</div>
+<section class="xp" aria-label="Expérience : ce qui passe derrière s'éloigne">
+      <p class="xp-intro">Dans l'étude 020, une forme qui en recouvre une autre la fait passer au second plan : le son
+        de la forme cachée s'éloigne, 7 dB plus bas. Ici on fait chevaucher deux formes, on les sépare, et l'on fait
+        passer l'une devant l'autre d'un geste, pendant qu'elles sonnent.</p>
+
+      <div class="xp-scene">
+        <div class="xp-planche">
+          <div id="planche"></div>
+          <p class="xp-legende">Toucher une forme la fait passer devant · glisser pour la déplacer</p>
+        </div>
+        <div class="xp-cote">
+          <div class="xp-rangee" id="exemples"><span class="xp-etiquette">Configurations</span></div>
+          <div class="xp-boutons">
+            <button class="xp-bouton" id="tenir" type="button" aria-pressed="false">Son tenu</button>
+            <button class="xp-bouton" id="note" type="button">Une note</button>
+          </div>
+          <dl class="xp-entendu" id="entendu"></dl>
+        </div>
+      </div>
+      <p class="xp-etat" aria-live="polite"></p>
+
+      <details class="xp-precisions">
+        <summary>La loi, et ce que l'expérience y ajoute</summary>
+        <ul>
+          <li>Chaque plan derrière le premier retire 7 dB. Une forme n'est derrière que si une autre la recouvre
+            effectivement : deux formes séparées sont au même plan, quel que soit l'ordre où elles ont été posées.</li>
+          <li>La profondeur est un facteur : elle s'ajoute à l'opacité (étude 011) et aux autres lois, qui restent
+            actives. Les formes sont grises : sans teinte, elles n'ouvrent aucune fenêtre (étude 012).</li>
+          <li>Chaque forme garde sa place et sa hauteur ; sa taille donne la durée de la note.</li>
+        </ul>
+      </details>
+    </section>
+
+    <nav>
+      <a href="../../etudes/020/">← Étude 020</a>
+      <a href="../">Les expériences</a>
+      <a href="../../">Sommaire</a>
+      <a href="../../etudes/021/">Étude 021 →</a>
+    </nav>
+
+    <footer class="site-signature">
+      Le Livre des Sons — concept et réalisation : Thomas Dechaud-Fauchet
+    </footer>
+
+  </main>
+  <script src="../commun/sign.js?v=1"></script>
+  <script>(()=>{const{Planche:e,chaine:n,tenir:r,jouerForme:t,son:a,ui:s,fmt:c,fmtHz:i,note:l,$:o}=SIGN,u={0:"Cercle",3:"Triangle",4:"Carré",6:"Hexagone"},f=["devant","2e plan","3e plan","4e plan","5e plan"],d=(e,n,r,t,a,s)=>({id:e,angles:n,x:r,y:t,taille:a,couleur:s,opacite:1}),p={recouverts:()=>[d("a",0,-.18,.42,.42,"#a8a8a8"),d("b",4,.2,.58,.4,"#e4e4e4")],separes:()=>[d("a",0,-.5,.42,.36,"#a8a8a8"),d("b",4,.5,.58,.34,"#e4e4e4")]};let g=p.recouverts(),h=[],v=new Map,x=new Map,L=!1;const O=new e(o("planche"),{fond:"noir",objets:g,label:"Planche : toucher une forme la fait passer devant ; les flèches la déplacent",surChange:()=>{S()},surToucher:e=>{e&&function(e){g.splice(g.indexOf(e),1),g.push(e),O.selection=e.id,O.dessiner(),S(),L||E()}(e)},surFin:()=>S()});function m(e){return v.has(e.id)||v.set(e.id,n()),v.get(e.id)}function S(){h=LOIS.plans(g),g.forEach(((e,n)=>{const r=v.get(e.id);r&&r.regler({teinte:null,niveau:.4*LOIS.gainPlan(h[n]),x:e.x});const t=x.get(e.id);t&&t.frequence(LOIS.frequence(e.y))})),function(){const e=g.map(((e,n)=>({o:e,r:h[n]}))).sort(((e,n)=>e.r-n.r||g.indexOf(n.o)-g.indexOf(e.o)));s.lecture("entendu",e.map((({o:e,r:n})=>{const r=LOIS.frequence(e.y);return[u[e.angles],`${f[n]} · ${n?c(LOIS.PLAN_DB*n,0)+" dB":"0 dB"} · ${i(r)} · ${l(r).split(" ")[0]}`]})).concat([["Plans",Math.max(...h)?`${Math.max(...h)+1}`:"un seul : aucune forme n'en recouvre une autre"]]))}()}function I(){g.forEach(((e,n)=>m(e).regler({teinte:null,niveau:.4*LOIS.gainPlan(h[n]),x:e.x},!0)))}function E(){a(),I();const e=a().currentTime+.05;g.forEach((n=>t({angles:n.angles,f:LOIS.frequence(n.y),d:LOIS.duree(n.taille),t0:e,voix:m(n)})))}s.choix("exemples",[["recouverts","Recouvertes"],["separes","Séparées"]],"recouverts",(e=>{g.splice(0,g.length,...p[e]()),O.selection=null,O.dessiner(),S(),L||E()})),o("note").addEventListener("click",E),o("tenir").addEventListener("click",(e=>{if(L)return x.forEach((e=>e.arreter())),x.clear(),L=!1,void e.currentTarget.setAttribute("aria-pressed","false");I(),g.forEach((e=>x.set(e.id,r({angles:e.angles,f:LOIS.frequence(e.y),voix:m(e)})))),L=!0,e.currentTarget.setAttribute("aria-pressed","true")})),S()})();</script>
+</body>
+</html>
